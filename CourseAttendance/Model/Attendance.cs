@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using CourseAttendance.Enums;
+using CourseAttendance.Model.Users;
 
 namespace CourseAttendance.Model
 {
-	public class Attendance
+    public class Attendance
 	{
-		public int Id { get; set; }
-		public int CourseId { get; set; }
-		public int StudentId { get; set; }
 		public DateTime AttendanceDate { get; set; }
 		public DateTime? SignInTime { get; set; }
 		public DateTime? SignOutTime { get; set; }
@@ -19,8 +17,14 @@ namespace CourseAttendance.Model
 		public string Location { get; set; }
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
+		public string AttachmentUrl { get; set; } 
+		
 
+		[ForeignKey("Course")]
+		public int CourseId { get; set; }
 		public virtual Course Course { get; set; }
-		public virtual User Student { get; set; }
+		[ForeignKey("Student")]
+		public string StudentId { get; set; }
+		public virtual Student Student { get; set; }
 	}
 }

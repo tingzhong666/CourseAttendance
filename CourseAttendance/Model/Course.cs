@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using CourseAttendance.Model.Users;
 
 namespace CourseAttendance.Model
 {
-	public class Course
+    public class Course
 	{
+        [Key]
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public int TeacherId { get; set; }
 		public byte Weekday { get; set; }
 		public TimeSpan StartTime { get; set; }
 		public TimeSpan EndTime { get; set; }
@@ -15,6 +16,10 @@ namespace CourseAttendance.Model
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
+		[ForeignKey(nameof(Teacher))]
+		public string TeacherId { get; set; }
 		public virtual User Teacher { get; set; }
+		public virtual List<CourseStudent> CourseStudents { get; set; } // 选课
+		public virtual List<Attendance> Attendances { get; set; } // 考勤
 	}
 }

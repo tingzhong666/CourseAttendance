@@ -14,7 +14,7 @@
 		/// </summary>
 		Academic,
 		/// <summary>
-		/// 老师
+		/// 授课老师
 		/// </summary>
 		Teacher,
 		/// <summary>
