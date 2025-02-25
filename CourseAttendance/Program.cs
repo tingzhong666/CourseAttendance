@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using CourseAttendance.Model.Users;
 using CourseAttendance.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,39 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(option =>
+{
+	option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+	option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Description = "Please enter a valid token",
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		BearerFormat = "JWT",
+		Scheme = "Bearer"
+	});
+	option.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type=ReferenceType.SecurityScheme,
+					Id="Bearer"
+				}
+			},
+			new string[]{}
+		}
+	});
+});
+
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
 
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
@@ -55,6 +89,7 @@ builder.Services.AddAuthentication(options =>
 	};
 });
 
+
 // 存储库注入
 builder.Services.AddScoped<AttendanceRepository>();
 builder.Services.AddScoped<CourseRepository>();
@@ -81,8 +116,29 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthorization();
 
 app.MapControllers();
+
+// 创建初始管理员账号
+using (var scope = app.Services.CreateScope())
+{
+	var services = scope.ServiceProvider;
+	var userManager = services.GetRequiredService<UserManager<User>>();
+
+	// 创建管理员用户
+	var adminName = "admin";
+	var adminPassword = "Admin123456!";
+
+	var adminUser = await userManager.FindByNameAsync(adminName);
+	if (adminUser == null)
+	{
+		adminUser = new User { UserName = adminName };
+		var result = await userManager.CreateAsync(adminUser, adminPassword);
+		if (result.Succeeded)
+		{
+			await userManager.AddToRoleAsync(adminUser, "Admin");
+		}
+	}
+}
 
 app.Run();

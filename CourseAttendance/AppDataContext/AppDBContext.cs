@@ -90,6 +90,8 @@ namespace CourseAttendance.AppDataContext
 				},
 			];
 			modelBuilder.Entity<IdentityRole>().HasData(roles);
+
+			modelBuilder.Entity<User>().HasIndex(x => x.UserName).IsUnique();
 		}
 
 	}

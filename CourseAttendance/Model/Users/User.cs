@@ -10,18 +10,18 @@ namespace CourseAttendance.Model.Users
     public class User : IdentityUser
 	{
 
-        [Required]
-        public string Password { get; set; }
+        //[Required]
+        //public string Password { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        //[Required]
+        //public string Name { get; set; }
 
-		[Required]
-		public UserRole Role { get; set; }
+		//[Required]
+		//public UserRole Role { get; set; }
 
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    }
+        //public string Email { get; set; }
+        public string? Phone { get; set; }
+        //public DateTime CreatedAt { get; set; } = DateTime.Now;
+        //public DateTime UpdatedAt { get; set; } = DateTime.Now;
+	}
 }
