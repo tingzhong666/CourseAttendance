@@ -13,11 +13,14 @@ namespace CourseAttendance.Model.Users
         //[Required]
         //public string Password { get; set; }
 
-        //[Required]
-        //public string Name { get; set; }
+        /// <summary>
+        /// 姓名
+        /// </summary>
+        [Required]
+        public string Name { get; set; }
 
-		//[Required]
-		//public UserRole Role { get; set; }
+        //[Required]
+        //public UserRole Role { get; set; }
 
         //public string Email { get; set; }
         public string? Phone { get; set; }

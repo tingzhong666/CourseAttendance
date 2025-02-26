@@ -13,9 +13,9 @@ namespace CourseAttendance.Controllers
 	[ApiController]
 	public class AccountController : ControllerBase
 	{
-		private readonly UserManager<User> _userManager;
-		private readonly TokenService _tokenService;
-		private readonly SignInManager<User> _signInManager;
+		protected readonly UserManager<User> _userManager;
+		protected readonly TokenService _tokenService;
+		protected readonly SignInManager<User> _signInManager;
 
 		public AccountController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager)
 		{
@@ -23,6 +23,80 @@ namespace CourseAttendance.Controllers
 			_tokenService = tokenService;
 			_signInManager = signInManager;
 		}
+
+		#region 通用
+		/// <summary>
+		/// 登录
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		[HttpPost("login")]
+		public async Task<ActionResult<LoginRes>> Login(LoginModel model)
+		{
+			var user = await _userManager.FindByNameAsync(model.UserName);
+			if (user == null)
+			{
+				return Unauthorized("无效的工号或密码。");
+			}
+			var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+
+			//var result = await _userManager.CheckPasswordAsync(user, model.Password);
+			if (!result.Succeeded)
+			{
+				return Unauthorized("无效的工号或密码。");
+			}
+
+			// 生成 JWT 令牌
+			var token = await _tokenService.CreateToken(user);
+			return Ok(new LoginRes { Token = token, UserName = model.UserName });
+		}
+
+
+		/// <summary>
+		/// 更新用户信息 本身
+		/// </summary>
+		/// <param name="user"></param>
+		/// <returns></returns>
+		[HttpPut("profile-slef")]
+		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
+		public async Task<IActionResult> UpdateProfileSelf(User user)
+		{
+			var result = await _userManager.UpdateAsync(user);
+			if (!result.Succeeded)
+			{
+				return BadRequest(result.Errors);
+			}
+			return NoContent();
+		}
+		#endregion
+
+		#region 超管
+		/// <summary>
+		/// 更新用户信息
+		/// </summary>
+		/// <param name="user"></param>
+		/// <returns></returns>
+		[HttpPut("profile")]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> UpdateProfile(User user)
+		{
+			var result = await _userManager.UpdateAsync(user);
+			if (!result.Succeeded)
+			{
+				return BadRequest(result.Errors);
+			}
+			return NoContent();
+		}
+		#endregion
+
+		#region 教务处
+		#endregion
+
+		#region 老师
+		#endregion
+
+		#region 学生
+		#endregion
 
 		// GET: api/users
 		[HttpGet]
@@ -137,39 +211,6 @@ namespace CourseAttendance.Controllers
 			return Ok(user);
 		}
 
-		// PUT: api/users/profile
-		[HttpPut("profile")]
-		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public async Task<IActionResult> UpdateProfile(User user)
-		{
-			var result = await _userManager.UpdateAsync(user);
-			if (!result.Succeeded)
-			{
-				return BadRequest(result.Errors);
-			}
-			return NoContent();
-		}
 
-		// POST: api/account/login
-		[HttpPost("login")]
-		public async Task<ActionResult<string>> Login(LoginModel model)
-		{
-			var user = await _userManager.FindByNameAsync(model.UserName);
-			if (user == null)
-			{
-				return Unauthorized("无效的工号或密码。");
-			}
-			var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-
-			//var result = await _userManager.CheckPasswordAsync(user, model.Password);
-			if (!result.Succeeded)
-			{
-				return Unauthorized("无效的工号或密码。");
-			}
-
-			// 生成 JWT 令牌
-			var token = await _tokenService.CreateToken(user);
-			return Ok(new { Token = token, model.UserName });
-		}
 	}
 }
