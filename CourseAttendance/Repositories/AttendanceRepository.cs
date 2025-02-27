@@ -1,5 +1,6 @@
 ﻿using CourseAttendance.AppDataContext;
 using CourseAttendance.Model;
+using CourseAttendance.Model.Users;
 using CourseAttendance.OtherModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,7 +39,23 @@ namespace CourseAttendance.Repositories
 
 		public async Task UpdateAsync(Attendance attendance)
 		{
-			_context.Attendances.Update(attendance);
+			var model = await _context.Attendances
+				.Include(a => a.Course)
+				.Include(a => a.Student)
+				.FirstOrDefaultAsync(a => a.CourseId == attendance.CourseId && a.StudentId == attendance.StudentId);
+			if (model == null) return;
+
+			model.SignInTime = attendance.SignInTime;
+			model.SignOutTime = attendance.SignOutTime;
+			model.Status = attendance.Status;
+			model.Performance = attendance.Performance;
+			model.Remark = attendance.Remark;
+			model.CheckMethod = attendance.CheckMethod;
+			model.Location = attendance.Location;
+			model.UpdatedAt = DateTime.Now;
+			model.AttachmentUrl = attendance.AttachmentUrl;
+
+			_context.Attendances.Update(model);
 			await _context.SaveChangesAsync();
 		}
 

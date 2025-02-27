@@ -1,49 +1,46 @@
 ﻿using CourseAttendance.AppDataContext;
 using CourseAttendance.Model.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseAttendance.Repositories.Users
 {
-	public class UserRepository
+	public class UserRepository(UserManager<User> userManager)
 	{
-		private readonly AppDBContext _context;
-
-		public UserRepository(AppDBContext context)
-		{
-			_context = context;
-		}
+		public readonly UserManager<User> _userManager = userManager;
 
 		public async Task<User?> GetByIdAsync(string id)
 		{
-			return await _context.Users
-				.FirstOrDefaultAsync(u => u.Id == id);
+			return await _userManager.FindByIdAsync(id);
 		}
 
-		public async Task<IEnumerable<User>> GetAllAsync()
+		public List<User> GetAllAsync()
 		{
-			return await _context.Users.ToListAsync();
+			return [.. _userManager.Users];
 		}
 
-		public async Task AddAsync(User user)
+		public async Task<IdentityResult> AddAsync(User user, string pwd)
 		{
-			await _context.Users.AddAsync(user);
-			await _context.SaveChangesAsync();
+			return await _userManager.CreateAsync(user, pwd);
 		}
 
-		public async Task UpdateAsync(User user)
+		public async Task<IdentityResult> UpdateAsync(User user)
 		{
-			_context.Users.Update(user);
-			await _context.SaveChangesAsync();
+			var model = await _userManager.FindByIdAsync(user.Id);
+			if (model == null)
+				return IdentityResult.Failed([new IdentityError { Description = "未找到此用户" }]);
+			model.Name = user.Name;
+			model.Email = user.Email;
+			model.PhoneNumber = user.PhoneNumber;
+			return await _userManager.UpdateAsync(model);
 		}
 
-		public async Task DeleteAsync(string id)
+		public async Task<IdentityResult> DeleteAsync(string id)
 		{
-			var user = await GetByIdAsync(id);
-			if (user != null)
-			{
-				_context.Users.Remove(user);
-				await _context.SaveChangesAsync();
-			}
+			var model = await _userManager.FindByIdAsync(id);
+			if (model == null)
+				return IdentityResult.Failed([new IdentityError { Description = "未找到此用户" }]);
+			return await _userManager.DeleteAsync(model);
 		}
 	}
 }

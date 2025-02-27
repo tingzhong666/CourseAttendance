@@ -132,7 +132,7 @@ using (var scope = app.Services.CreateScope())
 	var adminUser = await userManager.FindByNameAsync(adminName);
 	if (adminUser == null)
 	{
-		adminUser = new User { UserName = adminName };
+		adminUser = new User { UserName = adminName, Name = adminName };
 		var result = await userManager.CreateAsync(adminUser, adminPassword);
 		if (result.Succeeded)
 		{

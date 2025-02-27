@@ -35,13 +35,22 @@ namespace CourseAttendance.Repositories.Users
 
 		public async Task AddAsync(Student student)
 		{
-			await _context.Students.AddAsync(student);
+			var model = new Student
+			{
+				UserId = student.UserId,
+				Grade = student.Grade
+			};
+			await _context.Students.AddAsync(model);
 			await _context.SaveChangesAsync();
 		}
 
 		public async Task UpdateAsync(Student student)
 		{
-			_context.Students.Update(student);
+			var model = await _context.Students.FirstAsync(s => s.UserId == student.UserId);
+			if (model == null) return;
+
+			model.GradeId = student.GradeId;
+			_context.Students.Update(model);
 			await _context.SaveChangesAsync();
 		}
 

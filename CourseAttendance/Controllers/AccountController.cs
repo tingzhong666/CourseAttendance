@@ -1,4 +1,6 @@
 ﻿using CourseAttendance.DtoModel;
+using CourseAttendance.DtoModel.ReqDtos;
+using CourseAttendance.mapper;
 using CourseAttendance.Model.Users;
 using CourseAttendance.Repositories.Users;
 using CourseAttendance.Services;
@@ -14,14 +16,16 @@ namespace CourseAttendance.Controllers
 	public class AccountController : ControllerBase
 	{
 		protected readonly UserManager<User> _userManager;
+		protected readonly UserRepository _userRepository;
 		protected readonly TokenService _tokenService;
 		protected readonly SignInManager<User> _signInManager;
 
-		public AccountController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager)
+		public AccountController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager, UserRepository userRepository)
 		{
 			_userManager = userManager;
 			_tokenService = tokenService;
 			_signInManager = signInManager;
+			_userRepository = userRepository;
 		}
 
 		#region 通用
@@ -57,16 +61,24 @@ namespace CourseAttendance.Controllers
 		/// </summary>
 		/// <param name="user"></param>
 		/// <returns></returns>
-		[HttpPut("profile-slef")]
-		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public async Task<IActionResult> UpdateProfileSelf(User user)
+		//[HttpPut("profile-slef")]
+		//[Authorize(Roles = "Admin,Academic,Teacher,Student")]
+		//public async Task<IActionResult> UpdateProfileSelf(User user)
+		//{
+		//	var result = await _userManager.UpdateAsync(user);
+		//	if (!result.Succeeded)
+		//	{
+		//		return BadRequest(result.Errors);
+		//	}
+		//	return NoContent();
+		//}
+
+
+		
+		public  async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user)
 		{
-			var result = await _userManager.UpdateAsync(user);
-			if (!result.Succeeded)
-			{
-				return BadRequest(result.Errors);
-			}
-			return NoContent();
+			var result = await _userRepository.UpdateAsync(user.ToUserModel());
+			return result;
 		}
 		#endregion
 

@@ -35,7 +35,13 @@ namespace CourseAttendance.Repositories
 
 		public async Task UpdateAsync(Grade grade)
 		{
-			_context.Grades.Update(grade);
+			var model = await GetByIdAsync(grade.Id);
+			if (model == null) return;
+
+			model.Name = grade.Name;
+			model.UpdatedAt = DateTime.Now;
+
+			_context.Grades.Update(model);
 			await _context.SaveChangesAsync();
 		}
 

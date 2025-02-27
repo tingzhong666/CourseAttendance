@@ -17,13 +17,13 @@ namespace CourseAttendance.Model.Users
         /// 姓名
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         //[Required]
         //public UserRole Role { get; set; }
 
         //public string Email { get; set; }
-        public string? Phone { get; set; }
+        //public string? Phone { get; set; }
         //public DateTime CreatedAt { get; set; } = DateTime.Now;
         //public DateTime UpdatedAt { get; set; } = DateTime.Now;
 	}

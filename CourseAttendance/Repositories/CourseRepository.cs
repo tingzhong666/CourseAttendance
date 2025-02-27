@@ -39,6 +39,18 @@ namespace CourseAttendance.Repositories
 
 		public async Task UpdateAsync(Course course)
 		{
+
+			var model = await GetByIdAsync(course.Id);
+			if (model == null) return;
+
+			model.Name = course.Name;
+			model.Weekday = course.Weekday;
+			model.StartTime = course.StartTime;
+			model.EndTime = course.EndTime;
+			model.Location = course.Location;
+			model.UpdatedAt = DateTime.Now;
+			model.TeacherId = course.TeacherId;
+
 			_context.Courses.Update(course);
 			await _context.SaveChangesAsync();
 		}
