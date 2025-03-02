@@ -1,7 +1,7 @@
 ﻿using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.Model.Users;
 
-namespace CourseAttendance.mapper
+namespace CourseAttendance.mapper.UpdateProfileReqDtoExtends
 {
 	public static class UpdateProfileReqDtoExtend
 	{
@@ -12,14 +12,6 @@ namespace CourseAttendance.mapper
 				Email = user.Email,
 				PhoneNumber = user.Phone,
 				Name = user.Name,
-				Id = user.Id
-			};
-		}
-		public static Academic ToAcademicModel(this UpdateProfileReqDto user)
-		{
-			return new Academic
-			{
-				UserId = user.Id
 			};
 		}
 	}

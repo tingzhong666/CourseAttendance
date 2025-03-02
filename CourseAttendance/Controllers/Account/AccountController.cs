@@ -1,6 +1,8 @@
 ﻿using CourseAttendance.DtoModel;
 using CourseAttendance.DtoModel.ReqDtos;
-using CourseAttendance.mapper;
+using CourseAttendance.DtoModel.ResDtos;
+using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
+using CourseAttendance.mapper.UserExts;
 using CourseAttendance.Model.Users;
 using CourseAttendance.Repositories.Users;
 using CourseAttendance.Services;
@@ -8,8 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
-namespace CourseAttendance.Controllers
+namespace CourseAttendance.Controllers.Account
 {
 	[Route("api/account")]
 	[ApiController]
@@ -55,84 +58,95 @@ namespace CourseAttendance.Controllers
 			return Ok(new LoginRes { Token = token, UserName = model.UserName });
 		}
 
-
 		/// <summary>
 		/// 更新用户信息 本身
 		/// </summary>
 		/// <param name="user"></param>
 		/// <returns></returns>
-		//[HttpPut("profile-slef")]
-		//[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		//public async Task<IActionResult> UpdateProfileSelf(User user)
-		//{
-		//	var result = await _userManager.UpdateAsync(user);
-		//	if (!result.Succeeded)
-		//	{
-		//		return BadRequest(result.Errors);
-		//	}
-		//	return NoContent();
-		//}
 
-
-		
-		public  async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user)
+		public async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user)
 		{
+			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userId == null)
+				return IdentityResult.Failed([new IdentityError { Description = "获取当前用户ID失败" }]);
+			var model = user.ToUserModel();
+			model.Id = userId;
 			var result = await _userRepository.UpdateAsync(user.ToUserModel());
 			return result;
 		}
-		#endregion
 
-		#region 超管
 		/// <summary>
-		/// 更新用户信息
+		/// 获取所有用户
 		/// </summary>
-		/// <param name="user"></param>
 		/// <returns></returns>
-		[HttpPut("profile")]
-		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> UpdateProfile(User user)
-		{
-			var result = await _userManager.UpdateAsync(user);
-			if (!result.Succeeded)
-			{
-				return BadRequest(result.Errors);
-			}
-			return NoContent();
-		}
-		#endregion
-
-		#region 教务处
-		#endregion
-
-		#region 老师
-		#endregion
-
-		#region 学生
-		#endregion
-
-		// GET: api/users
 		[HttpGet]
-		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> GetUsers()
 		{
 			var users = await _userManager.Users.ToListAsync();
-			return Ok(new { code = 123, users });
+			var res = users.Select(x => x.ToGetUsersResDto()).ToList();
+			return Ok(res);
 		}
 
-		// GET: api/users/{id}
+
+		/// <summary>
+		/// 获取指定用户信息
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpGet("{id}")]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<User>> GetUser(string id)
+		public virtual async Task<ActionResult> GetUser(string id)
 		{
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
 			{
 				return NotFound();
 			}
-			return Ok(user);
+			return Ok(user.ToGetUsersResDto());
 		}
 
-		// POST: api/users
+
+		/// <summary>
+		/// 获取用户信息 本身
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("profile")]
+		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
+		public virtual async Task<ActionResult> GetProfile()
+		{
+			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userId == null)
+				return BadRequest("获取当前用户ID失败");
+			var user = await _userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				return BadRequest("获取当前用户信息失败");
+			}
+			return Ok(user.ToGetUsersResDto());
+		}
+		#endregion
+
+		#region 超管
+		/// <summary>
+		/// 更新用户信息 任意 管理员
+		/// </summary>
+		/// <param name="user"></param>
+		/// <returns></returns>
+		public async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto user, string id)
+		{
+			var model = user.ToUserModel();
+			model.Id = id;
+			var result = await _userRepository.UpdateAsync(user.ToUserModel());
+			return result;
+		}
+		#endregion
+
+
+		/// <summary>
+		/// 创建
+		/// </summary>
+		/// <param name="user"></param>
+		/// <param name="password"></param>
+		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
 		public async Task<ActionResult<User>> CreateUser(User user, string password)
@@ -209,19 +223,6 @@ namespace CourseAttendance.Controllers
 			return NoContent();
 		}
 
-		// GET: api/users/profile
-		[HttpGet("profile")]
-		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public async Task<ActionResult<User>> GetProfile()
-		{
-			var userId = User.FindFirst("id")?.Value; // 假设用户ID存储在Claims中
-			var user = await _userManager.FindByIdAsync(userId);
-			if (user == null)
-			{
-				return NotFound();
-			}
-			return Ok(user);
-		}
 
 
 	}

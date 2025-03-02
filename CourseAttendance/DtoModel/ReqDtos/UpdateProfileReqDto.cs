@@ -4,7 +4,7 @@ namespace CourseAttendance.DtoModel.ReqDtos
 {
 	public class UpdateProfileReqDto
 	{
-		public required string Id;
+		//public required string Id;
 		/// <summary>
 		/// 邮件
 		/// </summary>

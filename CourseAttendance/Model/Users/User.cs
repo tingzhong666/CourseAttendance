@@ -7,24 +7,26 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CourseAttendance.Model.Users
 {
-    public class User : IdentityUser
+	public class User : IdentityUser
 	{
 
-        //[Required]
-        //public string Password { get; set; }
+		//[Required]
+		//public string Password { get; set; }
 
-        /// <summary>
-        /// 姓名
-        /// </summary>
-        [Required]
-        public required string Name { get; set; }
+		/// <summary>
+		/// 姓名
+		/// </summary>
+		[Required]
+		public required string Name { get; set; }
 
-        //[Required]
-        //public UserRole Role { get; set; }
+		//[Required]
+		//public UserRole Role { get; set; }
 
-        //public string Email { get; set; }
-        //public string? Phone { get; set; }
-        //public DateTime CreatedAt { get; set; } = DateTime.Now;
-        //public DateTime UpdatedAt { get; set; } = DateTime.Now;
+		//public string Email { get; set; }
+		//public string? Phone { get; set; }
+		//public DateTime CreatedAt { get; set; } = DateTime.Now;
+		//public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+		public override required string UserName { get; set; }
 	}
 }
