@@ -27,10 +27,11 @@ namespace CourseAttendance.Repositories.Users
 				.ToListAsync();
 		}
 
-		public async Task AddAsync(Academic academic)
+		public async Task<int> AddAsync(Academic academic)
 		{
 			await _context.Academics.AddAsync(academic);
-			await _context.SaveChangesAsync();
+			var res = await _context.SaveChangesAsync();
+			return res;
 		}
 
 		public async Task UpdateAsync(Academic academic)
@@ -39,14 +40,15 @@ namespace CourseAttendance.Repositories.Users
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteAsync(string userId)
+		public async Task<int> DeleteAsync(string userId)
 		{
 			var academic = await GetByIdAsync(userId);
 			if (academic != null)
 			{
 				_context.Academics.Remove(academic);
-				await _context.SaveChangesAsync();
+				return await _context.SaveChangesAsync();
 			}
+			return 0;
 		}
 	}
 }

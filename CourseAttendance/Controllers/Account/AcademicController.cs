@@ -1,5 +1,6 @@
 ﻿using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
+using CourseAttendance.mapper.CreateUserReqDtoExts;
 using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
 using CourseAttendance.mapper.UserExts;
 using CourseAttendance.Model.Users;
@@ -54,7 +55,7 @@ namespace CourseAttendance.Controllers.Account
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileAcademicReqDto user, [FromQuery] string id)
 		{
-			var result = await base.UpdateProfile(user,id);
+			var result = await base.UpdateProfile(user, id);
 			if (!result.Succeeded)
 			{
 				return BadRequest(result.Errors);
@@ -112,6 +113,47 @@ namespace CourseAttendance.Controllers.Account
 				return BadRequest("获取当前用户信息失败");
 			}
 			return Ok(academic.ToGetAcademicResDto(user));
+		}
+
+		/// <summary>
+		/// 创建
+		/// </summary>
+		/// <param name="dto"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		public async Task<ActionResult> CreateUser(CreateUserAcademicReqDto dto)
+		{
+			var userModel = await base.CreateUser(dto);
+			if (userModel == null) return BadRequest("创建失败");
+
+			var academicModel = dto.ToModel();
+			academicModel.UserId = userModel.Id;
+			var result = await _academicRepository.AddAsync(academicModel);
+			if (result == 0)
+			{
+				await DeleteUser(userModel.Id);
+				return BadRequest("创建失败");
+			}
+			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id });
+		}
+
+
+		/// <summary>
+		/// 删除
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpDelete("{id}")]
+		[Authorize(Roles = "Admin")]
+		public new async Task<ActionResult> DeleteUser(string id)
+		{
+			var res = await base.DeleteUser(id);
+			if (!res.Succeeded) return BadRequest("删除失败");
+
+			var res2 = await _academicRepository.DeleteAsync(id);
+			if (res2 == 0) return BadRequest("删除失败");
+			return Ok(res);
 		}
 	}
 }

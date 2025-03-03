@@ -1,6 +1,6 @@
-﻿using CourseAttendance.DtoModel;
-using CourseAttendance.DtoModel.ReqDtos;
+﻿using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
+using CourseAttendance.mapper.CreateUserReqDtoExts;
 using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
 using CourseAttendance.mapper.UserExts;
 using CourseAttendance.Model.Users;
@@ -63,7 +63,7 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <param name="user"></param>
 		/// <returns></returns>
-
+		[NonAction]
 		public async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user)
 		{
 			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -123,98 +123,97 @@ namespace CourseAttendance.Controllers.Account
 			}
 			return Ok(user.ToGetUsersResDto());
 		}
+
+
+		/// <summary>
+		/// 密码修改本身
+		/// </summary>
+		/// <param name="reqDto"></param>
+		/// <returns></returns>
+		[HttpPut("change-password-self")]
+		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
+		public async Task<IActionResult> ChangePasswordSelf(ChangePasswordSelfReqDto reqDto)
+		{
+			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (userId == null)
+				return BadRequest("未携带id信息");
+
+			var user = await _userRepository.GetByIdAsync(userId);
+			if (user == null)
+				return BadRequest("未找到此用户");
+
+			if (reqDto.NewPassword != reqDto.ConfirmPassword)
+				return BadRequest("新密码和确认密码不匹配。");
+
+			var result = await _userManager.ChangePasswordAsync(user, reqDto.CurrentPassword, reqDto.NewPassword);
+			if (!result.Succeeded)
+			{
+				return BadRequest(result.Errors);
+			}
+
+			return NoContent();
+		}
 		#endregion
 
 		#region 超管
 		/// <summary>
 		/// 更新用户信息 任意 管理员
 		/// </summary>
-		/// <param name="user"></param>
+		/// <param name="dto"></param>
 		/// <returns></returns>
-		public async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto user, string id)
+		[NonAction]
+		public async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto dto, string id)
 		{
-			var model = user.ToUserModel();
+			var model = dto.ToUserModel();
 			model.Id = id;
-			var result = await _userRepository.UpdateAsync(user.ToUserModel());
+			var result = await _userRepository.UpdateAsync(dto.ToUserModel());
 			return result;
 		}
-		#endregion
 
 
 		/// <summary>
 		/// 创建
 		/// </summary>
-		/// <param name="user"></param>
-		/// <param name="password"></param>
 		/// <returns></returns>
-		[HttpPost]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<User>> CreateUser(User user, string password)
+		[NonAction]
+		public async Task<User> CreateUser(CreateUserReqDto dto)
 		{
-			var result = await _userManager.CreateAsync(user, password);
-			if (!result.Succeeded)
-			{
-				return BadRequest(result.Errors);
-			}
-			return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+			var model = dto.ToModel();
+			await _userRepository.AddAsync(dto.ToModel(), dto.PassWord);
+			return model;
 		}
 
-		// PUT: api/users/{id}
-		[HttpPut("{id}")]
-		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> UpdateUser(string id, User user)
-		{
-			if (id != user.Id)
-			{
-				return BadRequest();
-			}
 
-			var result = await _userManager.UpdateAsync(user);
-			if (!result.Succeeded)
-			{
-				return BadRequest(result.Errors);
-			}
-			return NoContent();
+		/// <summary>
+		/// 删除
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[NonAction]
+		public async Task<IdentityResult> DeleteUser(string id)
+		{
+			return await _userRepository.DeleteAsync(id);
 		}
 
-		// DELETE: api/users/{id}
-		[HttpDelete("{id}")]
-		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> DeleteUser(string id)
-		{
-			var user = await _userManager.FindByIdAsync(id);
-			if (user == null)
-			{
-				return NotFound();
-			}
 
-			var result = await _userManager.DeleteAsync(user);
-			if (!result.Succeeded)
-			{
-				return BadRequest(result.Errors);
-			}
-			return NoContent();
-		}
-
-		// PUT: api/users/change-password
+		/// <summary>
+		/// 密码修改指定用户 超管
+		/// </summary>
+		/// <param name="reqDto"></param>
+		/// <returns></returns>
 		[HttpPut("change-password")]
-		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> ChangePassword(ChangePasswordReqDto reqDto)
 		{
-			var userId = User.FindFirst("id")?.Value; // 假设用户ID存储在Claims中
-			var user = await _userManager.FindByIdAsync(userId);
 
+			var user = await _userRepository.GetByIdAsync(reqDto.UserId);
 			if (user == null)
-			{
-				return NotFound();
-			}
+				return BadRequest("未找到此用户");
 
-			if (model.NewPassword != model.ConfirmPassword)
-			{
+			if (reqDto.NewPassword != reqDto.ConfirmPassword)
 				return BadRequest("新密码和确认密码不匹配。");
-			}
 
-			var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+			var result = await _userManager.ChangePasswordAsync(user, reqDto.CurrentPassword, reqDto.NewPassword);
 			if (!result.Succeeded)
 			{
 				return BadRequest(result.Errors);
@@ -222,8 +221,6 @@ namespace CourseAttendance.Controllers.Account
 
 			return NoContent();
 		}
-
-
-
+		#endregion
 	}
 }

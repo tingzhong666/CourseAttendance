@@ -24,10 +24,11 @@ namespace CourseAttendance.Repositories.Users
 			return await _context.Admins.Include(a => a.User).ToListAsync();
 		}
 
-		public async Task AddAdminAsync(Admin admin)
+		public async Task<int> AddAdminAsync(Admin admin)
 		{
 			await _context.Admins.AddAsync(admin);
-			await _context.SaveChangesAsync();
+			var res = await _context.SaveChangesAsync();
+			return res;
 		}
 
 		public async Task UpdateAdminAsync(Admin admin)
@@ -36,14 +37,16 @@ namespace CourseAttendance.Repositories.Users
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteAdminAsync(int userId)
+		public async Task<int> DeleteAdminAsync(string userId)
 		{
 			var admin = await _context.Admins.FindAsync(userId);
 			if (admin != null)
 			{
 				_context.Admins.Remove(admin);
-				await _context.SaveChangesAsync();
+				return await _context.SaveChangesAsync();
 			}
+
+			return 0;
 		}
 	}
 }

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CourseAttendance.DtoModel
+namespace CourseAttendance.DtoModel.ReqDtos
 {
-	public class ChangePasswordModel
+	public class ChangePasswordSelfReqDto
 	{
 		[Required]
 		public string NewPassword { get; set; }

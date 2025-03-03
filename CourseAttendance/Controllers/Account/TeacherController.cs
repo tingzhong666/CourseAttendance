@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
-using CourseAttendance.mapper.UserExts.CourseAttendance.mapper.UserExts;
+using CourseAttendance.mapper.CreateUserReqDtoExts;
+using CourseAttendance.mapper.UserExts;
 
 namespace CourseAttendance.Controllers.Account
 {
@@ -108,6 +109,48 @@ namespace CourseAttendance.Controllers.Account
 				return BadRequest("获取当前用户信息失败");
 			}
 			return Ok(teacher.ToGetTeacherResDto(user));
+		}
+
+
+		/// <summary>
+		/// 创建
+		/// </summary>
+		/// <param name="dto"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		public async Task<ActionResult> CreateUser(CreateUserTeacherReqDto dto)
+		{
+			var userModel = await base.CreateUser(dto);
+			if (userModel == null) return BadRequest("创建失败");
+
+			var teacherModel = dto.ToModel();
+			teacherModel.UserId = userModel.Id;
+			var result = await _teacherRepository.AddAsync(teacherModel);
+			if (result == 0)
+			{
+				await DeleteUser(userModel.Id);
+				return BadRequest("创建失败");
+			}
+			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id });
+		}
+
+
+		/// <summary>
+		/// 删除
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpDelete("{id}")]
+		[Authorize(Roles = "Admin")]
+		public new async Task<ActionResult> DeleteUser(string id)
+		{
+			var res = await base.DeleteUser(id);
+			if (!res.Succeeded) return BadRequest("删除失败");
+
+			var res2 = await _teacherRepository.DeleteAsync(id);
+			if (res2 == 0) return BadRequest("删除失败");
+			return Ok(res);
 		}
 	}
 }

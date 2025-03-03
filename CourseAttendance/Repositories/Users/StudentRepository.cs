@@ -33,15 +33,16 @@ namespace CourseAttendance.Repositories.Users
 				.ToListAsync();
 		}
 
-		public async Task AddAsync(Student student)
+		public async Task<int> AddAsync(Student student)
 		{
 			var model = new Student
 			{
 				UserId = student.UserId,
-				Grade = student.Grade
+				GradeId = student.GradeId
 			};
 			await _context.Students.AddAsync(model);
-			await _context.SaveChangesAsync();
+			var res = await _context.SaveChangesAsync();
+			return res;
 		}
 
 		public async Task UpdateAsync(Student student)
@@ -54,14 +55,15 @@ namespace CourseAttendance.Repositories.Users
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteAsync(string userId)
+		public async Task<int> DeleteAsync(string userId)
 		{
 			var student = await GetByIdAsync(userId);
 			if (student != null)
 			{
 				_context.Students.Remove(student);
-				await _context.SaveChangesAsync();
+				return await _context.SaveChangesAsync();
 			}
+			return 0;
 		}
 	}
 }

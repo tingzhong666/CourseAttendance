@@ -27,6 +27,7 @@ namespace CourseAttendance.Model.Users
 		//public DateTime CreatedAt { get; set; } = DateTime.Now;
 		//public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-		public override required string UserName { get; set; }
+		[Required]
+		public override string UserName { get; set; }
 	}
 }

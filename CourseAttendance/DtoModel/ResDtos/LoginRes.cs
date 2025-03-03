@@ -1,4 +1,4 @@
-﻿namespace CourseAttendance.DtoModel
+﻿namespace CourseAttendance.DtoModel.ResDtos
 {
 	public class LoginRes
 	{

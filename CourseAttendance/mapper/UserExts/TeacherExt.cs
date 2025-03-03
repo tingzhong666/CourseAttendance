@@ -2,7 +2,6 @@
 using CourseAttendance.Model.Users;
 
 namespace CourseAttendance.mapper.UserExts
-namespace CourseAttendance.mapper.UserExts
 {
 	public static class TeacherExt
 	{
