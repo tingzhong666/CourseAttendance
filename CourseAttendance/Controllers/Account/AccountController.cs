@@ -64,14 +64,14 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="user"></param>
 		/// <returns></returns>
 		[NonAction]
-		public async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user)
+		public static async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user, ControllerBase controller, UserRepository _userRepository)
 		{
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			var userId = controller.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 			if (userId == null)
 				return IdentityResult.Failed([new IdentityError { Description = "获取当前用户ID失败" }]);
 			var model = user.ToUserModel();
 			model.Id = userId;
-			var result = await _userRepository.UpdateAsync(user.ToUserModel());
+			var result = await _userRepository.UpdateAsync(model);
 			return result;
 		}
 
@@ -94,7 +94,7 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		public virtual async Task<ActionResult> GetUser(string id)
+		public  async Task<ActionResult> GetUser(string id)
 		{
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
@@ -111,7 +111,7 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpGet("profile")]
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public virtual async Task<ActionResult> GetProfile()
+		public  async Task<ActionResult> GetProfile()
 		{
 			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 			if (userId == null)
@@ -162,11 +162,11 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="dto"></param>
 		/// <returns></returns>
 		[NonAction]
-		public async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto dto, string id)
+		public static async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto dto, string id, UserRepository _userRepository)
 		{
 			var model = dto.ToUserModel();
 			model.Id = id;
-			var result = await _userRepository.UpdateAsync(dto.ToUserModel());
+			var result = await _userRepository.UpdateAsync(model);
 			return result;
 		}
 
@@ -176,10 +176,11 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <returns></returns>
 		[NonAction]
-		public async Task<User> CreateUser(CreateUserReqDto dto)
+		public static async Task<User?> CreateUser(CreateUserReqDto dto, UserRepository _userRepository)
 		{
 			var model = dto.ToModel();
-			await _userRepository.AddAsync(dto.ToModel(), dto.PassWord);
+			var res=await _userRepository.AddAsync(model, dto.PassWord);
+			if (!res.Succeeded) return null;
 			return model;
 		}
 
@@ -189,10 +190,13 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		[NonAction]
-		public async Task<IdentityResult> DeleteUser(string id)
+		[HttpDelete("{id}")]
+		[Authorize(Roles = "Admin")]
+		public  async Task<IActionResult> DeleteUser(string id)
 		{
-			return await _userRepository.DeleteAsync(id);
+			var res= await _userRepository.DeleteAsync(id);
+			if (!res.Succeeded) return BadRequest("删除失败");
+			return Ok("删除成功");
 		}
 
 

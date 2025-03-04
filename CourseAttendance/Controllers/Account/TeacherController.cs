@@ -14,9 +14,19 @@ namespace CourseAttendance.Controllers.Account
 {
 	[Route("api/teacher")]
 	[ApiController]
-	public class TeacherController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager, TeacherRepository teacherRepository, UserRepository userRepository) : AccountController(userManager, tokenService, signInManager, userRepository)
+	public class TeacherController : ControllerBase
 	{
-		protected readonly TeacherRepository _teacherRepository = teacherRepository;
+		protected readonly UserRepository _userRepository;
+		protected readonly TeacherRepository _teacherRepository;
+
+		public TeacherController(UserRepository userRepository, TeacherRepository teacherRepository)
+		{
+			_userRepository = userRepository;
+			_teacherRepository = teacherRepository;
+		}
+
+
+
 		/// <summary>
 		/// 更新用户信息 本身
 		/// </summary>
@@ -24,9 +34,9 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpPut("profile-slef")]
 		[Authorize(Roles = "Academic")]
-		public  async Task<IActionResult> UpdateProfileSelf(UpdateProfileTeacherReqDto user)
+		public async Task<IActionResult> UpdateProfileSelf(UpdateProfileTeacherReqDto user)
 		{
-			var result = await base.UpdateProfileSelf(user);
+			var result = await AccountController.UpdateProfileSelf(user, this, _userRepository);
 			if (!result.Succeeded)
 			{
 				return BadRequest(result.Errors);
@@ -52,7 +62,7 @@ namespace CourseAttendance.Controllers.Account
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileTeacherReqDto user, [FromQuery] string id)
 		{
-			var result = await base.UpdateProfile(user, id);
+			var result = await AccountController.UpdateProfile(user, id, _userRepository);
 			if (!result.Succeeded)
 			{
 				return BadRequest(result.Errors);
@@ -72,9 +82,9 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		public override async Task<ActionResult> GetUser(string id)
+		public async Task<ActionResult> GetUser(string id)
 		{
-			var user = await _userManager.FindByIdAsync(id);
+			var user = await _userRepository._userManager.FindByIdAsync(id);
 			if (user == null)
 			{
 				return NotFound();
@@ -93,12 +103,12 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpGet("profile")]
 		[Authorize(Roles = "Teacher")]
-		public override async Task<ActionResult> GetProfile()
+		public async Task<ActionResult> GetProfile()
 		{
 			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 			if (userId == null)
 				return BadRequest("获取当前用户ID失败");
-			var user = await _userManager.FindByIdAsync(userId);
+			var user = await _userRepository._userManager.FindByIdAsync(userId);
 			if (user == null)
 			{
 				return BadRequest("获取当前用户信息失败");
@@ -121,7 +131,7 @@ namespace CourseAttendance.Controllers.Account
 		[Authorize(Roles = "Admin")]
 		public async Task<ActionResult> CreateUser(CreateUserTeacherReqDto dto)
 		{
-			var userModel = await base.CreateUser(dto);
+			var userModel = await AccountController.CreateUser(dto, _userRepository);
 			if (userModel == null) return BadRequest("创建失败");
 
 			var teacherModel = dto.ToModel();
@@ -129,28 +139,29 @@ namespace CourseAttendance.Controllers.Account
 			var result = await _teacherRepository.AddAsync(teacherModel);
 			if (result == 0)
 			{
-				await DeleteUser(userModel.Id);
+				var res = await _userRepository.DeleteAsync(userModel.Id);
+				if (!res.Succeeded) return BadRequest("创建失败");
 				return BadRequest("创建失败");
 			}
 			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id });
 		}
 
 
-		/// <summary>
-		/// 删除
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		[HttpDelete("{id}")]
-		[Authorize(Roles = "Admin")]
-		public new async Task<ActionResult> DeleteUser(string id)
-		{
-			var res = await base.DeleteUser(id);
-			if (!res.Succeeded) return BadRequest("删除失败");
+		///// <summary>
+		///// 删除
+		///// </summary>
+		///// <param name="id"></param>
+		///// <returns></returns>
+		//[HttpDelete("{id}")]
+		//[Authorize(Roles = "Admin")]
+		//public async Task<ActionResult> DeleteUser(string id)
+		//{
+		//	var res = await AccountController.DeleteUser(id, _userRepository);
+		//	if (!res.Succeeded) return BadRequest("删除失败");
 
-			var res2 = await _teacherRepository.DeleteAsync(id);
-			if (res2 == 0) return BadRequest("删除失败");
-			return Ok(res);
-		}
+		//	var res2 = await _teacherRepository.DeleteAsync(id);
+		//	if (res2 == 0) return BadRequest("删除失败");
+		//	return Ok(res);
+		//}
 	}
 }
