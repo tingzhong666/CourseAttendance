@@ -104,19 +104,19 @@ namespace CourseAttendance.Controllers.Account
 		/// 获取用户信息 本身
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet("profile")]
+		[HttpGet("profile-slef")]
 		[Authorize(Roles = "Admin")]
-		public  async Task<ActionResult> GetProfile()
+		public  async Task<ActionResult> GetProfileSlef()
 		{
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (userId == null)
+			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+			if (userName == null)
 				return BadRequest("获取当前用户ID失败");
-			var user = await _userRepository._userManager.FindByIdAsync(userId);
+			var user = await _userRepository._userManager.FindByNameAsync(userName);
 			if (user == null)
 			{
 				return BadRequest("获取当前用户信息失败");
 			}
-			var admin = await _adminRepository.GetAdminByIdAsync(userId);
+			var admin = await _adminRepository.GetAdminByIdAsync(user.Id);
 			if (admin == null)
 			{
 				return BadRequest("获取当前用户信息失败");
@@ -136,10 +136,13 @@ namespace CourseAttendance.Controllers.Account
 			var userModel = await AccountController.CreateUser(dto, _userRepository);
 			if (userModel == null) return BadRequest("创建失败");
 
+			var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
+
 			var adminModel = dto.ToModel();
 			adminModel.UserId = userModel.Id;
 			var result = await _adminRepository.AddAdminAsync(adminModel);
-			if (result == 0)
+
+			if (result == 0 || !resRole.Succeeded)
 			{
 				var res = await _userRepository.DeleteAsync(userModel.Id);
 				if (!res.Succeeded) return BadRequest("创建失败");

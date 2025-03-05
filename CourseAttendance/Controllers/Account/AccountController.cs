@@ -94,7 +94,7 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		public  async Task<ActionResult> GetUser(string id)
+		public async Task<ActionResult> GetUser(string id)
 		{
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
@@ -109,19 +109,19 @@ namespace CourseAttendance.Controllers.Account
 		/// 获取用户信息 本身
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet("profile")]
+		[HttpGet("profile-self")]
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public  async Task<ActionResult> GetProfile()
+		public async Task<ActionResult> GetProfileSlef()
 		{
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (userId == null)
+			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+			if (userName == null)
 				return BadRequest("获取当前用户ID失败");
-			var user = await _userManager.FindByIdAsync(userId);
+			var user = await _userManager.FindByNameAsync(userName);
 			if (user == null)
 			{
 				return BadRequest("获取当前用户信息失败");
 			}
-			return Ok(user.ToGetUsersResDto());
+			return Ok(user.ToGetUsersResDto(_userRepository));
 		}
 
 
@@ -179,7 +179,7 @@ namespace CourseAttendance.Controllers.Account
 		public static async Task<User?> CreateUser(CreateUserReqDto dto, UserRepository _userRepository)
 		{
 			var model = dto.ToModel();
-			var res=await _userRepository.AddAsync(model, dto.PassWord);
+			var res = await _userRepository.AddAsync(model, dto.PassWord);
 			if (!res.Succeeded) return null;
 			return model;
 		}
@@ -192,9 +192,9 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "Admin")]
-		public  async Task<IActionResult> DeleteUser(string id)
+		public async Task<IActionResult> DeleteUser(string id)
 		{
-			var res= await _userRepository.DeleteAsync(id);
+			var res = await _userRepository.DeleteAsync(id);
 			if (!res.Succeeded) return BadRequest("删除失败");
 			return Ok("删除成功");
 		}

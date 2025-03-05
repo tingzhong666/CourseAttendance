@@ -13,6 +13,8 @@ namespace CourseAttendance.DtoModel.ResDtos
 		/// </summary>
 		[Required]
 		public required string UserName { get; set; }
+		[Required]
+		public required List<string> Roles { get; set; }
 		public string? Email { get; set; }
 		public string? PhoneNumber { get; set; }
 	}

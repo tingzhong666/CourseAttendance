@@ -8,6 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 using CourseAttendance.Model.Users;
 using CourseAttendance.Services;
 using Microsoft.OpenApi.Models;
+using CourseAttendance.Controllers.Account;
+using CourseAttendance.DtoModel.ReqDtos;
+using CourseAttendance.mapper.CreateUserReqDtoExts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,6 +99,7 @@ builder.Services.AddScoped<CourseRepository>();
 builder.Services.AddScoped<CourseStudentRepository>();
 builder.Services.AddScoped<GradeRepository>();
 builder.Services.AddScoped<AcademicRepository>();
+builder.Services.AddScoped<AdminRepository>();
 builder.Services.AddScoped<StudentRepository>();
 builder.Services.AddScoped<TeacherRepository>();
 builder.Services.AddScoped<UserRepository>();
@@ -123,22 +127,25 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
-	var userManager = services.GetRequiredService<UserManager<User>>();
+	var _userRepository = services.GetRequiredService<UserRepository>();
+	var _adminRepository = services.GetRequiredService<AdminRepository>();
 
-	// 创建管理员用户
-	var adminName = "admin";
-	var adminPassword = "Admin123456!";
-
-	var adminUser = await userManager.FindByNameAsync(adminName);
-	if (adminUser == null)
+	var dto = new CreateUserAdminReqDto
 	{
-		adminUser = new User { UserName = adminName, Name = adminName };
-		var result = await userManager.CreateAsync(adminUser, adminPassword);
-		if (result.Succeeded)
-		{
-			await userManager.AddToRoleAsync(adminUser, "Admin");
-		}
+		Name = "admin",
+		UserName = "admin",
+		PassWord = "Admin123456!"
+	};
+	var userModel = await AccountController.CreateUser(dto, _userRepository);
+	if (userModel != null)
+	{
+		var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
+
+		var adminModel = dto.ToModel();
+		adminModel.UserId = userModel.Id;
+		var result = await _adminRepository.AddAdminAsync(adminModel);
 	}
+
 }
 
 app.Run();
