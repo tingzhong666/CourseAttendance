@@ -16,7 +16,7 @@ namespace CourseAttendance.mapper.UserExts
 				UserName = model.UserName,
 				Email = model.Email,
 				PhoneNumber = model.PhoneNumber,
-				Roles = [.. roles ?? []]
+				Roles = [.. roles ?? []],
 			};
 		}
 	}

@@ -45,11 +45,15 @@ namespace CourseAttendance.Controllers.Account
 			}
 
 
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (userId == null)
-				return BadRequest("获取当前用户ID失败");
+			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+			if (userName == null)
+				return BadRequest("获取当前用户名失败");
+			var userModel = await _userRepository._userManager.FindByNameAsync(userName);
+			if (userModel == null)
+				return BadRequest("获取当前用户Id失败");
+
 			var model = user.ToStudentModel();
-			model.UserId = userId;
+			model.UserId = userModel.Id;
 			await _studentRepository.UpdateAsync(model);
 
 			return NoContent();
@@ -95,7 +99,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return NotFound();
 			}
-			return Ok(student.ToGetStudentResDto(user));
+			return Ok(await student.ToGetStudentResDto(user, _userRepository));
 		}
 
 		/// <summary>
@@ -119,7 +123,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return BadRequest("获取当前用户信息失败");
 			}
-			return Ok(student.ToGetStudentResDto(user));
+			return Ok(await student.ToGetStudentResDto(user, _userRepository));
 		}
 
 		/// <summary>

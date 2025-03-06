@@ -33,7 +33,7 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="user"></param>
 		/// <returns></returns>
 		[HttpPut("profile-slef")]
-		[Authorize(Roles = "Student")]
+		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> UpdateProfileSelf(UpdateProfileAdminReqDto user)
 		{
 			var result = await AccountController.UpdateProfileSelf(user,this, _userRepository);
@@ -43,11 +43,16 @@ namespace CourseAttendance.Controllers.Account
 			}
 
 
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (userId == null)
-				return BadRequest("获取当前用户ID失败");
+			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+			if (userName == null)
+				return BadRequest("获取当前用户名失败");
+			var userModel = await _userRepository._userManager.FindByNameAsync(userName);
+			if (userModel == null)
+				return BadRequest("获取当前用户Id失败");
+
+
 			var model = user.ToAdminModel();
-			model.UserId = userId;
+			model.UserId = userModel.Id;
 			await _adminRepository.UpdateAdminAsync(model);
 
 			return NoContent();
@@ -97,7 +102,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return NotFound();
 			}
-			return Ok(admin.ToGetAdminResDto(user));
+			return Ok(await admin.ToGetAdminResDto(user, _userRepository));
 		}
 
 		/// <summary>
@@ -121,7 +126,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return BadRequest("获取当前用户信息失败");
 			}
-			return Ok(admin.ToGetAdminResDto(user));
+			return Ok(await admin.ToGetAdminResDto(user,_userRepository));
 		}
 
 		/// <summary>

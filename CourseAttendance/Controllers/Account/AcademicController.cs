@@ -45,11 +45,15 @@ namespace CourseAttendance.Controllers.Account
 			}
 
 
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (userId == null)
-				return BadRequest("获取当前用户ID失败");
+			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+			if (userName == null)
+				return BadRequest("获取当前用户名失败");
+			var userModel = await _userRepository._userManager.FindByNameAsync(userName);
+			if (userModel == null)
+				return BadRequest("获取当前用户Id失败");
+
 			var model = user.ToAcademicModel();
-			model.UserId = userId;
+			model.UserId = userModel.Id;
 			await _academicRepository.UpdateAsync(model);
 
 			return NoContent();
@@ -97,7 +101,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return NotFound("没有此用户");
 			}
-			return Ok(academic.ToGetAcademicResDto(user));
+			return Ok(await academic.ToGetAcademicResDto(user, _userRepository));
 		}
 
 		/// <summary>
@@ -121,7 +125,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return BadRequest("获取当前用户信息失败");
 			}
-			return Ok(academic.ToGetAcademicResDto(user));
+			return Ok(await academic.ToGetAcademicResDto(user, _userRepository));
 		}
 
 		/// <summary>
@@ -150,7 +154,7 @@ namespace CourseAttendance.Controllers.Account
 			}
 
 
-			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, academicModel.ToGetAcademicResDto(userModel));
+			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, await academicModel.ToGetAcademicResDto(userModel, _userRepository));
 		}
 
 

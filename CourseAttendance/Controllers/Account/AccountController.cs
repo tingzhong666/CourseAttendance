@@ -66,11 +66,15 @@ namespace CourseAttendance.Controllers.Account
 		[NonAction]
 		public static async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user, ControllerBase controller, UserRepository _userRepository)
 		{
-			var userId = controller.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (userId == null)
-				return IdentityResult.Failed([new IdentityError { Description = "获取当前用户ID失败" }]);
+			var userName = controller.User.FindFirst(ClaimTypes.GivenName)?.Value;
+			if (userName == null)
+				return IdentityResult.Failed([new IdentityError { Description = "获取当前用户名失败" }]);
+			var userModel = await _userRepository._userManager.FindByNameAsync(userName);
+			if (userModel == null)
+				return IdentityResult.Failed([new IdentityError { Description = "获取当前用户Id失败" }]);
+
 			var model = user.ToUserModel();
-			model.Id = userId;
+			model.Id = userModel.Id;
 			var result = await _userRepository.UpdateAsync(model);
 			return result;
 		}
@@ -83,8 +87,8 @@ namespace CourseAttendance.Controllers.Account
 		public async Task<IActionResult> GetUsers()
 		{
 			var users = await _userManager.Users.ToListAsync();
-			var res = users.Select(x => x.ToGetUsersResDto()).ToList();
-			return Ok(res);
+			var res = await Task.WhenAll(users.Select(async x => await x.ToGetUsersResDto(_userRepository)));
+			return Ok(res.ToList());
 		}
 
 
@@ -101,7 +105,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return NotFound();
 			}
-			return Ok(user.ToGetUsersResDto());
+			return Ok(await user.ToGetUsersResDto(_userRepository));
 		}
 
 
@@ -121,7 +125,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return BadRequest("获取当前用户信息失败");
 			}
-			return Ok(user.ToGetUsersResDto(_userRepository));
+			return Ok(await user.ToGetUsersResDto(_userRepository));
 		}
 
 
@@ -134,11 +138,11 @@ namespace CourseAttendance.Controllers.Account
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
 		public async Task<IActionResult> ChangePasswordSelf(ChangePasswordSelfReqDto reqDto)
 		{
-			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			if (userId == null)
-				return BadRequest("未携带id信息");
+			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+			if (userName == null)
+				return BadRequest("未携带用户名信息");
 
-			var user = await _userRepository.GetByIdAsync(userId);
+			var user = await _userRepository._userManager.FindByNameAsync(userName);
 			if (user == null)
 				return BadRequest("未找到此用户");
 
