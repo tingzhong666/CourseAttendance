@@ -1,4 +1,4 @@
-﻿namespace CourseAttendance.OtherModel
+﻿namespace CourseAttendance.DtoModel.ReqDtos
 {
 	public class AttendanceFilter
 	{

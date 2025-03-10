@@ -1,7 +1,7 @@
 ﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.Model;
 using CourseAttendance.Model.Users;
-using CourseAttendance.OtherModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseAttendance.Repositories

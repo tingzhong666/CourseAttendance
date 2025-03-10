@@ -31,10 +31,10 @@ namespace CourseAttendance.Repositories
 				.ToListAsync();
 		}
 
-		public async Task AddAsync(Course course)
+		public async Task<int> AddAsync(Course course)
 		{
 			await _context.Courses.AddAsync(course);
-			await _context.SaveChangesAsync();
+			return await _context.SaveChangesAsync();
 		}
 
 		public async Task UpdateAsync(Course course)

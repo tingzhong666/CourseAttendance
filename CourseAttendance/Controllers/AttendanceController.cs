@@ -1,5 +1,5 @@
-﻿using CourseAttendance.Model;
-using CourseAttendance.OtherModel;
+﻿using CourseAttendance.DtoModel.ReqDtos;
+using CourseAttendance.Model;
 using CourseAttendance.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
