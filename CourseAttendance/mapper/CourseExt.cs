@@ -2,7 +2,7 @@
 using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.Model;
 
-namespace CourseAttendance.mapper.UserExts
+namespace CourseAttendance.mapper
 {
 	public static class CourseExt
 	{

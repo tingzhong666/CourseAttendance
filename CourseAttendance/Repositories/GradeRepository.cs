@@ -27,32 +27,33 @@ namespace CourseAttendance.Repositories
 				.ToListAsync();
 		}
 
-		public async Task AddAsync(Grade grade)
+		public async Task<int> AddAsync(Grade grade)
 		{
 			await _context.Grades.AddAsync(grade);
-			await _context.SaveChangesAsync();
+			return await _context.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(Grade grade)
+		public async Task<int> UpdateAsync(Grade grade)
 		{
 			var model = await GetByIdAsync(grade.Id);
-			if (model == null) return;
+			if (model == null) return 0;
 
 			model.Name = grade.Name;
 			model.UpdatedAt = DateTime.Now;
 
 			_context.Grades.Update(model);
-			await _context.SaveChangesAsync();
+			return await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteAsync(int id)
+		public async Task<int> DeleteAsync(int id)
 		{
 			var grade = await GetByIdAsync(id);
 			if (grade != null)
 			{
 				_context.Grades.Remove(grade);
-				await _context.SaveChangesAsync();
+				return await _context.SaveChangesAsync();
 			}
+			return 0;
 		}
 	}
 }

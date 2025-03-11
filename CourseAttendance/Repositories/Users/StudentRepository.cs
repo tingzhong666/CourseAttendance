@@ -7,10 +7,12 @@ namespace CourseAttendance.Repositories.Users
 	public class StudentRepository
 	{
 		private readonly AppDBContext _context;
+		private readonly GradeRepository _gradeRepository;
 
-		public StudentRepository(AppDBContext context)
+		public StudentRepository(AppDBContext context, GradeRepository gradeRepository)
 		{
 			_context = context;
+			_gradeRepository = gradeRepository;
 		}
 
 		public async Task<Student?> GetByIdAsync(string userId)
@@ -35,6 +37,10 @@ namespace CourseAttendance.Repositories.Users
 
 		public async Task<int> AddAsync(Student student)
 		{
+			// 检查外键id
+			var gradeModel= await _gradeRepository.GetByIdAsync(student.GradeId);
+			if (gradeModel == null) return 0;
+
 			var model = new Student
 			{
 				UserId = student.UserId,
@@ -45,14 +51,14 @@ namespace CourseAttendance.Repositories.Users
 			return res;
 		}
 
-		public async Task UpdateAsync(Student student)
+		public async Task<int> UpdateAsync(Student student)
 		{
 			var model = await _context.Students.FirstAsync(s => s.UserId == student.UserId);
-			if (model == null) return;
+			if (model == null) return 0;
 
 			model.GradeId = student.GradeId;
 			_context.Students.Update(model);
-			await _context.SaveChangesAsync();
+			return await _context.SaveChangesAsync();
 		}
 
 		public async Task<int> DeleteAsync(string userId)

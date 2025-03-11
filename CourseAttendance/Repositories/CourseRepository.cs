@@ -37,11 +37,11 @@ namespace CourseAttendance.Repositories
 			return await _context.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(Course course)
+		public async Task<int> UpdateAsync(Course course)
 		{
 
 			var model = await GetByIdAsync(course.Id);
-			if (model == null) return;
+			if (model == null) return 0;
 
 			model.Name = course.Name;
 			model.Weekday = course.Weekday;
@@ -51,18 +51,19 @@ namespace CourseAttendance.Repositories
 			model.UpdatedAt = DateTime.Now;
 			model.TeacherId = course.TeacherId;
 
-			_context.Courses.Update(course);
-			await _context.SaveChangesAsync();
+			return await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteAsync(int id)
+		public async Task<int> DeleteAsync(int id)
 		{
 			var course = await GetByIdAsync(id);
 			if (course != null)
 			{
 				_context.Courses.Remove(course);
-				await _context.SaveChangesAsync();
+				return await _context.SaveChangesAsync();
 			}
+
+			return 0;
 		}
 	}
 }

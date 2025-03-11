@@ -9,6 +9,7 @@ using System.Security.Claims;
 using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
 using CourseAttendance.mapper.UserExts;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
+using Microsoft.EntityFrameworkCore;
 
 namespace CourseAttendance.Controllers.Account
 {
@@ -135,21 +136,39 @@ namespace CourseAttendance.Controllers.Account
 		[Authorize(Roles = "Admin")]
 		public async Task<ActionResult> CreateUser(CreateUserStudentReqDto dto)
 		{
-			var userModel = await AccountController.CreateUser(dto, _userRepository);
-			if (userModel == null) return BadRequest("创建失败");
-
-			var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Student");
-
-			var studentModel = dto.ToModel();
-			studentModel.UserId = userModel.Id;
-			var result = await _studentRepository.AddAsync(studentModel);
-			if (result == 0 || !resRole.Succeeded)
+			try
 			{
-				var res = await _userRepository.DeleteAsync(userModel.Id);
-				if (!res.Succeeded) return BadRequest("创建失败");
+				var userModel = await AccountController.CreateUser(dto, _userRepository);
+				if (userModel == null) return BadRequest("创建失败");
+
+				var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Student");
+
+				var studentModel = dto.ToModel();
+				studentModel.UserId = userModel.Id;
+				var result = await _studentRepository.AddAsync(studentModel);
+				if (result == 0 || !resRole.Succeeded)
+				{
+					var res = await _userRepository.DeleteAsync(userModel.Id);
+					if (!res.Succeeded) return BadRequest("创建失败");
+					return BadRequest("创建失败");
+				}
+				return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, await studentModel.ToGetStudentResDto(userModel, _userRepository));
+			}
+			catch (DbUpdateException ex)
+			{
+				// 检查异常信息是否包含特定外键约束的名称
+				if (ex.InnerException != null && ex.InnerException.Message.Contains("FK_Students_Grades_GradeId"))
+				{
+					return BadRequest("创建失败，班级不存在");
+				}
+
+				// 处理其他数据库错误
+				return StatusCode(500, $"数据库错误: {ex.InnerException?.Message}");
+			}
+			catch (Exception err)
+			{
 				return BadRequest("创建失败");
 			}
-			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id });
 		}
 
 

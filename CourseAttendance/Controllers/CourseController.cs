@@ -1,4 +1,5 @@
 ﻿using CourseAttendance.DtoModel.ReqDtos;
+using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.mapper;
 using CourseAttendance.Model;
 using CourseAttendance.Repositories;
@@ -22,16 +23,16 @@ namespace CourseAttendance.Controllers
 		// 获取所有
 		[HttpGet]
 		[Authorize]
-		public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
+		public async Task<ActionResult<List<CourseResponseDto>>> GetCourses()
 		{
 			var courses = await _courseRepository.GetAllAsync();
-			return Ok(courses);
+			return Ok(courses.ToList().Select(x => x.ToResponseDto()));
 		}
 
 		// 获取单个 按id
 		[HttpGet("{id}")]
 		[Authorize]
-		public async Task<ActionResult<Course>> GetCourse(int id)
+		public async Task<ActionResult<CourseResponseDto>> GetCourse(int id)
 		{
 			var course = await _courseRepository.GetByIdAsync(id);
 
@@ -40,30 +41,33 @@ namespace CourseAttendance.Controllers
 				return NotFound();
 			}
 
-			return Ok(course);
+			return Ok(course.ToResponseDto());
 		}
 
 		// 创建
 		[HttpPost]
 		[Authorize(Roles = "Admin, Academic")]
-		public async Task<ActionResult<Course>> CreateCourse([FromBody] CourseRequestDto course)
+		public async Task<ActionResult> CreateCourse([FromBody] CourseRequestDto course)
 		{
 			var model = course.ToModel();
-			await _courseRepository.AddAsync(model);
+			if (model == null) return BadRequest("创建失败");
+			var res = await _courseRepository.AddAsync(model);
+			if (res == 0) return BadRequest("创建失败");
 			return CreatedAtAction(nameof(GetCourse), new { id = model.Id }, course);
 		}
 
 		// 更新
 		[HttpPut("{id}")]
 		[Authorize(Roles = "Admin, Academic")]
-		public async Task<IActionResult> UpdateCourse(int id, [FromBody] Course course)
+		public async Task<IActionResult> UpdateCourse(int id, [FromBody] CourseRequestDto dto)
 		{
-			if (id != course.Id)
-			{
-				return BadRequest();
-			}
+			var model = dto.ToModel();
+			model.Id = id;
 
-			await _courseRepository.UpdateAsync(course);
+			var res = await _courseRepository.UpdateAsync(model);
+			if (res == 0)
+				return BadRequest("更新失败");
+
 			return NoContent();
 		}
 
@@ -72,7 +76,9 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<IActionResult> DeleteCourse(int id)
 		{
-			await _courseRepository.DeleteAsync(id);
+			var res = await _courseRepository.DeleteAsync(id);
+			if (res == 0)
+				return BadRequest("删除失败");
 			return NoContent();
 		}
 	}

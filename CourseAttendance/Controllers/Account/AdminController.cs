@@ -153,7 +153,7 @@ namespace CourseAttendance.Controllers.Account
 				if (!res.Succeeded) return BadRequest("创建失败");
 				return BadRequest("创建失败");
 			}
-			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id });
+			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, await adminModel.ToGetAdminResDto(userModel, _userRepository));
 		}
 
 
