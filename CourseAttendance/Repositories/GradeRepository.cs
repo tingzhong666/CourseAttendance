@@ -17,6 +17,7 @@ namespace CourseAttendance.Repositories
 		{
 			return await _context.Grades
 				.Include(g => g.Students)
+				.ThenInclude(s => s.User)
 				.FirstOrDefaultAsync(g => g.Id == id);
 		}
 

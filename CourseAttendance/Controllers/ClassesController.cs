@@ -1,4 +1,5 @@
-﻿using CourseAttendance.DtoModel.ReqDtos;
+﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.mapper;
 using CourseAttendance.mapper.UserExts;
@@ -6,6 +7,8 @@ using CourseAttendance.Repositories;
 using CourseAttendance.Repositories.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace CourseAttendance.Controllers
 {
@@ -25,7 +28,10 @@ namespace CourseAttendance.Controllers
 			_studentRepository = studentRepository;
 		}
 
-		// 1. 获取班级列表
+		/// <summary>
+		/// 1. 获取班级列表
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
 		public async Task<ActionResult<IEnumerable<GradeResponseDto>>> GetClasses()
@@ -35,7 +41,11 @@ namespace CourseAttendance.Controllers
 			return Ok(response);
 		}
 
-		// 2. 获取单个班级信息
+		/// <summary>
+		/// 2. 获取单个班级信息
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpGet("{id}")]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
 		public async Task<ActionResult<GradeResponseDto>> GetClass(int id)
@@ -47,7 +57,11 @@ namespace CourseAttendance.Controllers
 			return Ok(response);
 		}
 
-		// 3. 创建新班级
+		/// <summary>
+		/// 3. 创建新班级
+		/// </summary>
+		/// <param name="gradeRequest"></param>
+		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<GradeResponseDto>> CreateClass([FromBody] GradeRequestDto gradeRequest)
@@ -60,7 +74,12 @@ namespace CourseAttendance.Controllers
 			return CreatedAtAction(nameof(GetClass), new { id = dto.Id }, dto);
 		}
 
-		// 4. 更新班级信息
+		/// <summary>
+		/// 4. 更新班级信息
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="gradeRequest"></param>
+		/// <returns></returns>
 		[HttpPut("{id}")]
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<IActionResult> UpdateClass(int id, [FromBody] GradeRequestDto gradeRequest)
@@ -74,7 +93,11 @@ namespace CourseAttendance.Controllers
 			return NoContent(); // 204 更新成功
 		}
 
-		// 5. 删除班级
+		/// <summary>
+		/// 5. 删除班级
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<IActionResult> DeleteClass(int id)
@@ -85,7 +108,11 @@ namespace CourseAttendance.Controllers
 			return NoContent();
 		}
 
-		// 6. 获取班级的学生列表
+		/// <summary>
+		/// 6. 获取班级的学生列表
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpGet("{id}/students")]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
 		public async Task<ActionResult<IEnumerable<GetStudentResDto>>> GetStudents(int id)
@@ -93,13 +120,28 @@ namespace CourseAttendance.Controllers
 			var grade = await _gradeRepository.GetByIdAsync(id);
 			if (grade == null) return NotFound();
 
-			var students = grade.Students.inclu.Select(s => s.ToGetStudentResDto(s.User, _userRepository)).ToList();
-			var studentsRes = await Task.WhenAll(students);
+			var students = grade.Students.Select(async s =>
+			{
+				return await s.ToGetStudentResDto(s.User, _userRepository);
+			});
+
+			var studentsRes = new List<GetStudentResDto>();
+			// 全部操作同步执行，因为数据库上下文不支持多线程
+			foreach (var student in grade.Students)
+			{
+				var studentDto = await student.ToGetStudentResDto(student.User, _userRepository);
+				studentsRes.Add(studentDto);
+			}
 
 			return Ok(studentsRes);
 		}
 
-		// 7. 更换学生班级
+		/// <summary>
+		/// 7. 更换学生班级
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="studentId"></param>
+		/// <returns></returns>
 		[HttpPost("{id}/students/{studentId}")]
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<IActionResult> UpdateStudentToClass(int id, string studentId)
