@@ -48,7 +48,7 @@ namespace CourseAttendance.Repositories
 			model.SignInTime = attendance.SignInTime;
 			model.SignOutTime = attendance.SignOutTime;
 			model.Status = attendance.Status;
-			model.Performance = attendance.Performance;
+			//model.Performance = attendance.Performance;
 			model.Remark = attendance.Remark;
 			model.CheckMethod = attendance.CheckMethod;
 			model.Location = attendance.Location;

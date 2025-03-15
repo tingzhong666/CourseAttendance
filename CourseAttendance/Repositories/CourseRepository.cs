@@ -49,7 +49,7 @@ namespace CourseAttendance.Repositories
 			model.EndTime = course.EndTime;
 			model.Location = course.Location;
 			model.UpdatedAt = DateTime.Now;
-			model.TeacherId = course.TeacherId;
+			model.TeacherUserId = course.TeacherUserId;
 
 			return await _context.SaveChangesAsync();
 		}

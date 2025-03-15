@@ -17,7 +17,7 @@ namespace CourseAttendance.mapper
 				StartTime = model.StartTime,
 				EndTime = model.EndTime,
 				Location = model.Location,
-				TeacherId = model.TeacherId
+				TeacherId = model.TeacherUserId
 			};
 		}
 
@@ -37,8 +37,8 @@ namespace CourseAttendance.mapper
 				Location = model.Location,
 				CreatedAt = model.CreatedAt,
 				UpdatedAt = model.UpdatedAt,
-				TeacherId = model.TeacherId
-				// 这里可以添加教师信息的转换
+				TeacherId = model.TeacherUserId,
+				StudentIds = model.CourseStudents.Select(x => x.StudentId).ToList(),
 			};
 		}
 	}

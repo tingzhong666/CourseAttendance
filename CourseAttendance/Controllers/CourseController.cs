@@ -53,7 +53,11 @@ namespace CourseAttendance.Controllers
 			if (model == null) return BadRequest("创建失败");
 			var res = await _courseRepository.AddAsync(model);
 			if (res == 0) return BadRequest("创建失败");
-			return CreatedAtAction(nameof(GetCourse), new { id = model.Id }, course);
+
+			model = await _courseRepository.GetByIdAsync(model.Id);
+
+
+			return CreatedAtAction(nameof(GetCourse), new { id = model.Id }, model.ToResponseDto());
 		}
 
 		// 更新

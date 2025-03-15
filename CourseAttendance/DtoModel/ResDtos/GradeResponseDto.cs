@@ -1,4 +1,6 @@
-﻿namespace CourseAttendance.DtoModel.ResDtos
+﻿using CourseAttendance.Enums;
+
+namespace CourseAttendance.DtoModel.ResDtos
 {
 	public class GradeResponseDto
 	{
@@ -7,6 +9,6 @@
 		public DateTime CreatedAt { get; set; }
 		public DateTime UpdatedAt { get; set; }
 
-		//public List<GetStudentResDto> Students { get; set; } // 学生信
+		//public List<GetStudentResDto> Students { get; set; } // 学
 	}
 }

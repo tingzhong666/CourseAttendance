@@ -32,6 +32,17 @@ namespace CourseAttendance.Controllers.Account
 		}
 
 		#region 通用
+
+		/// <summary>
+		/// 登录状态验证
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("check")]
+		public async Task<ActionResult> Check()
+		{
+			return Ok();
+		}
+
 		/// <summary>
 		/// 登录
 		/// </summary>
@@ -52,7 +63,7 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return Unauthorized("无效的工号或密码。");
 			}
-
+			
 			// 生成 JWT 令牌
 			var token = await _tokenService.CreateToken(user);
 			return Ok(new LoginRes { Token = token, UserName = model.UserName });

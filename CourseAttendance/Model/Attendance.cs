@@ -11,13 +11,24 @@ namespace CourseAttendance.Model
 		public DateTime? SignInTime { get; set; }
 		public DateTime? SignOutTime { get; set; }
 		public AttendanceStatus Status { get; set; }
-		public PerformanceLevel Performance { get; set; }
+		/// <summary>
+		/// 备注
+		/// </summary>
 		public string Remark { get; set; }
+		/// <summary>
+		/// 打卡类型
+		/// </summary>
 		public CheckMethod CheckMethod { get; set; }
+		/// <summary>
+		/// 地点
+		/// </summary>
 		public string Location { get; set; }
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
-		public string AttachmentUrl { get; set; } 
+		/// <summary>
+		/// 附件
+		/// </summary>
+		public List<string> AttachmentUrl { get; set; } 
 		
 
 		[ForeignKey("Course")]

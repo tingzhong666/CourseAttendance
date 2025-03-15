@@ -153,6 +153,7 @@ namespace CourseAttendance.Controllers.Account
 				return BadRequest("创建失败");
 			}
 
+			academicModel = await _academicRepository.GetByIdAsync(userModel.Id);
 
 			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, await academicModel.ToGetAcademicResDto(userModel, _userRepository));
 		}

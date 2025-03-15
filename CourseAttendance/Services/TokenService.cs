@@ -24,7 +24,10 @@ namespace CourseAttendance.Services
 			var claims = new List<Claim>()
 			{
 				//new Claim(JwtRegisteredClaimNames.Email,user.Email),
-				new Claim(JwtRegisteredClaimNames.GivenName,user.UserName)
+				// 添加用户名 这里是工号学号的意思
+				new(JwtRegisteredClaimNames.GivenName,user.UserName),
+				// 添加Id到信息中
+				new(JwtRegisteredClaimNames.NameId,user.Id),
 			};
 
 			// 获取用户角色并添加到声明中
@@ -33,6 +36,8 @@ namespace CourseAttendance.Services
 			{
 				claims.Add(new Claim(ClaimTypes.Role, role)); // 添加角色声明
 			}
+
+
 
 			var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

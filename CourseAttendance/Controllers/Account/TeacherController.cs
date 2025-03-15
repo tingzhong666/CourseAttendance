@@ -9,6 +9,7 @@ using System.Security.Claims;
 using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
 using CourseAttendance.mapper.UserExts;
+using CourseAttendance.DtoModel.ResDtos;
 
 namespace CourseAttendance.Controllers.Account
 {
@@ -85,7 +86,7 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		public async Task<ActionResult> GetUser(string id)
+		public async Task<ActionResult<GetTeacherResDto>> GetUser(string id)
 		{
 			var user = await _userRepository._userManager.FindByIdAsync(id);
 			if (user == null)
@@ -106,7 +107,7 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpGet("profile-slef")]
 		[Authorize(Roles = "Teacher")]
-		public async Task<ActionResult> GetProfileSlef()
+		public async Task<ActionResult<GetTeacherResDto>> GetProfileSlef()
 		{
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
 			if (userName == null)
@@ -148,6 +149,9 @@ namespace CourseAttendance.Controllers.Account
 				if (!res.Succeeded) return BadRequest("创建失败");
 				return BadRequest("创建失败");
 			}
+
+			teacherModel = await _teacherRepository.GetByIdAsync(userModel.Id);
+
 			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, await teacherModel.ToGetTeacherResDto(userModel,_userRepository));
 		}
 

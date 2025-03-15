@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using CourseAttendance.Controllers.Account;
 using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,7 +93,6 @@ builder.Services.AddAuthentication(options =>
 	};
 });
 
-
 // 存储库注入
 builder.Services.AddScoped<AttendanceRepository>();
 builder.Services.AddScoped<CourseRepository>();
@@ -106,6 +106,13 @@ builder.Services.AddScoped<UserRepository>();
 
 builder.Services.AddScoped<TokenService, TokenService>();
 
+
+// 配置文件上传限制
+builder.Services.Configure<FormOptions>(options =>
+{
+	options.MultipartBodyLengthLimit = 200 * 1024 * 1024; // 设置文件大小限制 200MB
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -116,7 +123,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles(); // 启用静态文件
 app.UseAuthentication();
 app.UseAuthorization();
 

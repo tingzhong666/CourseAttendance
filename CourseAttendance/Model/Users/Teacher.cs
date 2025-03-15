@@ -10,5 +10,8 @@ namespace CourseAttendance.Model.Users
         public string UserId { get; set; } // 外键，作为主键
 
         public virtual User User { get; set; } // 对应的用户信息
+
+
+        public virtual List<Course> Courses { get; set; }
     }
 }

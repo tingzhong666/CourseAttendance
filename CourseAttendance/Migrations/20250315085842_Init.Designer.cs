@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAttendance.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250303114213_2025.3.3")]
-    partial class _202533
+    [Migration("20250315085842_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace CourseAttendance.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AttachmentUrl")
+                    b.PrimitiveCollection<string>("AttachmentUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -49,9 +49,6 @@ namespace CourseAttendance.Migrations
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Performance")
-                        .HasColumnType("int");
 
                     b.Property<string>("Remark")
                         .IsRequired()
@@ -101,7 +98,7 @@ namespace CourseAttendance.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TeacherId")
+                    b.Property<string>("TeacherUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -114,7 +111,7 @@ namespace CourseAttendance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("TeacherUserId");
 
                     b.ToTable("Courses");
                 });
@@ -126,6 +123,9 @@ namespace CourseAttendance.Migrations
 
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Performance")
+                        .HasColumnType("int");
 
                     b.HasKey("CourseId", "StudentId");
 
@@ -455,9 +455,9 @@ namespace CourseAttendance.Migrations
 
             modelBuilder.Entity("CourseAttendance.Model.Course", b =>
                 {
-                    b.HasOne("CourseAttendance.Model.Users.User", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
+                    b.HasOne("CourseAttendance.Model.Users.Teacher", "Teacher")
+                        .WithMany("Courses")
+                        .HasForeignKey("TeacherUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -603,6 +603,11 @@ namespace CourseAttendance.Migrations
                     b.Navigation("Attendances");
 
                     b.Navigation("CourseStudents");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.Users.Teacher", b =>
+                {
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

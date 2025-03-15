@@ -16,7 +16,7 @@ namespace CourseAttendance.mapper
 				StartTime = dto.StartTime,
 				EndTime = dto.EndTime,
 				Location = dto.Location,
-				TeacherId = dto.TeacherId
+				TeacherUserId = dto.TeacherId
 			};
 		}
 	}

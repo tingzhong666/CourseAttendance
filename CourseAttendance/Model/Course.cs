@@ -17,8 +17,8 @@ namespace CourseAttendance.Model
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
 		[ForeignKey(nameof(Teacher))]
-		public string TeacherId { get; set; }
-		public virtual User Teacher { get; set; }
+		public string TeacherUserId { get; set; }
+		public virtual Teacher Teacher { get; set; }
 		public virtual List<CourseStudent> CourseStudents { get; set; } // 选课
 		public virtual List<Attendance> Attendances { get; set; } // 考勤
 	}

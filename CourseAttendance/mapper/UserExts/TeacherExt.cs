@@ -17,6 +17,7 @@ namespace CourseAttendance.mapper.UserExts
 				Email = UserModel.Email,
 				PhoneNumber = UserModel.PhoneNumber,
 				Roles = [.. roles ?? []],
+				CourseIds = model.Courses.Select(x => x.Id).ToList(),
 			};
 		}
 	}

@@ -29,20 +29,31 @@ namespace CourseAttendance.Repositories
 				.ToListAsync();
 		}
 
-		public async Task AddAsync(CourseStudent courseStudent)
+		public async Task<int> AddAsync(CourseStudent courseStudent)
 		{
 			await _context.CourseStudents.AddAsync(courseStudent);
-			await _context.SaveChangesAsync();
+			return await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteAsync(int courseId, string studentId)
+		public async Task<int> DeleteAsync(int courseId, string studentId)
 		{
 			var courseStudent = await GetByIdsAsync(courseId, studentId);
 			if (courseStudent != null)
 			{
 				_context.CourseStudents.Remove(courseStudent);
-				await _context.SaveChangesAsync();
+				return await _context.SaveChangesAsync();
 			}
+
+			return 0;
+		}
+
+		// 修改
+		public async Task<int> UpdateAsync(CourseStudent courseStudent)
+		{
+			var model = await _context.CourseStudents.FirstOrDefaultAsync(x => x.StudentId == courseStudent.StudentId && x.CourseId == courseStudent.CourseId);
+			if (model == null) return 0;
+			model.Performance = courseStudent.Performance;
+			return await _context.SaveChangesAsync();
 		}
 	}
 }

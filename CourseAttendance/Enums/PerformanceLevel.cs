@@ -6,6 +6,10 @@
 	public enum PerformanceLevel
 	{
 		/// <summary>
+		/// 无
+		/// </summary>
+		None = 0,
+		/// <summary>
 		/// 优
 		/// </summary>
 		Excellent,

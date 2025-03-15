@@ -17,6 +17,7 @@ namespace CourseAttendance.Repositories.Users
 		{
 			return await _context.Teachers
 				.Include(t => t.User)
+				.Include(t => t.Courses)
 				.FirstOrDefaultAsync(t => t.UserId == userId);
 		}
 

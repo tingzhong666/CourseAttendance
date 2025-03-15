@@ -9,5 +9,11 @@ namespace CourseAttendance.DtoModel.ResDtos
 		/// </summary>
 		[Required]
 		public int GradeId { get; set; }
+
+		/// <summary>
+		/// 课程
+		/// </summary>
+		[Required]
+		public List<int> courses { get; set; } = new List<int>();
 	}
 }
