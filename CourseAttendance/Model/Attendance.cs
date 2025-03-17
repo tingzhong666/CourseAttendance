@@ -9,7 +9,7 @@ namespace CourseAttendance.Model
 	{
 		public DateTime AttendanceDate { get; set; }
 		public DateTime? SignInTime { get; set; }
-		public DateTime? SignOutTime { get; set; }
+		//public DateTime? SignOutTime { get; set; }
 		public AttendanceStatus Status { get; set; }
 		/// <summary>
 		/// 备注
