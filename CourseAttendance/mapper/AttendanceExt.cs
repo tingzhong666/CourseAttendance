@@ -9,7 +9,7 @@ namespace CourseAttendance.mapper
 		{
 			return new AttendanceResponseDto
 			{
-				AttendanceDate = attendance.AttendanceDate,
+				//AttendanceDate = attendance.AttendanceDate,
 				SignInTime = attendance.SignInTime,
 				//SignOutTime = attendance.SignOutTime,
 				Status = attendance.Status,

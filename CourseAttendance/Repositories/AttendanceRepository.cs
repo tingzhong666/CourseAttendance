@@ -23,7 +23,7 @@ namespace CourseAttendance.Repositories
 				.FirstOrDefaultAsync(a => a.CourseId == courseId && a.StudentId == studentId);
 		}
 
-		public async Task<IEnumerable<Attendance>> GetAllAsync()
+		public async Task<List<Attendance>> GetAllAsync()
 		{
 			return await _context.Attendances
 				.Include(a => a.Course)
@@ -31,22 +31,22 @@ namespace CourseAttendance.Repositories
 				.ToListAsync();
 		}
 
-		public async Task AddAsync(Attendance attendance)
+		public async Task<int> AddAsync(Attendance attendance)
 		{
 			await _context.Attendances.AddAsync(attendance);
-			await _context.SaveChangesAsync();
+			return await _context.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(Attendance attendance)
+		public async Task<int> UpdateAsync(Attendance attendance)
 		{
 			var model = await _context.Attendances
 				.Include(a => a.Course)
 				.Include(a => a.Student)
 				.FirstOrDefaultAsync(a => a.CourseId == attendance.CourseId && a.StudentId == attendance.StudentId);
-			if (model == null) return;
+			if (model == null) return 0;
 
 			model.SignInTime = attendance.SignInTime;
-			model.SignOutTime = attendance.SignOutTime;
+			//model.SignOutTime = attendance.SignOutTime;
 			model.Status = attendance.Status;
 			//model.Performance = attendance.Performance;
 			model.Remark = attendance.Remark;
@@ -55,46 +55,47 @@ namespace CourseAttendance.Repositories
 			model.UpdatedAt = DateTime.Now;
 			model.AttachmentUrl = attendance.AttachmentUrl;
 
-			_context.Attendances.Update(model);
-			await _context.SaveChangesAsync();
+			//_context.Attendances.Update(model);
+			return await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteAsync(int courseId, string studentId)
+		public async Task<int> DeleteAsync(int courseId, string studentId)
 		{
 			var attendance = await GetByIdAsync(courseId, studentId);
 			if (attendance != null)
 			{
 				_context.Attendances.Remove(attendance);
-				await _context.SaveChangesAsync();
+				return await _context.SaveChangesAsync();
 			}
+			return 0;
 		}
 
 
-		public async Task<IEnumerable<Attendance>> FilterAttendancesAsync(AttendanceFilter filter)
-		{
-			var query = _context.Attendances.AsQueryable();
+		//public async Task<IEnumerable<Attendance>> FilterAttendancesAsync(AttendanceFilter filter)
+		//{
+		//	var query = _context.Attendances.AsQueryable();
 
-			if (filter.CourseId.HasValue)
-			{
-				query = query.Where(a => a.CourseId == filter.CourseId.Value);
-			}
+		//	if (filter.CourseId.HasValue)
+		//	{
+		//		query = query.Where(a => a.CourseId == filter.CourseId.Value);
+		//	}
 
-			if (!string.IsNullOrEmpty(filter.StudentId))
-			{
-				query = query.Where(a => a.StudentId == filter.StudentId);
-			}
+		//	if (!string.IsNullOrEmpty(filter.StudentId))
+		//	{
+		//		query = query.Where(a => a.StudentId == filter.StudentId);
+		//	}
 
-			if (filter.StartDate.HasValue)
-			{
-				query = query.Where(a => a.AttendanceDate >= filter.StartDate.Value);
-			}
+		//	if (filter.StartDate.HasValue)
+		//	{
+		//		query = query.Where(a => a.CreatedAt >= filter.StartDate.Value);
+		//	}
 
-			if (filter.EndDate.HasValue)
-			{
-				query = query.Where(a => a.AttendanceDate <= filter.EndDate.Value);
-			}
+		//	if (filter.EndDate.HasValue)
+		//	{
+		//		query = query.Where(a => a.CreatedAt <= filter.EndDate.Value);
+		//	}
 
-			return await query.ToListAsync();
-		}
+		//	return await query.ToListAsync();
+		//}
 	}
 }

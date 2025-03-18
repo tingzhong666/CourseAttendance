@@ -7,9 +7,15 @@ namespace CourseAttendance.Model
 {
     public class Attendance
 	{
-		public DateTime AttendanceDate { get; set; }
+		//public DateTime AttendanceDate { get; set; }
+		/// <summary>
+		/// 签到时间
+		/// </summary>
 		public DateTime? SignInTime { get; set; }
 		//public DateTime? SignOutTime { get; set; }
+		/// <summary>
+		/// 考勤状态
+		/// </summary>
 		public AttendanceStatus Status { get; set; }
 		/// <summary>
 		/// 备注

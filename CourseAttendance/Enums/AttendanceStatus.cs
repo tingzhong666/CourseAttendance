@@ -18,7 +18,7 @@
 		/// </summary>
 		Leave,
 		/// <summary>
-		/// 缺课
+		/// 缺席
 		/// </summary>
 		Absent,
 		/// <summary>

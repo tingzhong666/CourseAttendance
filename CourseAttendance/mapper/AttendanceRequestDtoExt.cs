@@ -9,7 +9,7 @@ namespace CourseAttendance.mapper
 		{
 			return new Attendance
 			{
-				AttendanceDate = requestDto.AttendanceDate,
+				//AttendanceDate = requestDto.AttendanceDate,
 				SignInTime = requestDto.SignInTime,
 				//SignOutTime = requestDto.SignOutTime,
 				Status = requestDto.Status,
@@ -18,10 +18,24 @@ namespace CourseAttendance.mapper
 				Location = requestDto.Location,
 				AttachmentUrl = requestDto.AttachmentUrl,
 				CourseId = requestDto.CourseId,
-				StudentId = requestDto.StudentId,
+				//StudentId = requestDto.StudentId,
 				//CreatedAt = DateTime.Now,
 				UpdatedAt = DateTime.Now,
 			};
 		}
+
+		//public static AttendanceRequestDto Clone(this AttendanceRequestDto requestDto)
+		//{
+		//	return new AttendanceRequestDto
+		//	{
+		//		SignInTime = requestDto.SignInTime,
+		//		Status = requestDto.Status,
+		//		Remark = requestDto.Remark,
+		//		CheckMethod = requestDto.CheckMethod,
+		//		Location = requestDto.Location,
+		//		AttachmentUrl = requestDto.AttachmentUrl,
+		//		CourseId = requestDto.CourseId,
+		//	};
+		//}
 	}
 }
