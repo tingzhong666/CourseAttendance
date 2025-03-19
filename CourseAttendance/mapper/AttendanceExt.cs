@@ -15,10 +15,10 @@ namespace CourseAttendance.mapper
 				Status = attendance.Status,
 				Remark = attendance.Remark,
 				CheckMethod = attendance.CheckMethod,
-				Location = attendance.Location,
+				//Location = attendance.Location,
 				CreatedAt = attendance.CreatedAt,
 				UpdatedAt = attendance.UpdatedAt,
-				AttachmentUrl = attendance.AttachmentUrl,
+				//AttachmentUrl = attendance.AttachmentUrl,
 				CourseId = attendance.CourseId,
 				StudentId = attendance.StudentId,
 			};

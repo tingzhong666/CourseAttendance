@@ -26,6 +26,6 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		/// <summary>
 		/// 密码 密码打卡用
 		/// </summary>
-		public string? PassWordHas { get; set; } = "";
+		public string? PassWord { get; set; } = "";
 	}
 }
