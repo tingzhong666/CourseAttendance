@@ -53,7 +53,7 @@ namespace CourseAttendance.Repositories
 			model.CheckMethod = attendance.CheckMethod;
 			//model.Location = attendance.Location;
 			model.UpdatedAt = DateTime.Now;
-			model.AttachmentUrl = attendance.AttachmentUrl;
+			//model.AttachmentUrl = attendance.AttachmentUrl;
 			model.PassWord = attendance.PassWord;
 			model.EndTime = attendance.EndTime;
 

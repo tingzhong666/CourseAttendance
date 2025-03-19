@@ -12,7 +12,7 @@
 		/// <summary>
 		/// 位置打卡
 		/// </summary>
-		Location,
+		//Location,
 		/// <summary>
 		/// 密码打卡
 		/// </summary>
