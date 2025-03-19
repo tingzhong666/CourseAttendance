@@ -51,9 +51,11 @@ namespace CourseAttendance.Repositories
 			//model.Performance = attendance.Performance;
 			model.Remark = attendance.Remark;
 			model.CheckMethod = attendance.CheckMethod;
-			model.Location = attendance.Location;
+			//model.Location = attendance.Location;
 			model.UpdatedAt = DateTime.Now;
 			model.AttachmentUrl = attendance.AttachmentUrl;
+			model.PassWord = attendance.PassWord;
+			model.EndTime = attendance.EndTime;
 
 			//_context.Attendances.Update(model);
 			return await _context.SaveChangesAsync();

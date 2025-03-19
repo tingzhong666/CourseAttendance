@@ -208,12 +208,37 @@ namespace CourseAttendance.Controllers
 			// 如果是老师，则验证当前课程是否有权限
 			if (model.StudentId != userId)
 			{
-				return BadRequest("操作失败，当前用户无权限修改此课程考勤");
+				return BadRequest("操作失败，当前用户无权限执行此操作");
 			}
 
-			model = dto.ToModel();
+			//model = dto.ToModel();
+			// 打卡逻辑
+			var isTimeRange = model.CreatedAt <= DateTime.Now && DateTime.Now <= model.EndTime;
+			switch (model.CheckMethod)
+			{
+				case CheckMethod.Normal:
+					// 时间在范围内为正常，否则缺席，请假只能老师手动改
+					if (isTimeRange)
+						model.Status = AttendanceStatus.None;
+					else
+						model.Status = AttendanceStatus.Absent;
+					break;
+				//case CheckMethod.Location:
+				//break;
+				case CheckMethod.Password:
+					if (isTimeRange && dto.PassWord == model.PassWord)
+						model.Status = AttendanceStatus.None;
+					else
+						model.Status = AttendanceStatus.Absent;
+					break;
+				default:
+					return BadRequest("操作失败，未知打卡方式");
+			}
+
+
+
 			var res = await _attendanceRepository.UpdateAsync(model);
-			if (res == 0) return BadRequest($"操作失败，更新失败");
+			if (res == 0) return BadRequest($"操作失败，打卡失败");
 
 			return Ok();
 		}

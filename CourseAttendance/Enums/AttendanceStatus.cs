@@ -5,14 +5,14 @@
 	/// </summary>
 	public enum AttendanceStatus
 	{
-		/// <summary>
-		/// 迟到
-		/// </summary>
-		Late,
-		/// <summary>
-		/// 早退
-		/// </summary>
-		Early,
+		///// <summary>
+		///// 迟到
+		///// </summary>
+		//Late,
+		///// <summary>
+		///// 早退
+		///// </summary>
+		//Early,
 		/// <summary>
 		/// 请假
 		/// </summary>
