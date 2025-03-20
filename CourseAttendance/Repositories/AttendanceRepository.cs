@@ -15,12 +15,12 @@ namespace CourseAttendance.Repositories
 			_context = context;
 		}
 
-		public async Task<Attendance?> GetByIdAsync(int courseId, string studentId)
+		public async Task<Attendance?> GetByIdAsync(int id)
 		{
 			return await _context.Attendances
 				.Include(a => a.Course)
 				.Include(a => a.Student)
-				.FirstOrDefaultAsync(a => a.CourseId == courseId && a.StudentId == studentId);
+				.FirstOrDefaultAsync(a => a.Id == id);
 		}
 
 		public async Task<List<Attendance>> GetAllAsync()
@@ -42,7 +42,7 @@ namespace CourseAttendance.Repositories
 			var model = await _context.Attendances
 				.Include(a => a.Course)
 				.Include(a => a.Student)
-				.FirstOrDefaultAsync(a => a.CourseId == attendance.CourseId && a.StudentId == attendance.StudentId);
+				.FirstOrDefaultAsync(a => a.Id == attendance.Id);
 			if (model == null) return 0;
 
 			model.SignInTime = attendance.SignInTime;
@@ -61,9 +61,9 @@ namespace CourseAttendance.Repositories
 			return await _context.SaveChangesAsync();
 		}
 
-		public async Task<int> DeleteAsync(int courseId, string studentId)
+		public async Task<int> DeleteAsync(int id)
 		{
-			var attendance = await GetByIdAsync(courseId, studentId);
+			var attendance = await GetByIdAsync(id);
 			if (attendance != null)
 			{
 				_context.Attendances.Remove(attendance);

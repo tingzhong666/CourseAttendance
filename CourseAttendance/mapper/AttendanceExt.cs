@@ -21,6 +21,7 @@ namespace CourseAttendance.mapper
 				//AttachmentUrl = attendance.AttachmentUrl,
 				CourseId = attendance.CourseId,
 				StudentId = attendance.StudentId,
+				EndTime = attendance.EndTime,
 			};
 		}
 	}

@@ -29,8 +29,8 @@ namespace CourseAttendance.AppDataContext
 			base.OnModelCreating(modelBuilder);
 			// 多对多 考勤  课程与学生
 			{
-				modelBuilder.Entity<Attendance>()
-					.HasKey(cs => new { cs.CourseId, cs.StudentId });
+				//modelBuilder.Entity<Attendance>()
+				//	.HasKey(cs => new { cs.CourseId, cs.StudentId });
 
 				modelBuilder.Entity<Attendance>()
 					.HasOne(u => u.Student)

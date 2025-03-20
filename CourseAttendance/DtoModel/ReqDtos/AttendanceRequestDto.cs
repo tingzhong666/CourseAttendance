@@ -8,6 +8,10 @@ namespace CourseAttendance.DtoModel.ReqDtos
 	/// </summary>
 	public class AttendanceRequestDto
 	{
+
+		[Required]
+		public int Id { get; set; }
+
 		//public DateTime AttendanceDate { get; set; }
 		//public DateTime? SignInTime { get; set; } 用服务器时间
 		//public DateTime? SignOutTime { get; set; }
@@ -18,10 +22,10 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		//public string Location { get; set; }
 		//public List<string> AttachmentUrl { get; set; }
 
-		[Required]
-		public int CourseId { get; set; }
-		[Required]
-		public string StudentId { get; set; }
+		//[Required]
+		//public int CourseId { get; set; }
+		//[Required]
+		//public string StudentId { get; set; }
 
 		/// <summary>
 		/// 密码 密码打卡用

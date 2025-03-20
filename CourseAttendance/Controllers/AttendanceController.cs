@@ -28,6 +28,7 @@ namespace CourseAttendance.Controllers
 		/// <summary>
 		/// 获取列表
 		/// </summary>
+		/// <param name="filter"></param>
 		/// <returns></returns>
 		[HttpGet]
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
@@ -72,14 +73,13 @@ namespace CourseAttendance.Controllers
 		/// <summary>
 		/// 获取单个详情 ID获取
 		/// </summary>
-		/// <param name="courseId"></param>
-		/// <param name="studentId"></param>
+		/// <param name="id"></param>
 		/// <returns></returns>
-		[HttpGet("{courseId}/{studentId}")]
+		[HttpGet("{id}")]
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public async Task<ActionResult<AttendanceResponseDto>> GetAttendance(int courseId, string studentId)
+		public async Task<ActionResult<AttendanceResponseDto>> GetAttendance(int id)
 		{
-			var model = await _attendanceRepository.GetByIdAsync(courseId, studentId);
+			var model = await _attendanceRepository.GetByIdAsync(id);
 			if (model == null)
 			{
 				return BadRequest("操作失败，未找到此考勤信息");
@@ -100,15 +100,16 @@ namespace CourseAttendance.Controllers
 		}
 
 		/// <summary>
-		/// 创建考勤信息 
+		/// 创建考勤信息
 		/// </summary>
-		/// <param name="attendance"></param>
+		/// <param name="courseId"></param>
+		/// <param name="checkMethod"></param>
 		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "Admin,Academic,Teacher")]
-		public async Task<ActionResult<List<AttendanceResponseDto>>> CreateAttendance([FromQuery] int courseId, [FromQuery] CheckMethod checkMethod)
+		public async Task<ActionResult<List<AttendanceResponseDto>>> CreateAttendance([FromBody] AttendanceCreateRequestDto dto)
 		{
-			var courseModel = await _courseRepository.GetByIdAsync(courseId);
+			var courseModel = await _courseRepository.GetByIdAsync(dto.CourseId);
 			if (courseModel == null)
 			{
 				return BadRequest("操作失败，未找到此课程信息");
@@ -123,19 +124,7 @@ namespace CourseAttendance.Controllers
 			}
 
 
-			var now = DateTime.Now;
-			var models = courseModel.CourseStudents.Select(x =>
-			{
-				return new Attendance
-				{
-					CheckMethod = checkMethod,
-					CourseId = x.CourseId,
-					CreatedAt = now,
-					Status = AttendanceStatus.Absent,
-					UpdatedAt = now,
-					StudentId = x.StudentId,
-				};
-			}).ToList();
+			var models = courseModel.CourseStudents.Select(x => dto.ToModel(x.StudentId)).ToList();
 			foreach (var item in models)
 			{
 				var res = await _attendanceRepository.AddAsync(item);
@@ -151,34 +140,28 @@ namespace CourseAttendance.Controllers
 		/// <summary>
 		/// 修改考勤状态
 		/// </summary>
-		/// <param name="courseId"></param>
-		/// <param name="studentId"></param>
+		/// <param name="id"></param>
 		/// <param name="status"></param>
 		/// <returns></returns>
 		[HttpPut]
 		[Authorize(Roles = "Admin,Academic,Teacher")]
-		public async Task<ActionResult> UpdateAttendanceStatus([FromQuery] int courseId, [FromQuery] string studentId, [FromQuery] AttendanceStatus status)
+		public async Task<ActionResult> UpdateAttendanceStatus([FromQuery] int id, [FromQuery] AttendanceStatus status)
 		{
-			// 老师身份 验证是否有权限
-			var courseModel = await _courseRepository.GetByIdAsync(courseId);
-			if (courseModel == null)
-			{
-				return BadRequest("操作失败，未找到此课程信息");
-			}
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userId == null)
-				return BadRequest("操作失败，Token为携带ID信息");
-			// 如果是老师，则验证当前课程是否有权限
-			if (User.IsInRole("Teacher") && courseModel.TeacherUserId != userId)
-			{
-				return BadRequest("操作失败，当前用户无权限修改此课程考勤");
-			}
-
-			var model = await _attendanceRepository.GetByIdAsync(courseId, studentId);
+			var model = await _attendanceRepository.GetByIdAsync(id);
 			if (model == null)
 			{
 				return BadRequest("操作失败，未找到此考勤信息");
 			}
+			// 老师身份 验证是否有权限
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			if (userId == null)
+				return BadRequest("操作失败，Token为携带ID信息");
+			// 如果是老师，则验证当前课程是否有权限
+			if (User.IsInRole("Teacher") && model.Course.TeacherUserId != userId)
+			{
+				return BadRequest("操作失败，当前用户无权限修改此课程考勤");
+			}
+
 			model.Status = status;
 			var res = await _attendanceRepository.UpdateAsync(model);
 			if (res == 0) return BadRequest($"操作失败，更新失败");
@@ -189,15 +172,13 @@ namespace CourseAttendance.Controllers
 		/// <summary>
 		/// 学生打卡
 		/// </summary>
-		/// <param name="courseId"></param>
-		/// <param name="studentId"></param>
-		/// <param name="attendance"></param>
+		/// <param name="dto"></param>
 		/// <returns></returns>
 		[HttpPut("sign-in")]
 		[Authorize(Roles = "Student")]
 		public async Task<IActionResult> SignIn([FromBody] AttendanceRequestDto dto)
 		{
-			var model = await _attendanceRepository.GetByIdAsync(dto.CourseId, dto.StudentId);
+			var model = await _attendanceRepository.GetByIdAsync(dto.Id);
 			if (model == null)
 			{
 				return BadRequest("操作失败，未找到此考勤信息");
@@ -214,28 +195,26 @@ namespace CourseAttendance.Controllers
 			//model = dto.ToModel();
 			// 打卡逻辑
 			var isTimeRange = model.CreatedAt <= DateTime.Now && DateTime.Now <= model.EndTime;
+			// 时间在范围内为正常，否则缺席，请假只能老师手动改
+			if (!isTimeRange)
+				return BadRequest($"操作失败，超出时间");
+			if(model.CreatedAt != model.UpdatedAt)
+				return BadRequest($"操作失败，已经执行过操作");
 			switch (model.CheckMethod)
 			{
 				case CheckMethod.Normal:
-					// 时间在范围内为正常，否则缺席，请假只能老师手动改
-					if (isTimeRange)
-						model.Status = AttendanceStatus.None;
-					else
-						model.Status = AttendanceStatus.Absent;
 					break;
 				//case CheckMethod.Location:
 				//break;
 				case CheckMethod.Password:
-					if (isTimeRange && dto.PassWord == model.PassWord)
-						model.Status = AttendanceStatus.None;
-					else
-						model.Status = AttendanceStatus.Absent;
+					if (dto.PassWord != model.PassWord)
+						return BadRequest($"操作失败，密码不对");
 					break;
 				default:
 					return BadRequest("操作失败，未知打卡方式");
 			}
 
-
+			model.Status = AttendanceStatus.None;
 
 			var res = await _attendanceRepository.UpdateAsync(model);
 			if (res == 0) return BadRequest($"操作失败，打卡失败");
@@ -243,17 +222,22 @@ namespace CourseAttendance.Controllers
 			return Ok();
 		}
 
-		[HttpDelete("{courseId}/{studentId}")]
+		/// <summary>
+		/// 删除
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpDelete("{id}")]
 		[Authorize(Roles = "Admin,Academic")]
-		public async Task<IActionResult> DeleteAttendance(int courseId, string studentId)
+		public async Task<IActionResult> DeleteAttendance(int id)
 		{
-			var attendance = await _attendanceRepository.GetByIdAsync(courseId, studentId);
+			var attendance = await _attendanceRepository.GetByIdAsync(id);
 			if (attendance == null)
 			{
 				return BadRequest("操作失败，未找到此考勤信息");
 			}
 
-			var res = await _attendanceRepository.DeleteAsync(courseId, studentId);
+			var res = await _attendanceRepository.DeleteAsync(id);
 			if (res == 0) return BadRequest($"操作失败，删除失败");
 
 			return Ok();

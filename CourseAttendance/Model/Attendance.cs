@@ -7,6 +7,10 @@ namespace CourseAttendance.Model
 {
     public class Attendance
 	{
+
+		[Key]
+		public int Id { get; set; }
+
 		//public DateTime AttendanceDate { get; set; }
 		/// <summary>
 		/// 签到时间
