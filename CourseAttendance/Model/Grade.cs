@@ -11,6 +11,10 @@ namespace CourseAttendance.Model
 
 		[Required]
 		public string Name { get; set; }
+		// 大专业系
+		// 专业
+		// 班级序号
+		// 入校年份
 
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;

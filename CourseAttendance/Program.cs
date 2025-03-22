@@ -123,6 +123,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+	app.UseCors(x => x
+		 .AllowAnyMethod()
+		 .AllowAnyHeader()
+		 .AllowCredentials()
+		  //.WithOrigins("https://localhost:44351))
+		  .SetIsOriginAllowed(origin => true)); // ¿çÓòÅäÖÃ
+}
 app.UseStaticFiles(); // ÆôÓÃ¾²Ì¬ÎÄ¼ş
 app.UseAuthentication();
 app.UseAuthorization();
