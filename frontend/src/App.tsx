@@ -4,11 +4,11 @@ import { Button } from 'antd';
 import Login from './pages/login/login';
 import HomeLayout from './pages/homeLayout/homeLayout';
 
-import * as api from "./services/http/httpInstance"
+//import * as api from "./services/http/httpInstance"
 
-const App = async () => {
+const App = () => {
 
-    await api.Account.apiAccountCheckGet();
+    //await api.Account.apiAccountCheckGet();
 
     return (
         <div className="App">
