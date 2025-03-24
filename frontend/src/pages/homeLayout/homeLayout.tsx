@@ -3,6 +3,7 @@ import "./homeLayout.css"
 import { Col, Row } from 'antd'
 import SideMenu from './SideMenu/SideMenu'
 import Home from '../home/home'
+import { Outlet,  } from 'react-router'
 
 interface Props {
 
@@ -13,10 +14,11 @@ export default (props: Props) => {
         <>
             <Row>
                 <Col span={5} style={{ border: '1px solid ' }}>
-                    <SideMenu/>
+                    <SideMenu />
                 </Col>
                 <Col span={19} style={{ border: '1px solid ' }}>
-                    <Home/>
+                    {/*<Home />*/}
+                    <Outlet />
                 </Col>
             </Row>
         </>

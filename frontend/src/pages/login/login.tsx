@@ -3,13 +3,18 @@ import "./login.css"
 import { Button, Card, Flex, Form, Input, Image, Row, Col } from "antd"
 import loginPng from "../../assets/login.png"
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import * as api from "../../services/http/httpInstance"
+import { LoginModel } from '../../services/api';
+import { useAuth } from "../../Contexts/auth"
+import { UserProfile } from '../../Models/User';
+import { useNavigate } from 'react-router';
 
 interface Props {
 
 }
 
 interface formType {
-    username: string,
+    username: string
     password: string
 }
 
@@ -18,8 +23,13 @@ export default (props: Props) => {
 
     const [form] = Form.useForm();
 
-    const onFinish = (values: formType) => {
-        console.log("asdasdasdasd" + values.username);
+    const onFinish = async (values: formType) => {
+        var res = await api.Account.apiAccountLoginPost({ userName: values.username, password: values.password } as LoginModel);
+
+        useAuth().setToken(res.data.token)
+        useAuth().setUser({ userName: res.data.userName } as UserProfile)
+
+        useNavigate()("/home")
     };
     return (
         <div className="login">

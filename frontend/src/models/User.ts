@@ -1,4 +1,4 @@
 export type UserProfile = {
     userName: string;
-    email: string;
+    //email: string;
 };

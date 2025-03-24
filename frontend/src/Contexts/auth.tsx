@@ -1,12 +1,13 @@
 import axios from "axios";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { UserProfile } from "../models/User";
+import { UserProfile } from "../Models/User";
 
 
 type UserContextType = {
-    user: UserProfile | null;
-    token: string | null;
+    user: UserProfile | null
+    setUser: React.Dispatch<React.SetStateAction<UserProfile | null>>
+    token: string | null
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 };
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
@@ -29,8 +30,9 @@ export const UserProvider = ({ children }: Props) => {
         setIsReady(true);
     }, []);
 
+
     return (
-        <UserContext.Provider value={{ token, user }}>
+        <UserContext.Provider value={{ token, user, setUser, setToken }}>
             {isReady ? children : null}
         </UserContext.Provider>
     )
