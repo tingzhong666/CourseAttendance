@@ -10,13 +10,14 @@ import { useNavigate } from 'react-router';
 //import * as api from "./services/http/httpInstance"
 
 const App = () => {
-    let auth = useAuth()
-    let navigate = useNavigate()
-    //await api.Account.apiAccountCheckGet();
-    useEffect(() => {
-        if (auth.token == null)
-            navigate("/login")
-    }, [])
+    //let auth = useAuth()
+    //let navigate = useNavigate()
+    ////await api.Account.apiAccountCheckGet();
+    //useEffect(() => {
+    //    if (auth.token == null)
+    //        navigate("/login")
+    //    console.log(auth.token+" 123")
+    //}, [])
 
     return (
         <div className="App">

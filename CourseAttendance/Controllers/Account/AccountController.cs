@@ -33,11 +33,20 @@ namespace CourseAttendance.Controllers.Account
 
 		#region 通用
 
+		// 测试
+		[HttpGet("test")]
+		public async Task<ActionResult> Test()
+		{
+			return Ok();
+		}
+
+
 		/// <summary>
 		/// 登录状态验证
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("check")]
+		[Authorize]
 		public async Task<ActionResult> Check()
 		{
 			return Ok();

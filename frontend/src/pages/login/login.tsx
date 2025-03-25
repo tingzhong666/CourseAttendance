@@ -19,18 +19,31 @@ interface formType {
 }
 
 export default (props: Props) => {
-
+    const auth = useAuth();
+    const navigate = useNavigate();
 
     const [form] = Form.useForm();
 
     const onFinish = async (values: formType) => {
         var res = await api.Account.apiAccountLoginPost({ userName: values.username, password: values.password } as LoginModel);
 
-        useAuth().setToken(res.data.token)
-        useAuth().setUser({ userName: res.data.userName } as UserProfile)
+        auth.setToken(res.data.token)
+        let userProfile=  { userName: res.data.userName } as UserProfile
+        auth.setUser(userProfile)
 
-        useNavigate()("/home")
-    };
+        const user = localStorage.setItem("user", JSON.stringify(userProfile));
+        const token = localStorage.setItem("token", res.data.token);
+
+        navigate("/home")
+    }
+
+
+
+    const onTest = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        console.log(auth.token+"qwe")
+        //var res = await api.Account.apiAccountTestGet();
+    }
+
     return (
         <div className="login">
             {/*标题*/}
@@ -68,6 +81,7 @@ export default (props: Props) => {
                                 </Form.Item>
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit">登录</Button>
+                                    <Button type="primary" onClick={e => onTest(e)}>测试</Button>
                                 </Form.Item>
                             </Form>
                         </Card>
