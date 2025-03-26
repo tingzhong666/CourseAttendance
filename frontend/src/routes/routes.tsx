@@ -3,6 +3,7 @@ import App from "../App";
 import Home from "../pages/home/home";
 import Login from "../pages/login/login";
 import HomeLayout from "../pages/homeLayout/homeLayout";
+import NotFount from "../pages/notfount404/notfount404";
 
 export const router = createBrowserRouter([
     {
@@ -18,4 +19,8 @@ export const router = createBrowserRouter([
             //{ path: "company/:ticker", element: <CompanyPage /> },
         ],
     },
+    {
+        path: "*",
+        element: <NotFount />
+    }
 ]);
