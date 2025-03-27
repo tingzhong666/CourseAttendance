@@ -36,27 +36,27 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpPut("profile-slef")]
 		[Authorize(Roles = "Academic")]
-		public async Task<IActionResult> UpdateProfileSelf(UpdateProfileAcademicReqDto user)
+		public async Task<ActionResult<ApiResponse<object>>> UpdateProfileSelf(UpdateProfileAcademicReqDto user)
 		{
 			var result = await AccountController.UpdateProfileSelf(user, this, _userRepository);
 			if (!result.Succeeded)
 			{
-				return BadRequest(result.Errors);
+				return Ok(new ApiResponse<object> { Code = 2, Msg = result.Errors.ToString(), Data = null });
 			}
 
 
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
 			if (userName == null)
-				return BadRequest("获取当前用户名失败");
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "获取当前用户名失败", Data = null });
 			var userModel = await _userRepository._userManager.FindByNameAsync(userName);
 			if (userModel == null)
-				return BadRequest("获取当前用户Id失败");
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "获取当前用户Id失败", Data = null });
 
 			var model = user.ToAcademicModel();
 			model.UserId = userModel.Id;
 			await _academicRepository.UpdateAsync(model);
 
-			return NoContent();
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
 
@@ -66,12 +66,12 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpPut("profile")]
 		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileAcademicReqDto user, [FromQuery] string id)
+		public async Task<ActionResult<ApiResponse<object>>> UpdateProfile([FromBody] UpdateProfileAcademicReqDto user, [FromQuery] string id)
 		{
 			var result = await AccountController.UpdateProfile(user, id, _userRepository);
 			if (!result.Succeeded)
 			{
-				return BadRequest(result.Errors);
+				return Ok(new ApiResponse<object> { Code = 2, Msg = result.Errors.ToString(), Data = null });
 			}
 
 
@@ -79,7 +79,7 @@ namespace CourseAttendance.Controllers.Account
 			model.UserId = id;
 			await _academicRepository.UpdateAsync(model);
 
-			return NoContent();
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
 
@@ -89,19 +89,19 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		public async Task<ActionResult> GetUser(string id)
+		public async Task<ActionResult<ApiResponse<GetAcademicResDto>>> GetUser(string id)
 		{
 			var user = await _userRepository._userManager.FindByIdAsync(id);
 			if (user == null)
 			{
-				return NotFound("没有此用户");
+				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "没有此用户", Data = null });
 			}
 			var academic = await _academicRepository.GetByIdAsync(id);
 			if (academic == null)
 			{
-				return NotFound("没有此用户");
+				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "没有此用户", Data = null });
 			}
-			return Ok(await academic.ToGetAcademicResDto(user, _userRepository));
+			return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "", Data = await academic.ToGetAcademicResDto(user, _userRepository) });
 		}
 
 		/// <summary>
@@ -110,22 +110,22 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpGet("profile-slef")]
 		[Authorize(Roles = "Academic")]
-		public async Task<ActionResult> GetProfileSlef()
+		public async Task<ActionResult<ApiResponse<GetAcademicResDto>>> GetProfileSlef()
 		{
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
 			if (userName == null)
-				return BadRequest("获取当前用户ID失败");
+				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "获取当前用户ID失败", Data = null });
 			var user = await _userRepository._userManager.FindByNameAsync(userName);
 			if (user == null)
 			{
-				return BadRequest("获取当前用户信息失败");
+				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "获取当前用户信息失败", Data = null });
 			}
 			var academic = await _academicRepository.GetByIdAsync(user.Id);
 			if (academic == null)
 			{
-				return BadRequest("获取当前用户信息失败");
+				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "获取当前用户信息失败", Data = null });
 			}
-			return Ok(await academic.ToGetAcademicResDto(user, _userRepository));
+			return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "获取当前用户信息失败", Data = await academic.ToGetAcademicResDto(user, _userRepository) });
 		}
 
 		/// <summary>
@@ -135,10 +135,11 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult> CreateUser([FromBody] CreateUserAcademicReqDto dto)
+		public async Task<ActionResult<ApiResponse<GetAcademicResDto>>> CreateUser([FromBody] CreateUserAcademicReqDto dto)
 		{
 			var userModel = await AccountController.CreateUser(dto, _userRepository);
-			if (userModel == null) return BadRequest("创建失败");
+			if (userModel == null)
+				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "创建失败", Data = null });
 
 			var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Academic");
 
@@ -149,13 +150,13 @@ namespace CourseAttendance.Controllers.Account
 			if (result == 0 || !resRole.Succeeded)
 			{
 				var res = await _userRepository.DeleteAsync(userModel.Id);
-				if (!res.Succeeded) return BadRequest("创建失败");
-				return BadRequest("创建失败");
+				if (!res.Succeeded)
+					return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "创建失败", Data = null });
 			}
 
 			academicModel = await _academicRepository.GetByIdAsync(userModel.Id);
 
-			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, await academicModel.ToGetAcademicResDto(userModel, _userRepository));
+			return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "创建失败", Data = await academicModel.ToGetAcademicResDto(userModel, _userRepository) });
 		}
 
 

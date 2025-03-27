@@ -34,11 +34,11 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpGet]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
-		public async Task<ActionResult<IEnumerable<GradeResponseDto>>> GetClasses()
+		public async Task<ActionResult<ApiResponse<List<GradeResponseDto>>>> GetClasses()
 		{
 			var grades = await _gradeRepository.GetAllAsync();
-			var response = grades.Select(g => g.ToResponseDto());
-			return Ok(response);
+			var response = grades.Select(g => g.ToResponseDto()).ToList();
+			return Ok(new ApiResponse<List<GradeResponseDto>> { Code = 1, Msg = "", Data = response });
 		}
 
 		/// <summary>
@@ -48,13 +48,14 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpGet("{id}")]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
-		public async Task<ActionResult<GradeResponseDto>> GetClass(int id)
+		public async Task<ActionResult<ApiResponse<GradeResponseDto>>> GetClass(int id)
 		{
 			var grade = await _gradeRepository.GetByIdAsync(id);
-			if (grade == null) return NotFound();
+			if (grade == null)
+				return Ok(new ApiResponse<GradeResponseDto> { Code = 2, Msg = "", Data = null });
 
 			var response = grade.ToResponseDto();
-			return Ok(response);
+			return Ok(new ApiResponse<GradeResponseDto> { Code = 1, Msg = "", Data = response });
 		}
 
 		/// <summary>
@@ -64,14 +65,14 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "Admin, Academic")]
-		public async Task<ActionResult<GradeResponseDto>> CreateClass([FromBody] GradeRequestDto gradeRequest)
+		public async Task<ActionResult<ApiResponse<GradeResponseDto>>> CreateClass([FromBody] GradeRequestDto gradeRequest)
 		{
 			var grade = gradeRequest.ToModel();
 			var res = await _gradeRepository.AddAsync(grade);
 			if (res == 0)
-				return BadRequest("创建失败");
+				return Ok(new ApiResponse<GradeResponseDto> { Code = 2, Msg = "创建失败", Data = null });
 			var dto = grade.ToResponseDto();
-			return CreatedAtAction(nameof(GetClass), new { id = dto.Id }, dto);
+			return Ok(new ApiResponse<GradeResponseDto> { Code = 1, Msg = "", Data = dto });
 		}
 
 		/// <summary>
@@ -82,15 +83,15 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpPut("{id}")]
 		[Authorize(Roles = "Admin, Academic")]
-		public async Task<IActionResult> UpdateClass(int id, [FromBody] GradeRequestDto gradeRequest)
+		public async Task<ActionResult<ApiResponse<object>>> UpdateClass(int id, [FromBody] GradeRequestDto gradeRequest)
 		{
 			var grade = gradeRequest.ToModel();
 			grade.Id = id; // 确保 ID 正确
 
 			var res = await _gradeRepository.UpdateAsync(grade);
 			if (res == 0)
-				return BadRequest("更新失败");
-			return NoContent(); // 204 更新成功
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "更新失败", Data = null });
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
 		/// <summary>
@@ -100,12 +101,12 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "Admin, Academic")]
-		public async Task<IActionResult> DeleteClass(int id)
+		public async Task<ActionResult<ApiResponse<object>>> DeleteClass(int id)
 		{
 			var res = await _gradeRepository.DeleteAsync(id);
 			if (res == 0)
-				return BadRequest("删除失败");
-			return NoContent();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败", Data = null });
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
 		/// <summary>
@@ -115,10 +116,11 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpGet("{id}/students")]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
-		public async Task<ActionResult<IEnumerable<GetStudentResDto>>> GetStudents(int id)
+		public async Task<ActionResult<ApiResponse<List<GetStudentResDto>>>> GetStudents(int id)
 		{
 			var grade = await _gradeRepository.GetByIdAsync(id);
-			if (grade == null) return NotFound();
+			if (grade == null)
+				return Ok(new ApiResponse<List<GetStudentResDto>> { Code = 2, Msg = "", Data = null });
 
 			var students = grade.Students.Select(async s =>
 			{
@@ -133,7 +135,7 @@ namespace CourseAttendance.Controllers
 				studentsRes.Add(studentDto);
 			}
 
-			return Ok(studentsRes);
+			return Ok(new ApiResponse<List<GetStudentResDto>> { Code = 1, Msg = "", Data = studentsRes });
 		}
 
 		/// <summary>
@@ -144,26 +146,28 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpPost("{id}/students/{studentId}")]
 		[Authorize(Roles = "Admin, Academic")]
-		public async Task<IActionResult> UpdateStudentToClass(int id, string studentId)
+		public async Task<ActionResult<ApiResponse<object>>> UpdateStudentToClass(int id, string studentId)
 		{
 			try
 			{
 				var grade = await _gradeRepository.GetByIdAsync(id);
-				if (grade == null) return NotFound();
+				if (grade == null)
+					return Ok(new ApiResponse<object> { Code = 2, Msg = "", Data = null });
 
 				var studentModel = await _studentRepository.GetByIdAsync(studentId);
-				if (studentModel == null) return BadRequest("未查到此学生");
+				if (studentModel == null)
+					return Ok(new ApiResponse<object> { Code = 2, Msg = "未查到此学生", Data = null });
 
 				studentModel.GradeId = id;
 				var res = await _studentRepository.UpdateAsync(studentModel);
 				if (res == 0)
-					return BadRequest("更换失败");
+					return Ok(new ApiResponse<object> { Code = 2, Msg = "更换失败", Data = null });
 
-				return NoContent();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
 			catch (Exception err)
 			{
-				return BadRequest("更换失败");
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "更换失败", Data = null });
 			}
 		}
 
