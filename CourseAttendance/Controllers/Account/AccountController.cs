@@ -63,14 +63,14 @@ namespace CourseAttendance.Controllers.Account
 			var user = await _userManager.FindByNameAsync(model.UserName);
 			if (user == null)
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "无效的工号或密码", Data = null });
+				return Ok(new ApiResponse<object> { Code = 3, Msg = "无效的工号或密码", Data = null });
 			}
 			var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
 			//var result = await _userManager.CheckPasswordAsync(user, model.Password);
 			if (!result.Succeeded)
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "无效的工号或密码", Data = null });
+				return Ok(new ApiResponse<object> { Code = 3, Msg = "无效的工号或密码", Data = null });
 			}
 
 			// 生成 JWT 令牌
@@ -139,12 +139,13 @@ namespace CourseAttendance.Controllers.Account
 		{
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
 			if (userName == null)
-				return Ok(new ApiResponse<GetUserResDto> { Code = 2, Msg = "获取当前用户ID失败", Data = null });
+				return Ok(new ApiResponse<GetUserResDto> { Code = 4, Msg = "获取当前用户ID失败", Data = null });
 			var user = await _userManager.FindByNameAsync(userName);
 			if (user == null)
 			{
-				return Ok(new ApiResponse<GetUserResDto> { Code = 2, Msg = "获取当前用户信息失败", Data = null });
+				return Ok(new ApiResponse<GetUserResDto> { Code = 5, Msg = "获取当前用户信息失败", Data = null });
 			}
+
 			return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await user.ToGetUsersResDto(_userRepository) });
 		}
 

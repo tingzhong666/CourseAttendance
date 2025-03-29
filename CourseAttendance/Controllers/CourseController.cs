@@ -23,10 +23,26 @@ namespace CourseAttendance.Controllers
 		// 获取所有
 		[HttpGet]
 		[Authorize]
-		public async Task<ActionResult<ApiResponse<List<CourseResponseDto?>>>> GetCourses()
+		public async Task<ActionResult<ApiResponse<CourseResponseListDto>>> GetCourses([FromQuery] CourseReqQueryDto query)
 		{
 			var courses = await _courseRepository.GetAllAsync();
-			return Ok(new ApiResponse<List<CourseResponseDto?>> { Code = 1, Msg = "", Data = courses.ToList().Select(x => x.ToResponseDto()).ToList() });
+			if (query.Name != null && query.Name != "")
+			{
+				courses = courses.Where(x => x.Name.Contains(query.Name)).ToList();
+			}
+
+			var total = courses.Count();
+			// 分页
+			courses = courses.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
+
+			return Ok(new ApiResponse<CourseResponseListDto> { 
+				Code = 1,
+				Msg = "",
+				Data = new CourseResponseListDto {
+					DataList = courses.ToList().Select(x => x.ToResponseDto()).ToList(), 
+					Total = total 
+				} 
+			});
 		}
 
 		// 获取单个 按id
@@ -53,13 +69,13 @@ namespace CourseAttendance.Controllers
 			if (model == null)
 				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "创建失败", Data = null });
 			var res = await _courseRepository.AddAsync(model);
-			if (res == 0) 
+			if (res == 0)
 				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "创建失败", Data = null });
 
 			model = await _courseRepository.GetByIdAsync(model.Id);
 
 
-				return Ok(new ApiResponse<CourseResponseDto?> { Code = 1, Msg = "创建失败", Data = model.ToResponseDto() });
+			return Ok(new ApiResponse<CourseResponseDto?> { Code = 1, Msg = "创建失败", Data = model.ToResponseDto() });
 		}
 
 		// 更新
@@ -74,7 +90,7 @@ namespace CourseAttendance.Controllers
 			if (res == 0)
 				return Ok(new ApiResponse<object> { Code = 2, Msg = "更新失败", Data = null });
 
-				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
 		// 删除
@@ -85,7 +101,7 @@ namespace CourseAttendance.Controllers
 			var res = await _courseRepository.DeleteAsync(id);
 			if (res == 0)
 				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败", Data = null });
-				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 	}
 }

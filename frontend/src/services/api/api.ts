@@ -141,6 +141,56 @@ export interface AttendanceResponseDto {
 /**
  * 
  * @export
+ * @interface AttendanceResponseDtoApiResponse
+ */
+export interface AttendanceResponseDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceResponseDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceResponseDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {AttendanceResponseDto}
+     * @memberof AttendanceResponseDtoApiResponse
+     */
+    'data'?: AttendanceResponseDto;
+}
+/**
+ * 
+ * @export
+ * @interface AttendanceResponseDtoListApiResponse
+ */
+export interface AttendanceResponseDtoListApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceResponseDtoListApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceResponseDtoListApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {Array<AttendanceResponseDto>}
+     * @memberof AttendanceResponseDtoListApiResponse
+     */
+    'data'?: Array<AttendanceResponseDto> | null;
+}
+/**
+ * 
+ * @export
  * @enum {number}
  */
 
@@ -336,6 +386,75 @@ export interface CourseResponseDto {
 /**
  * 
  * @export
+ * @interface CourseResponseDtoApiResponse
+ */
+export interface CourseResponseDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseResponseDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseResponseDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {CourseResponseDto}
+     * @memberof CourseResponseDtoApiResponse
+     */
+    'data'?: CourseResponseDto;
+}
+/**
+ * 
+ * @export
+ * @interface CourseResponseListDto
+ */
+export interface CourseResponseListDto {
+    /**
+     * 
+     * @type {Array<CourseResponseDto>}
+     * @memberof CourseResponseListDto
+     */
+    'dataList'?: Array<CourseResponseDto> | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseResponseListDto
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface CourseResponseListDtoApiResponse
+ */
+export interface CourseResponseListDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseResponseListDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseResponseListDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {CourseResponseListDto}
+     * @memberof CourseResponseListDtoApiResponse
+     */
+    'data'?: CourseResponseListDto;
+}
+/**
+ * 
+ * @export
  * @interface CourseSelectionResDto
  */
 export interface CourseSelectionResDto {
@@ -360,6 +479,31 @@ export interface CourseSelectionResDto {
 }
 
 
+/**
+ * 
+ * @export
+ * @interface CourseSelectionResDtoListApiResponse
+ */
+export interface CourseSelectionResDtoListApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseSelectionResDtoListApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseSelectionResDtoListApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {Array<CourseSelectionResDto>}
+     * @memberof CourseSelectionResDtoListApiResponse
+     */
+    'data'?: Array<CourseSelectionResDto> | null;
+}
 /**
  * 
  * @export
@@ -517,6 +661,142 @@ export interface CreateUserTeacherReqDto {
 /**
  * 
  * @export
+ * @interface GetAcademicResDto
+ */
+export interface GetAcademicResDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAcademicResDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAcademicResDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAcademicResDto
+     */
+    'userName': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetAcademicResDto
+     */
+    'roles': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAcademicResDto
+     */
+    'email'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAcademicResDto
+     */
+    'phoneNumber'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface GetAcademicResDtoApiResponse
+ */
+export interface GetAcademicResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetAcademicResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAcademicResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {GetAcademicResDto}
+     * @memberof GetAcademicResDtoApiResponse
+     */
+    'data'?: GetAcademicResDto;
+}
+/**
+ * 
+ * @export
+ * @interface GetAdminResDto
+ */
+export interface GetAdminResDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAdminResDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAdminResDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAdminResDto
+     */
+    'userName': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetAdminResDto
+     */
+    'roles': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAdminResDto
+     */
+    'email'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAdminResDto
+     */
+    'phoneNumber'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface GetAdminResDtoApiResponse
+ */
+export interface GetAdminResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetAdminResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAdminResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {GetAdminResDto}
+     * @memberof GetAdminResDtoApiResponse
+     */
+    'data'?: GetAdminResDto;
+}
+/**
+ * 
+ * @export
  * @interface GetStudentResDto
  */
 export interface GetStudentResDto {
@@ -572,6 +852,56 @@ export interface GetStudentResDto {
 /**
  * 
  * @export
+ * @interface GetStudentResDtoApiResponse
+ */
+export interface GetStudentResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetStudentResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStudentResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {GetStudentResDto}
+     * @memberof GetStudentResDtoApiResponse
+     */
+    'data'?: GetStudentResDto;
+}
+/**
+ * 
+ * @export
+ * @interface GetStudentResDtoListApiResponse
+ */
+export interface GetStudentResDtoListApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetStudentResDtoListApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStudentResDtoListApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {Array<GetStudentResDto>}
+     * @memberof GetStudentResDtoListApiResponse
+     */
+    'data'?: Array<GetStudentResDto> | null;
+}
+/**
+ * 
+ * @export
  * @interface GetTeacherResDto
  */
 export interface GetTeacherResDto {
@@ -621,6 +951,124 @@ export interface GetTeacherResDto {
 /**
  * 
  * @export
+ * @interface GetTeacherResDtoApiResponse
+ */
+export interface GetTeacherResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetTeacherResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTeacherResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {GetTeacherResDto}
+     * @memberof GetTeacherResDtoApiResponse
+     */
+    'data'?: GetTeacherResDto;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserResDto
+ */
+export interface GetUserResDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDto
+     */
+    'userName': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetUserResDto
+     */
+    'roles': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDto
+     */
+    'email'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDto
+     */
+    'phoneNumber'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserResDtoApiResponse
+ */
+export interface GetUserResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetUserResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {GetUserResDto}
+     * @memberof GetUserResDtoApiResponse
+     */
+    'data'?: GetUserResDto;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserResDtoListApiResponse
+ */
+export interface GetUserResDtoListApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetUserResDtoListApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDtoListApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {Array<GetUserResDto>}
+     * @memberof GetUserResDtoListApiResponse
+     */
+    'data'?: Array<GetUserResDto> | null;
+}
+/**
+ * 
+ * @export
  * @interface GradeRequestDto
  */
 export interface GradeRequestDto {
@@ -665,6 +1113,56 @@ export interface GradeResponseDto {
 /**
  * 
  * @export
+ * @interface GradeResponseDtoApiResponse
+ */
+export interface GradeResponseDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeResponseDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeResponseDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {GradeResponseDto}
+     * @memberof GradeResponseDtoApiResponse
+     */
+    'data'?: GradeResponseDto;
+}
+/**
+ * 
+ * @export
+ * @interface GradeResponseDtoListApiResponse
+ */
+export interface GradeResponseDtoListApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeResponseDtoListApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GradeResponseDtoListApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {Array<GradeResponseDto>}
+     * @memberof GradeResponseDtoListApiResponse
+     */
+    'data'?: Array<GradeResponseDto> | null;
+}
+/**
+ * 
+ * @export
  * @interface LoginModel
  */
 export interface LoginModel {
@@ -699,6 +1197,56 @@ export interface LoginRes {
      * @memberof LoginRes
      */
     'userName': string;
+}
+/**
+ * 
+ * @export
+ * @interface LoginResApiResponse
+ */
+export interface LoginResApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof LoginResApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginResApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {LoginRes}
+     * @memberof LoginResApiResponse
+     */
+    'data'?: LoginRes;
+}
+/**
+ * 
+ * @export
+ * @interface ObjectApiResponse
+ */
+export interface ObjectApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof ObjectApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ObjectApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof ObjectApiResponse
+     */
+    'data'?: any | null;
 }
 /**
  * 
@@ -1032,7 +1580,7 @@ export const AcademicApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAcademicIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAcademicIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAcademicResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicIdGet']?.[localVarOperationServerIndex]?.url;
@@ -1044,7 +1592,7 @@ export const AcademicApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAcademicPost(createUserAcademicReqDto?: CreateUserAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAcademicPost(createUserAcademicReqDto?: CreateUserAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAcademicResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicPost(createUserAcademicReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicPost']?.[localVarOperationServerIndex]?.url;
@@ -1057,7 +1605,7 @@ export const AcademicApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAcademicProfilePut(id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAcademicProfilePut(id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicProfilePut(id, updateProfileAcademicReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicProfilePut']?.[localVarOperationServerIndex]?.url;
@@ -1068,7 +1616,7 @@ export const AcademicApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAcademicProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAcademicProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAcademicResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicProfileSlefGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicProfileSlefGet']?.[localVarOperationServerIndex]?.url;
@@ -1080,7 +1628,7 @@ export const AcademicApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAcademicProfileSlefPut(updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAcademicProfileSlefPut(updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicProfileSlefPut(updateProfileAcademicReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicProfileSlefPut']?.[localVarOperationServerIndex]?.url;
@@ -1102,7 +1650,7 @@ export const AcademicApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAcademicIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAcademicIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAcademicResDtoApiResponse> {
             return localVarFp.apiAcademicIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1111,7 +1659,7 @@ export const AcademicApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAcademicPost(createUserAcademicReqDto?: CreateUserAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAcademicPost(createUserAcademicReqDto?: CreateUserAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetAcademicResDtoApiResponse> {
             return localVarFp.apiAcademicPost(createUserAcademicReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1121,7 +1669,7 @@ export const AcademicApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAcademicProfilePut(id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAcademicProfilePut(id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAcademicProfilePut(id, updateProfileAcademicReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1129,7 +1677,7 @@ export const AcademicApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAcademicProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAcademicProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetAcademicResDtoApiResponse> {
             return localVarFp.apiAcademicProfileSlefGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1138,7 +1686,7 @@ export const AcademicApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAcademicProfileSlefPut(updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAcademicProfileSlefPut(updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAcademicProfileSlefPut(updateProfileAcademicReqDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -1548,7 +2096,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountChangePasswordPut(changePasswordReqDto?: ChangePasswordReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountChangePasswordPut(changePasswordReqDto?: ChangePasswordReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountChangePasswordPut(changePasswordReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountChangePasswordPut']?.[localVarOperationServerIndex]?.url;
@@ -1560,7 +2108,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountChangePasswordSelfPut(changePasswordSelfReqDto?: ChangePasswordSelfReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountChangePasswordSelfPut(changePasswordSelfReqDto?: ChangePasswordSelfReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountChangePasswordSelfPut(changePasswordSelfReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountChangePasswordSelfPut']?.[localVarOperationServerIndex]?.url;
@@ -1571,7 +2119,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountCheckGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountCheckGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountCheckGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountCheckGet']?.[localVarOperationServerIndex]?.url;
@@ -1582,7 +2130,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountGet']?.[localVarOperationServerIndex]?.url;
@@ -1594,7 +2142,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountIdDelete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountIdDelete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountIdDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -1606,7 +2154,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountIdGet']?.[localVarOperationServerIndex]?.url;
@@ -1618,7 +2166,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountLoginPost(loginModel?: LoginModel, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginRes>> {
+        async apiAccountLoginPost(loginModel?: LoginModel, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountLoginPost(loginModel, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountLoginPost']?.[localVarOperationServerIndex]?.url;
@@ -1629,7 +2177,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountProfileSelfGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountProfileSelfGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountProfileSelfGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountProfileSelfGet']?.[localVarOperationServerIndex]?.url;
@@ -1640,7 +2188,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountTestGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountTestGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountTestGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountTestGet']?.[localVarOperationServerIndex]?.url;
@@ -1662,7 +2210,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountChangePasswordPut(changePasswordReqDto?: ChangePasswordReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountChangePasswordPut(changePasswordReqDto?: ChangePasswordReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountChangePasswordPut(changePasswordReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1671,7 +2219,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountChangePasswordSelfPut(changePasswordSelfReqDto?: ChangePasswordSelfReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountChangePasswordSelfPut(changePasswordSelfReqDto?: ChangePasswordSelfReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountChangePasswordSelfPut(changePasswordSelfReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1679,7 +2227,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountCheckGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountCheckGet(options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountCheckGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1687,7 +2235,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountGet(options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListApiResponse> {
             return localVarFp.apiAccountGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1696,7 +2244,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountIdDelete(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountIdDelete(id: string, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1705,7 +2253,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoApiResponse> {
             return localVarFp.apiAccountIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1714,7 +2262,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountLoginPost(loginModel?: LoginModel, options?: RawAxiosRequestConfig): AxiosPromise<LoginRes> {
+        apiAccountLoginPost(loginModel?: LoginModel, options?: RawAxiosRequestConfig): AxiosPromise<LoginResApiResponse> {
             return localVarFp.apiAccountLoginPost(loginModel, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1722,7 +2270,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountProfileSelfGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountProfileSelfGet(options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoApiResponse> {
             return localVarFp.apiAccountProfileSelfGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1730,7 +2278,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountTestGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountTestGet(options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountTestGet(options).then((request) => request(axios, basePath));
         },
     };
@@ -2049,7 +2597,7 @@ export const AdminApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAdminIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAdminIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAdminResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminIdGet']?.[localVarOperationServerIndex]?.url;
@@ -2061,7 +2609,7 @@ export const AdminApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAdminPost(createUserAdminReqDto?: CreateUserAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAdminPost(createUserAdminReqDto?: CreateUserAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAdminResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminPost(createUserAdminReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminPost']?.[localVarOperationServerIndex]?.url;
@@ -2074,7 +2622,7 @@ export const AdminApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAdminProfilePut(id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAdminProfilePut(id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminProfilePut(id, updateProfileAdminReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminProfilePut']?.[localVarOperationServerIndex]?.url;
@@ -2085,7 +2633,7 @@ export const AdminApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAdminProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAdminProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAdminResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminProfileSlefGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminProfileSlefGet']?.[localVarOperationServerIndex]?.url;
@@ -2097,7 +2645,7 @@ export const AdminApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAdminProfileSlefPut(updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAdminProfileSlefPut(updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminProfileSlefPut(updateProfileAdminReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminProfileSlefPut']?.[localVarOperationServerIndex]?.url;
@@ -2119,7 +2667,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAdminIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAdminIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAdminResDtoApiResponse> {
             return localVarFp.apiAdminIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2128,7 +2676,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAdminPost(createUserAdminReqDto?: CreateUserAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAdminPost(createUserAdminReqDto?: CreateUserAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetAdminResDtoApiResponse> {
             return localVarFp.apiAdminPost(createUserAdminReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2138,7 +2686,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAdminProfilePut(id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAdminProfilePut(id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAdminProfilePut(id, updateProfileAdminReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2146,7 +2694,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAdminProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAdminProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetAdminResDtoApiResponse> {
             return localVarFp.apiAdminProfileSlefGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2155,7 +2703,7 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAdminProfileSlefPut(updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAdminProfileSlefPut(updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAdminProfileSlefPut(updateProfileAdminReqDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -2499,7 +3047,7 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAttendanceGet(courseId?: number, studentId?: string, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AttendanceResponseDto>>> {
+        async apiAttendanceGet(courseId?: number, studentId?: string, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceResponseDtoListApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceGet(courseId, studentId, startDate, endDate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendanceGet']?.[localVarOperationServerIndex]?.url;
@@ -2511,7 +3059,7 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAttendanceIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAttendanceIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceIdDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendanceIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -2523,7 +3071,7 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAttendanceIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceResponseDto>> {
+        async apiAttendanceIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceResponseDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendanceIdGet']?.[localVarOperationServerIndex]?.url;
@@ -2535,7 +3083,7 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAttendancePost(attendanceCreateRequestDto?: AttendanceCreateRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AttendanceResponseDto>>> {
+        async apiAttendancePost(attendanceCreateRequestDto?: AttendanceCreateRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceResponseDtoListApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendancePost(attendanceCreateRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendancePost']?.[localVarOperationServerIndex]?.url;
@@ -2548,7 +3096,7 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAttendancePut(id?: number, status?: AttendanceStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAttendancePut(id?: number, status?: AttendanceStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendancePut(id, status, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendancePut']?.[localVarOperationServerIndex]?.url;
@@ -2560,7 +3108,7 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAttendanceSignInPut(attendanceRequestDto?: AttendanceRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAttendanceSignInPut(attendanceRequestDto?: AttendanceRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceSignInPut(attendanceRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendanceSignInPut']?.[localVarOperationServerIndex]?.url;
@@ -2585,7 +3133,7 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendanceGet(courseId?: number, studentId?: string, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<AttendanceResponseDto>> {
+        apiAttendanceGet(courseId?: number, studentId?: string, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceResponseDtoListApiResponse> {
             return localVarFp.apiAttendanceGet(courseId, studentId, startDate, endDate, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2594,7 +3142,7 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendanceIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAttendanceIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAttendanceIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2603,7 +3151,7 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendanceIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceResponseDto> {
+        apiAttendanceIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceResponseDtoApiResponse> {
             return localVarFp.apiAttendanceIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2612,7 +3160,7 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendancePost(attendanceCreateRequestDto?: AttendanceCreateRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<Array<AttendanceResponseDto>> {
+        apiAttendancePost(attendanceCreateRequestDto?: AttendanceCreateRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceResponseDtoListApiResponse> {
             return localVarFp.apiAttendancePost(attendanceCreateRequestDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2622,7 +3170,7 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendancePut(id?: number, status?: AttendanceStatus, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAttendancePut(id?: number, status?: AttendanceStatus, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAttendancePut(id, status, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2631,7 +3179,7 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendanceSignInPut(attendanceRequestDto?: AttendanceRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAttendanceSignInPut(attendanceRequestDto?: AttendanceRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAttendanceSignInPut(attendanceRequestDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -3001,7 +3549,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GradeResponseDto>>> {
+        async apiClassesGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDtoListApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesGet']?.[localVarOperationServerIndex]?.url;
@@ -3013,7 +3561,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiClassesIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesIdDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -3025,7 +3573,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDto>> {
+        async apiClassesIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesIdGet']?.[localVarOperationServerIndex]?.url;
@@ -3038,7 +3586,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesIdPut(id: number, gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiClassesIdPut(id: number, gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesIdPut(id, gradeRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesIdPut']?.[localVarOperationServerIndex]?.url;
@@ -3050,7 +3598,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GetStudentResDto>>> {
+        async apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoListApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesIdStudentsGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesIdStudentsGet']?.[localVarOperationServerIndex]?.url;
@@ -3063,7 +3611,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesIdStudentsStudentIdPost(id: number, studentId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiClassesIdStudentsStudentIdPost(id: number, studentId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesIdStudentsStudentIdPost(id, studentId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesIdStudentsStudentIdPost']?.[localVarOperationServerIndex]?.url;
@@ -3075,7 +3623,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesPost(gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDto>> {
+        async apiClassesPost(gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesPost(gradeRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesPost']?.[localVarOperationServerIndex]?.url;
@@ -3096,7 +3644,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<GradeResponseDto>> {
+        apiClassesGet(options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDtoListApiResponse> {
             return localVarFp.apiClassesGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -3105,7 +3653,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiClassesIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiClassesIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3114,7 +3662,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDto> {
+        apiClassesIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDtoApiResponse> {
             return localVarFp.apiClassesIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3124,7 +3672,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesIdPut(id: number, gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiClassesIdPut(id: number, gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiClassesIdPut(id, gradeRequestDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3133,7 +3681,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<Array<GetStudentResDto>> {
+        apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoListApiResponse> {
             return localVarFp.apiClassesIdStudentsGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3143,7 +3691,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesIdStudentsStudentIdPost(id: number, studentId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiClassesIdStudentsStudentIdPost(id: number, studentId: string, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiClassesIdStudentsStudentIdPost(id, studentId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3152,7 +3700,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesPost(gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDto> {
+        apiClassesPost(gradeRequestDto?: GradeRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDtoApiResponse> {
             return localVarFp.apiClassesPost(gradeRequestDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -3254,10 +3802,13 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiCourseGet: async (page?: number, limit?: number, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/course`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3273,6 +3824,18 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication Bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['Page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['Limit'] = limit;
+            }
+
+            if (name !== undefined) {
+                localVarQueryParameter['Name'] = name;
+            }
 
 
     
@@ -3449,11 +4012,14 @@ export const CourseApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseResponseDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(options);
+        async apiCourseGet(page?: number, limit?: number, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(page, limit, name, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCourseGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3464,7 +4030,7 @@ export const CourseApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCourseIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseIdDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCourseIdDelete']?.[localVarOperationServerIndex]?.url;
@@ -3476,7 +4042,7 @@ export const CourseApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseDto>> {
+        async apiCourseIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCourseIdGet']?.[localVarOperationServerIndex]?.url;
@@ -3489,7 +4055,7 @@ export const CourseApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseIdPut(id: number, courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCourseIdPut(id: number, courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseIdPut(id, courseRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCourseIdPut']?.[localVarOperationServerIndex]?.url;
@@ -3501,7 +4067,7 @@ export const CourseApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCoursePost(courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCoursePost(courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCoursePost(courseRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCoursePost']?.[localVarOperationServerIndex]?.url;
@@ -3519,11 +4085,14 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<CourseResponseDto>> {
-            return localVarFp.apiCourseGet(options).then((request) => request(axios, basePath));
+        apiCourseGet(page?: number, limit?: number, name?: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseListDtoApiResponse> {
+            return localVarFp.apiCourseGet(page, limit, name, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3531,7 +4100,7 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCourseIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiCourseIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3540,7 +4109,7 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseDto> {
+        apiCourseIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseDtoApiResponse> {
             return localVarFp.apiCourseIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3550,7 +4119,7 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseIdPut(id: number, courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCourseIdPut(id: number, courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiCourseIdPut(id, courseRequestDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3559,7 +4128,7 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCoursePost(courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCoursePost(courseRequestDto?: CourseRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseDtoApiResponse> {
             return localVarFp.apiCoursePost(courseRequestDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -3574,12 +4143,15 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
 export class CourseApi extends BaseAPI {
     /**
      * 
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {string} [name] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseApi
      */
-    public apiCourseGet(options?: RawAxiosRequestConfig) {
-        return CourseApiFp(this.configuration).apiCourseGet(options).then((request) => request(this.axios, this.basePath));
+    public apiCourseGet(page?: number, limit?: number, name?: string, options?: RawAxiosRequestConfig) {
+        return CourseApiFp(this.configuration).apiCourseGet(page, limit, name, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3901,7 +4473,7 @@ export const CourseSelectionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseSelectionAddGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCourseSelectionAddGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseSelectionAddGet(studentId, courseId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseSelectionApi.apiCourseSelectionAddGet']?.[localVarOperationServerIndex]?.url;
@@ -3913,7 +4485,7 @@ export const CourseSelectionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseSelectionAddSelfGet(courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCourseSelectionAddSelfGet(courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseSelectionAddSelfGet(courseId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseSelectionApi.apiCourseSelectionAddSelfGet']?.[localVarOperationServerIndex]?.url;
@@ -3926,7 +4498,7 @@ export const CourseSelectionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseSelectionDelGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCourseSelectionDelGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseSelectionDelGet(studentId, courseId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseSelectionApi.apiCourseSelectionDelGet']?.[localVarOperationServerIndex]?.url;
@@ -3938,7 +4510,7 @@ export const CourseSelectionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseSelectionDelSelfGet(courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCourseSelectionDelSelfGet(courseId?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseSelectionDelSelfGet(courseId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseSelectionApi.apiCourseSelectionDelSelfGet']?.[localVarOperationServerIndex]?.url;
@@ -3950,7 +4522,7 @@ export const CourseSelectionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseSelectionGetAllGet(isAll?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseSelectionResDto>>> {
+        async apiCourseSelectionGetAllGet(isAll?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseSelectionResDtoListApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseSelectionGetAllGet(isAll, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseSelectionApi.apiCourseSelectionGetAllGet']?.[localVarOperationServerIndex]?.url;
@@ -3964,7 +4536,7 @@ export const CourseSelectionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseSelectionPerformancePut(studentId?: string, courseId?: number, performanceLevel?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiCourseSelectionPerformancePut(studentId?: string, courseId?: number, performanceLevel?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseSelectionPerformancePut(studentId, courseId, performanceLevel, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseSelectionApi.apiCourseSelectionPerformancePut']?.[localVarOperationServerIndex]?.url;
@@ -3987,7 +4559,7 @@ export const CourseSelectionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseSelectionAddGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCourseSelectionAddGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiCourseSelectionAddGet(studentId, courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3996,7 +4568,7 @@ export const CourseSelectionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseSelectionAddSelfGet(courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCourseSelectionAddSelfGet(courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiCourseSelectionAddSelfGet(courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4006,7 +4578,7 @@ export const CourseSelectionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseSelectionDelGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCourseSelectionDelGet(studentId?: string, courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiCourseSelectionDelGet(studentId, courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4015,7 +4587,7 @@ export const CourseSelectionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseSelectionDelSelfGet(courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCourseSelectionDelSelfGet(courseId?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiCourseSelectionDelSelfGet(courseId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4024,7 +4596,7 @@ export const CourseSelectionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseSelectionGetAllGet(isAll?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<Array<CourseSelectionResDto>> {
+        apiCourseSelectionGetAllGet(isAll?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<CourseSelectionResDtoListApiResponse> {
             return localVarFp.apiCourseSelectionGetAllGet(isAll, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4035,7 +4607,7 @@ export const CourseSelectionApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseSelectionPerformancePut(studentId?: string, courseId?: number, performanceLevel?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiCourseSelectionPerformancePut(studentId?: string, courseId?: number, performanceLevel?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiCourseSelectionPerformancePut(studentId, courseId, performanceLevel, options).then((request) => request(axios, basePath));
         },
     };
@@ -4329,7 +4901,7 @@ export const StudentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDto>> {
+        async apiStudentIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentIdGet']?.[localVarOperationServerIndex]?.url;
@@ -4341,7 +4913,7 @@ export const StudentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentPost(createUserStudentReqDto?: CreateUserStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStudentPost(createUserStudentReqDto?: CreateUserStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentPost(createUserStudentReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentPost']?.[localVarOperationServerIndex]?.url;
@@ -4354,7 +4926,7 @@ export const StudentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentProfilePut(id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStudentProfilePut(id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentProfilePut(id, updateProfileStudentReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentProfilePut']?.[localVarOperationServerIndex]?.url;
@@ -4365,7 +4937,7 @@ export const StudentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDto>> {
+        async apiStudentProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentProfileSlefGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentProfileSlefGet']?.[localVarOperationServerIndex]?.url;
@@ -4377,7 +4949,7 @@ export const StudentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentProfileSlefPut(updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiStudentProfileSlefPut(updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentProfileSlefPut(updateProfileStudentReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentProfileSlefPut']?.[localVarOperationServerIndex]?.url;
@@ -4399,7 +4971,7 @@ export const StudentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDto> {
+        apiStudentIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoApiResponse> {
             return localVarFp.apiStudentIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4408,7 +4980,7 @@ export const StudentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentPost(createUserStudentReqDto?: CreateUserStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStudentPost(createUserStudentReqDto?: CreateUserStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoApiResponse> {
             return localVarFp.apiStudentPost(createUserStudentReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4418,7 +4990,7 @@ export const StudentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentProfilePut(id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStudentProfilePut(id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiStudentProfilePut(id, updateProfileStudentReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4426,7 +4998,7 @@ export const StudentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDto> {
+        apiStudentProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoApiResponse> {
             return localVarFp.apiStudentProfileSlefGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -4435,7 +5007,7 @@ export const StudentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentProfileSlefPut(updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiStudentProfileSlefPut(updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiStudentProfileSlefPut(updateProfileStudentReqDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -4714,7 +5286,7 @@ export const TeacherApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDto>> {
+        async apiTeacherIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherIdGet']?.[localVarOperationServerIndex]?.url;
@@ -4726,7 +5298,7 @@ export const TeacherApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherPost(createUserTeacherReqDto?: CreateUserTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiTeacherPost(createUserTeacherReqDto?: CreateUserTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherPost(createUserTeacherReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherPost']?.[localVarOperationServerIndex]?.url;
@@ -4739,7 +5311,7 @@ export const TeacherApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherProfilePut(id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiTeacherProfilePut(id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherProfilePut(id, updateProfileTeacherReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherProfilePut']?.[localVarOperationServerIndex]?.url;
@@ -4750,7 +5322,7 @@ export const TeacherApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDto>> {
+        async apiTeacherProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDtoApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherProfileSlefGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherProfileSlefGet']?.[localVarOperationServerIndex]?.url;
@@ -4762,7 +5334,7 @@ export const TeacherApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherProfileSlefPut(updateProfileTeacherReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherProfileSlefPut']?.[localVarOperationServerIndex]?.url;
@@ -4784,7 +5356,7 @@ export const TeacherApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDto> {
+        apiTeacherIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDtoApiResponse> {
             return localVarFp.apiTeacherIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4793,7 +5365,7 @@ export const TeacherApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherPost(createUserTeacherReqDto?: CreateUserTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiTeacherPost(createUserTeacherReqDto?: CreateUserTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDtoApiResponse> {
             return localVarFp.apiTeacherPost(createUserTeacherReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4803,7 +5375,7 @@ export const TeacherApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherProfilePut(id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiTeacherProfilePut(id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiTeacherProfilePut(id, updateProfileTeacherReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4811,7 +5383,7 @@ export const TeacherApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDto> {
+        apiTeacherProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDtoApiResponse> {
             return localVarFp.apiTeacherProfileSlefGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -4820,7 +5392,7 @@ export const TeacherApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiTeacherProfileSlefPut(updateProfileTeacherReqDto, options).then((request) => request(axios, basePath));
         },
     };

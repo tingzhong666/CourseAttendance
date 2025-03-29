@@ -1,6 +1,6 @@
 ﻿import React from 'react'
 import "./login.css"
-import { Button, Card, Flex, Form, Input, Image, Row, Col } from "antd"
+import { Button, Card, Flex, Form, Input, Image, Row, Col, notification } from "antd"
 import loginPng from "../../assets/login.png"
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import * as api from "../../services/http/httpInstance"
@@ -27,12 +27,26 @@ export default (props: Props) => {
     const onFinish = async (values: formType) => {
         var res = await api.Account.apiAccountLoginPost({ userName: values.username, password: values.password } as LoginModel);
 
-        auth.setToken(res.data.token)
-        let userProfile=  { userName: res.data.userName } as UserProfile
-        auth.setUser(userProfile)
+        if (res.data.code != 1) {
+            switch (res.data.code) {
+                case 3:
+                    notification.info({
+                        message: `请求失败，无效的工号或密码`,
+                        placement: "topRight",
+                    })
+                    break
+            }
+            return;
+        }
 
-        const user = localStorage.setItem("user", JSON.stringify(userProfile));
-        const token = localStorage.setItem("token", res.data.token);
+        var data = res.data.data
+
+        //auth.setToken(data?.token || null)
+        //let userProfile = { userName: data?.userName } as UserProfile
+        //auth.setUser(userProfile)
+
+        //const user = localStorage.setItem("user", JSON.stringify(userProfile));
+        const token = localStorage.setItem("token", data?.token || "");
 
         navigate("/home")
     }
@@ -40,7 +54,7 @@ export default (props: Props) => {
 
 
     const onTest = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        console.log(auth.token+"qwe")
+        console.log(auth.token + "qwe")
         //var res = await api.Account.apiAccountTestGet();
     }
 

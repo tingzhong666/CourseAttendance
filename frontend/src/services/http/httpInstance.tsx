@@ -22,12 +22,32 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
+    if (response.data.code != 1) {
+        let msg = ''
+        switch (response.data.code) {
+            case 2:
+                msg = '未知错误'
+                break
+            default:
+        }
+        notification.info({
+            message: msg,
+            placement: "topRight",
+        });
+    }
     return response;
 }, function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
+    let msg = ''
+    if (error.status == 401) {
+        msg = '响应失败，权限不够'
+    }
+    else {
+        msg = '响应失败，未知错误'
+    }
     notification.info({
-        message: `响应失败，未知错误 `,
+        message: msg,
         placement: "topRight",
     });
     return Promise.reject(error);

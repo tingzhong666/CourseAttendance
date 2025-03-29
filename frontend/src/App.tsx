@@ -21,10 +21,10 @@ const App = () => {
 
     return (
         <div className="App">
-            <UserProvider>
+
                 {/*{useAuth().token == null ? < Login /> : <HomeLayout />}*/}
                 <Outlet />
-            </UserProvider>
+
         </div>
     )
 }

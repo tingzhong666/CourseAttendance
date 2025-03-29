@@ -11,14 +11,14 @@ export default () => {
 
     type MenuItem = Required<MenuProps>['items'][number];
     const items: MenuItem[] = [
-        { key: '/', label: '首页' },
+        { key: '/home', label: '首页' },
         {
             key: 'sub1',
             label: '课堂与考勤',
             children: [
                 { key: '/courses', label: '课程列表' },
                 { key: '/my-courses', label: '我的课程' },
-                { key: '/attendance ', label: '考勤' },
+                { key: '/attendance', label: '考勤' },
             ],
         },
         {
