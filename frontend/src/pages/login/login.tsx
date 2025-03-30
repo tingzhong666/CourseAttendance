@@ -1,26 +1,63 @@
 ﻿import React from 'react'
 import "./login.css"
-import { Button, Card, Flex, Form, Input, Image, Row, Col } from "antd"
+import { Button, Card, Flex, Form, Input, Image, Row, Col, notification } from "antd"
 import loginPng from "../../assets/login.png"
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import * as api from "../../services/http/httpInstance"
+import { LoginModel } from '../../services/api';
+import { useAuth } from "../../Contexts/auth"
+import { UserProfile } from '../../Models/User';
+import { useNavigate } from 'react-router';
 
 interface Props {
 
 }
 
 interface formType {
-    username: string,
+    username: string
     password: string
 }
 
 export default (props: Props) => {
-
+    const auth = useAuth();
+    const navigate = useNavigate();
 
     const [form] = Form.useForm();
 
-    const onFinish = (values: formType) => {
-        console.log("asdasdasdasd" + values.username);
-    };
+    const onFinish = async (values: formType) => {
+        var res = await api.Account.apiAccountLoginPost({ userName: values.username, password: values.password } as LoginModel);
+
+        if (res.data.code != 1) {
+            switch (res.data.code) {
+                case 3:
+                    notification.info({
+                        message: `请求失败，无效的工号或密码`,
+                        placement: "topRight",
+                    })
+                    break
+            }
+            return;
+        }
+
+        var data = res.data.data
+
+        //auth.setToken(data?.token || null)
+        //let userProfile = { userName: data?.userName } as UserProfile
+        //auth.setUser(userProfile)
+
+        //const user = localStorage.setItem("user", JSON.stringify(userProfile));
+        const token = localStorage.setItem("token", data?.token || "");
+
+        navigate("/home")
+    }
+
+
+
+    const onTest = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        console.log(auth.token + "qwe")
+        //var res = await api.Account.apiAccountTestGet();
+    }
+
     return (
         <div className="login">
             {/*标题*/}
@@ -58,6 +95,7 @@ export default (props: Props) => {
                                 </Form.Item>
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit">登录</Button>
+                                    <Button type="primary" onClick={e => onTest(e)}>测试</Button>
                                 </Form.Item>
                             </Form>
                         </Card>

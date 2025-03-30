@@ -18,7 +18,7 @@ namespace CourseAttendance.Controllers.Account
 	public class AdminController : ControllerBase
 	{
 		protected readonly UserRepository _userRepository;
-		protected readonly AdminRepository _adminRepository ;
+		protected readonly AdminRepository _adminRepository;
 
 		public AdminController(UserRepository userRepository, AdminRepository adminRepository)
 		{
@@ -34,28 +34,28 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpPut("profile-slef")]
 		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> UpdateProfileSelf(UpdateProfileAdminReqDto user)
+		public async Task<ActionResult<ApiResponse<object>>> UpdateProfileSelf(UpdateProfileAdminReqDto user)
 		{
-			var result = await AccountController.UpdateProfileSelf(user,this, _userRepository);
+			var result = await AccountController.UpdateProfileSelf(user, this, _userRepository);
 			if (!result.Succeeded)
 			{
-				return BadRequest(result.Errors);
+				return Ok(new ApiResponse<object> { Code = 2, Msg = result.Errors.ToString(), Data = null });
 			}
 
 
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
 			if (userName == null)
-				return BadRequest("获取当前用户名失败");
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "获取当前用户名失败", Data = null });
 			var userModel = await _userRepository._userManager.FindByNameAsync(userName);
 			if (userModel == null)
-				return BadRequest("获取当前用户Id失败");
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "获取当前用户Id失败", Data = null });
 
 
 			var model = user.ToAdminModel();
 			model.UserId = userModel.Id;
 			await _adminRepository.UpdateAdminAsync(model);
 
-			return NoContent();
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
 
@@ -66,12 +66,12 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpPut("profile")]
 		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileAdminReqDto user, [FromQuery] string id)
+		public async Task<ActionResult<ApiResponse<object>>> UpdateProfile([FromBody] UpdateProfileAdminReqDto user, [FromQuery] string id)
 		{
 			var result = await AccountController.UpdateProfile(user, id, _userRepository);
 			if (!result.Succeeded)
 			{
-				return BadRequest(result.Errors);
+				return Ok(new ApiResponse<object> { Code = 2, Msg = result.Errors.ToString(), Data = null });
 			}
 
 
@@ -79,7 +79,7 @@ namespace CourseAttendance.Controllers.Account
 			model.UserId = id;
 			await _adminRepository.UpdateAdminAsync(model);
 
-			return NoContent();
+			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
 
@@ -90,19 +90,19 @@ namespace CourseAttendance.Controllers.Account
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		public  async Task<ActionResult> GetUser(string id)
+		public async Task<ActionResult<ApiResponse<GetAdminResDto>>> GetUser(string id)
 		{
 			var user = await _userRepository._userManager.FindByIdAsync(id);
 			if (user == null)
 			{
-				return NotFound();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "获取当前用户名失败", Data = null });
 			}
 			var admin = await _adminRepository.GetAdminByIdAsync(id);
 			if (admin == null)
 			{
-				return NotFound();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "获取当前用户名失败", Data = null });
 			}
-			return Ok(await admin.ToGetAdminResDto(user, _userRepository));
+			return Ok(new ApiResponse<GetAdminResDto> { Code = 1, Msg = "", Data = await admin.ToGetAdminResDto(user, _userRepository) });
 		}
 
 		/// <summary>
@@ -111,22 +111,22 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpGet("profile-slef")]
 		[Authorize(Roles = "Admin")]
-		public  async Task<ActionResult> GetProfileSlef()
+		public async Task<ActionResult<ApiResponse<GetAdminResDto>>> GetProfileSlef()
 		{
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
 			if (userName == null)
-				return BadRequest("获取当前用户ID失败");
+				return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "获取当前用户ID失败", Data = null });
 			var user = await _userRepository._userManager.FindByNameAsync(userName);
 			if (user == null)
 			{
-				return BadRequest("获取当前用户信息失败");
+				return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "获取当前用户信息失败", Data = null });
 			}
 			var admin = await _adminRepository.GetAdminByIdAsync(user.Id);
 			if (admin == null)
 			{
-				return BadRequest("获取当前用户信息失败");
+				return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "获取当前用户信息失败", Data = null });
 			}
-			return Ok(await admin.ToGetAdminResDto(user,_userRepository));
+			return Ok(new ApiResponse<GetAdminResDto> { Code = 1, Msg = "", Data = await admin.ToGetAdminResDto(user, _userRepository) });
 		}
 
 		/// <summary>
@@ -136,10 +136,11 @@ namespace CourseAttendance.Controllers.Account
 		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult> CreateUser(CreateUserAdminReqDto dto)
+		public async Task<ActionResult<ApiResponse<GetAdminResDto>>> CreateUser(CreateUserAdminReqDto dto)
 		{
 			var userModel = await AccountController.CreateUser(dto, _userRepository);
-			if (userModel == null) return BadRequest("创建失败");
+			if (userModel == null)
+				return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "创建失败", Data = null });
 
 			var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
 
@@ -150,11 +151,10 @@ namespace CourseAttendance.Controllers.Account
 			if (result == 0 || !resRole.Succeeded)
 			{
 				var res = await _userRepository.DeleteAsync(userModel.Id);
-				if (!res.Succeeded) return BadRequest("创建失败");
-				return BadRequest("创建失败");
+				return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "创建失败", Data = null });
 			}
 			adminModel = await _adminRepository.GetAdminByIdAsync(userModel.Id);
-			return CreatedAtAction(nameof(GetUser), new { id = userModel.Id }, await adminModel.ToGetAdminResDto(userModel, _userRepository));
+			return Ok(new ApiResponse<GetAdminResDto> { Code = 1, Msg = "", Data = await adminModel.ToGetAdminResDto(userModel, _userRepository) });
 		}
 
 

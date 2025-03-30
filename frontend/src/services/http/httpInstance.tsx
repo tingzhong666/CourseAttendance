@@ -1,42 +1,63 @@
 import notification from "antd/es/notification";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React from "react"
 
-const baseURL = 'https://localhost:5246/'
+const baseURL = 'https://localhost:7019'
 
-const [api, contextHolder] = notification.useNotification();
-// Ìí¼ÓÇëÇóÀ¹½ØÆ÷
+// æ·»åŠ è¯·æ±‚æ‹¦æˆªå™¨
 axios.interceptors.request.use(function (config) {
-    // ÔÚ·¢ËÍÇëÇóÖ®Ç°×öĞ©Ê²Ã´
+    // åœ¨å‘é€è¯·æ±‚ä¹‹å‰åšäº›ä»€ä¹ˆ
     return config;
 }, function (error) {
-    // ¶ÔÇëÇó´íÎó×öĞ©Ê²Ã´
-    api.info({
-        message: `ÇëÇóÊ§°Ü£¬Î´Öª´íÎó`,
+    // å¯¹è¯·æ±‚é”™è¯¯åšäº›ä»€ä¹ˆ
+    notification.info({
+        message: `è¯·æ±‚å¤±è´¥ï¼ŒæœªçŸ¥é”™è¯¯`,
+        placement: "topRight",
+    });
+
+    return Promise.reject(error);
+});
+
+// æ·»åŠ å“åº”æ‹¦æˆªå™¨
+axios.interceptors.response.use(function (response) {
+    // 2xx èŒƒå›´å†…çš„çŠ¶æ€ç éƒ½ä¼šè§¦å‘è¯¥å‡½æ•°ã€‚
+    // å¯¹å“åº”æ•°æ®åšç‚¹ä»€ä¹ˆ
+    if (response.data.code != 1) {
+        let msg = ''
+        switch (response.data.code) {
+            case 2:
+                msg = 'æœªçŸ¥é”™è¯¯'
+                break
+            default:
+        }
+        notification.info({
+            message: msg,
+            placement: "topRight",
+        });
+    }
+    return response;
+}, function (error) {
+    // è¶…å‡º 2xx èŒƒå›´çš„çŠ¶æ€ç éƒ½ä¼šè§¦å‘è¯¥å‡½æ•°ã€‚
+    // å¯¹å“åº”é”™è¯¯åšç‚¹ä»€ä¹ˆ
+    let msg = ''
+    if (error.status == 401) {
+        msg = 'å“åº”å¤±è´¥ï¼Œæƒé™ä¸å¤Ÿ'
+    }
+    else {
+        msg = 'å“åº”å¤±è´¥ï¼ŒæœªçŸ¥é”™è¯¯'
+    }
+    notification.info({
+        message: msg,
         placement: "topRight",
     });
     return Promise.reject(error);
 });
 
-// Ìí¼ÓÏìÓ¦À¹½ØÆ÷
-axios.interceptors.response.use(function (response) {
-    // 2xx ·¶Î§ÄÚµÄ×´Ì¬Âë¶¼»á´¥·¢¸Ãº¯Êı¡£
-    // ¶ÔÏìÓ¦Êı¾İ×öµãÊ²Ã´
-    return response;
-}, function (error) {
-    // ³¬³ö 2xx ·¶Î§µÄ×´Ì¬Âë¶¼»á´¥·¢¸Ãº¯Êı¡£
-    // ¶ÔÏìÓ¦´íÎó×öµãÊ²Ã´
-    api.info({
-        message: `ÏìÓ¦Ê§°Ü£¬Î´Öª´íÎó`,
-        placement: "topRight",
-    });
-    return Promise.reject(error);
-});
 
 
 
 import { AcademicApi, AccountApi, AdminApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, StudentApi, TeacherApi } from "../api"
-export const Academic = new AcademicApi(undefined, baseURL,axios )
+export const Academic = new AcademicApi(undefined, baseURL, axios)
 export const Account = new AccountApi(undefined, baseURL, axios)
 export const Admin = new AdminApi(undefined, baseURL, axios)
 export const Attendance = new AttendanceApi(undefined, baseURL, axios)
