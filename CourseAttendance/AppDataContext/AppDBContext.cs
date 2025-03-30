@@ -23,6 +23,10 @@ namespace CourseAttendance.AppDataContext
 		public DbSet<CourseStudent> CourseStudents { get; set; }
 		public DbSet<Attendance> Attendances { get; set; }
 		public DbSet<Grade> Grades { get; set; }
+		public DbSet<WebSystemConfig> WebSystemConfigs { get; set; }
+		public DbSet<TimeTable> TimeTables { get; set; }
+		public DbSet<CourseTime> CourseTimes { get; set; }
+		
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -61,6 +65,25 @@ namespace CourseAttendance.AppDataContext
 					.HasForeignKey(p => p.CourseId)
 					.OnDelete(DeleteBehavior.Restrict);
 			}
+
+			// 多对多 上课的时间 课程与作息表
+			{
+				modelBuilder.Entity<CourseTime>()
+					.HasKey(ct => new { ct.CourseId, ct.TimeTableId });
+
+				modelBuilder.Entity<CourseTime>()
+					.HasOne(u => u.Course)
+					.WithMany(u => u.CourseTimes)
+					.HasForeignKey(p => p.CourseId)
+					.OnDelete(DeleteBehavior.Restrict);
+
+				modelBuilder.Entity<CourseTime>()
+					.HasOne(u => u.TimeTable)
+					.WithMany(u => u.CourseTimes)
+					.HasForeignKey(p => p.TimeTableId)
+					.OnDelete(DeleteBehavior.Restrict);
+			}
+
 
 			List<IdentityRole> roles =
 			[

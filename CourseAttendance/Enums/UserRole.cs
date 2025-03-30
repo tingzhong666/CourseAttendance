@@ -1,7 +1,7 @@
 ﻿namespace CourseAttendance.Enums
 {
 	/// <summary>
-	/// 用户身份 权限
+	/// 用户身份 权限 用不到了
 	/// </summary>
 	public enum UserRole
 	{

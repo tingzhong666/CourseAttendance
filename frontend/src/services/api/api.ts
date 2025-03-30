@@ -191,13 +191,13 @@ export interface AttendanceResponseDtoListApiResponse {
 /**
  * 
  * @export
- * @enum {number}
+ * @enum {string}
  */
 
 export const AttendanceStatus = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2
+    Leave: 'Leave',
+    Absent: 'Absent',
+    None: 'None'
 } as const;
 
 export type AttendanceStatus = typeof AttendanceStatus[keyof typeof AttendanceStatus];
@@ -262,12 +262,12 @@ export interface ChangePasswordSelfReqDto {
 /**
  * 
  * @export
- * @enum {number}
+ * @enum {string}
  */
 
 export const CheckMethod = {
-    NUMBER_0: 0,
-    NUMBER_1: 1
+    Normal: 'Normal',
+    Password: 'Password'
 } as const;
 
 export type CheckMethod = typeof CheckMethod[keyof typeof CheckMethod];
@@ -287,22 +287,10 @@ export interface CourseRequestDto {
     'name': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<CourseTimeReqDto>}
      * @memberof CourseRequestDto
      */
-    'weekday': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseRequestDto
-     */
-    'startTime': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseRequestDto
-     */
-    'endTime': string;
+    'courseTimes': Array<CourseTimeReqDto>;
     /**
      * 
      * @type {string}
@@ -336,10 +324,10 @@ export interface CourseResponseDto {
     'name': string;
     /**
      * 
-     * @type {string}
+     * @type {Array<CourseTimeResDto>}
      * @memberof CourseResponseDto
      */
-    'weekday': string;
+    'courseTimes'?: Array<CourseTimeResDto> | null;
     /**
      * 
      * @type {string}
@@ -504,6 +492,84 @@ export interface CourseSelectionResDtoListApiResponse {
      */
     'data'?: Array<CourseSelectionResDto> | null;
 }
+/**
+ * 
+ * @export
+ * @interface CourseTimeReqDto
+ */
+export interface CourseTimeReqDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTimeReqDto
+     */
+    'courseId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTimeReqDto
+     */
+    'timeTableId'?: number;
+    /**
+     * 
+     * @type {Weekday}
+     * @memberof CourseTimeReqDto
+     */
+    'weekday'?: Weekday;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTimeReqDto
+     */
+    'startTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTimeReqDto
+     */
+    'endTime'?: string;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface CourseTimeResDto
+ */
+export interface CourseTimeResDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTimeResDto
+     */
+    'courseId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTimeResDto
+     */
+    'timeTableId'?: number;
+    /**
+     * 
+     * @type {Weekday}
+     * @memberof CourseTimeResDto
+     */
+    'weekday'?: Weekday;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTimeResDto
+     */
+    'startTime'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTimeResDto
+     */
+    'endTime'?: string;
+}
+
+
 /**
  * 
  * @export
@@ -1251,20 +1317,173 @@ export interface ObjectApiResponse {
 /**
  * 
  * @export
- * @enum {number}
+ * @enum {string}
  */
 
 export const PerformanceLevel = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3,
-    NUMBER_4: 4
+    None: 'None',
+    Excellent: 'Excellent',
+    Good: 'Good',
+    Medium: 'Medium',
+    Poor: 'Poor'
 } as const;
 
 export type PerformanceLevel = typeof PerformanceLevel[keyof typeof PerformanceLevel];
 
 
+/**
+ * 
+ * @export
+ * @interface TimeSpan
+ */
+export interface TimeSpan {
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'ticks'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'days'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'hours'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'milliseconds'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'microseconds'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'nanoseconds'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'minutes'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'seconds'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'totalDays'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'totalHours'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'totalMilliseconds'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'totalMicroseconds'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'totalNanoseconds'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'totalMinutes'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeSpan
+     */
+    'totalSeconds'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface TimeTableResDto
+ */
+export interface TimeTableResDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeTableResDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TimeTableResDto
+     */
+    'name'?: string | null;
+    /**
+     * 
+     * @type {TimeSpan}
+     * @memberof TimeTableResDto
+     */
+    'start'?: TimeSpan;
+    /**
+     * 
+     * @type {TimeSpan}
+     * @memberof TimeTableResDto
+     */
+    'end'?: TimeSpan;
+}
+/**
+ * 
+ * @export
+ * @interface TimeTableResDtoApiResponse
+ */
+export interface TimeTableResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeTableResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TimeTableResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {TimeTableResDto}
+     * @memberof TimeTableResDtoApiResponse
+     */
+    'data'?: TimeTableResDto;
+}
 /**
  * 
  * @export
@@ -1371,6 +1590,25 @@ export interface UpdateProfileTeacherReqDto {
      */
     'name': string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const Weekday = {
+    Monday: 'MONDAY',
+    Tuesday: 'TUESDAY',
+    Wednesday: 'WEDNESDAY',
+    Thursday: 'THURSDAY',
+    Friday: 'FRIDAY',
+    Saturday: 'SATURDAY',
+    Sunday: 'SUNDAY'
+} as const;
+
+export type Weekday = typeof Weekday[keyof typeof Weekday];
+
+
 
 /**
  * AcademicApi - axios parameter creator
@@ -5458,6 +5696,114 @@ export class TeacherApi extends BaseAPI {
      */
     public apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig) {
         return TeacherApiFp(this.configuration).apiTeacherProfileSlefPut(updateProfileTeacherReqDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * TimeTableApi - axios parameter creator
+ * @export
+ */
+export const TimeTableApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTimeTableIdGet: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiTimeTableIdGet', 'id', id)
+            const localVarPath = `/api/time-table/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * TimeTableApi - functional programming interface
+ * @export
+ */
+export const TimeTableApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TimeTableApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTimeTableIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TimeTableResDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTimeTableIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TimeTableApi.apiTimeTableIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * TimeTableApi - factory interface
+ * @export
+ */
+export const TimeTableApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TimeTableApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTimeTableIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<TimeTableResDtoApiResponse> {
+            return localVarFp.apiTimeTableIdGet(id, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * TimeTableApi - object-oriented interface
+ * @export
+ * @class TimeTableApi
+ * @extends {BaseAPI}
+ */
+export class TimeTableApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TimeTableApi
+     */
+    public apiTimeTableIdGet(id: number, options?: RawAxiosRequestConfig) {
+        return TimeTableApiFp(this.configuration).apiTimeTableIdGet(id, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

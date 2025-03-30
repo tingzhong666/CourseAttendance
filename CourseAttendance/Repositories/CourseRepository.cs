@@ -19,6 +19,7 @@ namespace CourseAttendance.Repositories
 				.Include(c => c.Teacher)
 				.Include(c => c.CourseStudents)
 				.Include(c => c.Attendances)
+				.Include(c => c.CourseTimes)
 				.FirstOrDefaultAsync(c => c.Id == id);
 		}
 
@@ -28,6 +29,7 @@ namespace CourseAttendance.Repositories
 				.Include(c => c.Teacher)
 				.Include(c => c.CourseStudents)
 				.Include(c => c.Attendances)
+				.Include(c => c.CourseTimes)
 				.ToListAsync();
 		}
 
@@ -44,9 +46,9 @@ namespace CourseAttendance.Repositories
 			if (model == null) return 0;
 
 			model.Name = course.Name;
-			model.Weekday = course.Weekday;
-			model.StartTime = course.StartTime;
-			model.EndTime = course.EndTime;
+			//model.Weekday = course.Weekday;
+			//model.StartTime = course.StartTime;
+			//model.EndTime = course.EndTime;
 			model.Location = course.Location;
 			model.UpdatedAt = DateTime.Now;
 			model.TeacherUserId = course.TeacherUserId;

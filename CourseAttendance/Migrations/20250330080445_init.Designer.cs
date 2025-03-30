@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAttendance.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250320112358_25.3.20_2")]
-    partial class _25320_2
+    [Migration("20250330080445_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,9 +85,6 @@ namespace CourseAttendance.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -96,19 +93,12 @@ namespace CourseAttendance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("TeacherUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Weekday")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -135,6 +125,30 @@ namespace CourseAttendance.Migrations
                     b.ToTable("CourseStudents");
                 });
 
+            modelBuilder.Entity("CourseAttendance.Model.CourseTime", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimeTableId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Weekday")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseId", "TimeTableId");
+
+                    b.HasIndex("TimeTableId");
+
+                    b.ToTable("CourseTimes");
+                });
+
             modelBuilder.Entity("CourseAttendance.Model.Grade", b =>
                 {
                     b.Property<int>("Id")
@@ -156,6 +170,29 @@ namespace CourseAttendance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Grades");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.TimeTable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<TimeSpan>("End")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("Start")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeTables");
                 });
 
             modelBuilder.Entity("CourseAttendance.Model.Users.Academic", b =>
@@ -274,6 +311,20 @@ namespace CourseAttendance.Migrations
                         .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.WebSystemConfig", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("WebSystemConfigs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -484,6 +535,25 @@ namespace CourseAttendance.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("CourseAttendance.Model.CourseTime", b =>
+                {
+                    b.HasOne("CourseAttendance.Model.Course", "Course")
+                        .WithMany("CourseTimes")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CourseAttendance.Model.TimeTable", "TimeTable")
+                        .WithMany("CourseTimes")
+                        .HasForeignKey("TimeTableId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("TimeTable");
+                });
+
             modelBuilder.Entity("CourseAttendance.Model.Users.Academic", b =>
                 {
                     b.HasOne("CourseAttendance.Model.Users.User", "User")
@@ -592,11 +662,18 @@ namespace CourseAttendance.Migrations
                     b.Navigation("Attendances");
 
                     b.Navigation("CourseStudents");
+
+                    b.Navigation("CourseTimes");
                 });
 
             modelBuilder.Entity("CourseAttendance.Model.Grade", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.TimeTable", b =>
+                {
+                    b.Navigation("CourseTimes");
                 });
 
             modelBuilder.Entity("CourseAttendance.Model.Users.Student", b =>

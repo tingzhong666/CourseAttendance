@@ -1,8 +1,11 @@
-﻿namespace CourseAttendance.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace CourseAttendance.Enums
 {
 	/// <summary>
 	/// 考勤状态
 	/// </summary>
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum AttendanceStatus
 	{
 		///// <summary>

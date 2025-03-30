@@ -12,6 +12,7 @@ using CourseAttendance.Controllers.Account;
 using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
 using Microsoft.AspNetCore.Http.Features;
+using Newtonsoft.Json.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +54,8 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
 	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+	options.SerializerSettings.Converters.Add(new StringEnumConverter());
 });
 
 builder.Services.AddDbContext<AppDBContext>(options =>
@@ -103,8 +106,13 @@ builder.Services.AddScoped<AdminRepository>();
 builder.Services.AddScoped<StudentRepository>();
 builder.Services.AddScoped<TeacherRepository>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<WebSystemConfigRepository>();
+builder.Services.AddScoped<TimeTableRepository>();
+builder.Services.AddScoped<CourseTimeRepository>();
 
 builder.Services.AddScoped<TokenService, TokenService>();
+
+builder.Services.AddScoped<InitService, InitService>();
 
 
 // 配置文件上传限制
@@ -139,29 +147,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// 创建初始管理员账号
+// 某些数据初始化
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
-	var _userRepository = services.GetRequiredService<UserRepository>();
-	var _adminRepository = services.GetRequiredService<AdminRepository>();
-
-	var dto = new CreateUserAdminReqDto
-	{
-		Name = "admin",
-		UserName = "admin",
-		PassWord = "Admin123456!"
-	};
-	var userModel = await AccountController.CreateUser(dto, _userRepository);
-	if (userModel != null)
-	{
-		var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
-
-		var adminModel = dto.ToModel();
-		adminModel.UserId = userModel.Id;
-		var result = await _adminRepository.AddAdminAsync(adminModel);
-	}
-
+	var initService = services.GetRequiredService<InitService>();
+	await initService.Run();
 }
 
 app.Run();

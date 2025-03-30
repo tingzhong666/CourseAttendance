@@ -4,6 +4,6 @@
 	{
 		public int Code { get; set; } = 1;
 		public string? Msg { get; set; } = "";
-		public T Data { get; set; }
+		public T? Data { get; set; }
 	}
 }

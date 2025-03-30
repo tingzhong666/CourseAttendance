@@ -7,14 +7,11 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		[Required]
 		public string Name { get; set; }
 
+		/// <summary>
+		/// 上课时间的哦
+		/// </summary>
 		[Required]
-		public string Weekday { get; set; }
-
-		[Required]
-		public DateTime StartTime { get; set; }
-
-		[Required]
-		public DateTime EndTime { get; set; }
+		public List<CourseTimeReqDto> CourseTimes { get; set; }
 
 		[Required]
 		public string Location { get; set; }

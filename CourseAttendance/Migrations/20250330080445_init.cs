@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CourseAttendance.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,6 +66,33 @@ namespace CourseAttendance.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Grades", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TimeTables",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Start = table.Column<TimeSpan>(type: "time", nullable: false),
+                    End = table.Column<TimeSpan>(type: "time", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeTables", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WebSystemConfigs",
+                columns: table => new
+                {
+                    Key = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WebSystemConfigs", x => x.Key);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,9 +283,6 @@ namespace CourseAttendance.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Weekday = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -279,22 +303,22 @@ namespace CourseAttendance.Migrations
                 name: "Attendances",
                 columns: table => new
                 {
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AttendanceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     SignInTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SignOutTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CheckMethod = table.Column<int>(type: "int", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AttachmentUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PassWord = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attendances", x => new { x.CourseId, x.StudentId });
+                    table.PrimaryKey("PK_Attendances", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Attendances_Courses_CourseId",
                         column: x => x.CourseId,
@@ -331,6 +355,33 @@ namespace CourseAttendance.Migrations
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourseTimes",
+                columns: table => new
+                {
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    TimeTableId = table.Column<int>(type: "int", nullable: false),
+                    Weekday = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseTimes", x => new { x.CourseId, x.TimeTableId });
+                    table.ForeignKey(
+                        name: "FK_CourseTimes_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CourseTimes_TimeTables_TimeTableId",
+                        column: x => x.TimeTableId,
+                        principalTable: "TimeTables",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -391,6 +442,11 @@ namespace CourseAttendance.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attendances_CourseId",
+                table: "Attendances",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Attendances_StudentId",
                 table: "Attendances",
                 column: "StudentId");
@@ -404,6 +460,11 @@ namespace CourseAttendance.Migrations
                 name: "IX_CourseStudents_StudentId",
                 table: "CourseStudents",
                 column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseTimes_TimeTableId",
+                table: "CourseTimes",
+                column: "TimeTableId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_GradeId",
@@ -442,19 +503,28 @@ namespace CourseAttendance.Migrations
                 name: "CourseStudents");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "CourseTimes");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "WebSystemConfigs");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Teachers");
+                name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "TimeTables");
 
             migrationBuilder.DropTable(
                 name: "Grades");
+
+            migrationBuilder.DropTable(
+                name: "Teachers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

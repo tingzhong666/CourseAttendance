@@ -2,10 +2,18 @@ import { useEffect, useState } from 'react'
 import * as api from '../../services/http/httpInstance'
 import { Button, PaginationProps, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { data } from 'react-router';
-import { CourseResponseDto } from '../../services/api';
+import { CourseResponseDto, CourseTimeResDto } from '../../services/api';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import { useAuth } from '../../Contexts/auth';
+import { CreateUUID, WeekdayMap } from '../../Utils/Utils';
+import CourseAdd from '../../conponents/courseAdd';
+
+interface CourseTimeData {
+    // 周几
+    weekday: string,
+    // 第几节
+    section: string,
+}
 
 interface CourseData extends CourseResponseDto {
     // 是否选了此课 学生身份用
@@ -13,7 +21,9 @@ interface CourseData extends CourseResponseDto {
     // 是否是我亲自授课 老师身份用
     isTeach: boolean | null,
     // 授课老师的名字
-    taecherName: string
+    taecherName: string,
+    // 上课时间
+    timeDatas: Array<CourseTimeData>,
 }
 
 export default () => {
@@ -23,6 +33,7 @@ export default () => {
     const [current, setCurrent] = useState(1)
     const [limit, setLimit] = useState(20)
     const [queryStr, setQueryStr] = useState('')
+    const [addShow, setAddShow] = useState(false)
 
     useEffect(() => {
         init()
@@ -53,7 +64,21 @@ export default () => {
             title: '时间',
             key: 'time',
             //dataIndex: 'tags',
-            render: () => (<>待定</>)
+            render: (_, record) => {
+
+                var renders = record.timeDatas?.map(x => {
+
+                    return (
+                        <div key={CreateUUID()}>
+                            {x.weekday}- {x.section}
+                        </div>
+                    )
+                })
+
+                return (<>
+                    {renders}
+                </>)
+            }
         },
         {
             title: '操作',
@@ -107,12 +132,27 @@ export default () => {
             cd.isSelected = cd.studentIds.includes(auth.user?.id || '')
             // 是否是我亲自授课 老师身份用
             cd.isTeach = cd.teacherId == auth.user?.id
+            // 课程时间
+            cd.timeDatas = await timeDataConvert(cd.courseTimes || [])
             return cd
         }) ?? []
 
 
         setData(await Promise.all(tmp) || [])
         setTotal(res.data.data?.total || 0)
+    }
+
+    // 课程时间转换
+    const timeDataConvert = async (dto: CourseTimeResDto[]) => {
+        const tmp = dto.map(async v => {
+            const res = await api.TimeTable.apiTimeTableIdGet(v.timeTableId || -1)
+            return {
+                weekday: WeekdayMap(v.weekday),
+                section: res.data.data?.name
+            } as CourseTimeData
+        }) ?? []
+
+        return await Promise.all(tmp)
     }
 
     // 查询
@@ -132,10 +172,21 @@ export default () => {
 
         await getData();
     }
+    const add = (): void => {
+        setAddShow(true)
+    }
+
     return (<Space direction='vertical' style={{ width: '100%' }}>
         <Space>
             <Search placeholder="输入查询对的课程名" onSearch={onSearch} enterButton />
-            <Button type='primary'>新增</Button>
+
+            {/* 管理员 教务处 老师 可以新增课程 */}
+            {auth.user?.roles.includes('Admihn') ||
+                auth.user?.roles.includes('Academic') ||
+                auth.user?.roles.includes('Teacher') ?
+                <Button type='primary' onClick={() => add()}>新增</Button>
+                : <></>
+            }
         </Space>
 
         <Table<CourseData>
@@ -143,5 +194,7 @@ export default () => {
             pagination={{ position: ['bottomCenter'], total, showSizeChanger: true, current, pageSize: limit, onChange: onPageChange }}
             dataSource={data}
         />
+
+        <CourseAdd show={addShow} showChange={x => setAddShow(x)} />
     </Space>)
 }

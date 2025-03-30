@@ -5,18 +5,17 @@ namespace CourseAttendance.mapper
 {
 	public static class CourseRequestDtoExt
 	{
-		public static Course? ToModel(this CourseRequestDto dto)
+		public static Course ToModel(this CourseRequestDto dto)
 		{
-			if (dto == null) return null;
-
 			return new Course
 			{
 				Name = dto.Name,
-				Weekday = dto.Weekday,
-				StartTime = dto.StartTime,
-				EndTime = dto.EndTime,
+				//Weekday = dto.Weekday,
+				//StartTime = dto.StartTime,
+				//EndTime = dto.EndTime,
 				Location = dto.Location,
-				TeacherUserId = dto.TeacherId
+				TeacherUserId = dto.TeacherId,
+				//CourseTimes = dto.CourseTimes.Select(x => x.ToModel()).ToList()
 			};
 		}
 	}

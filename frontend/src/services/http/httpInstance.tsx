@@ -1,6 +1,5 @@
 import notification from "antd/es/notification";
-import axios, { AxiosError } from "axios";
-import React from "react"
+import axios from "axios";
 
 const baseURL = 'https://localhost:7019'
 
@@ -22,19 +21,19 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
-    if (response.data.code != 1) {
-        let msg = ''
-        switch (response.data.code) {
-            case 2:
-                msg = '未知错误'
-                break
-            default:
-        }
-        notification.info({
-            message: msg,
-            placement: "topRight",
-        });
-    }
+    // if (response.data.code != 1) {
+    //     let msg = ''
+    //     switch (response.data.code) {
+    //         case 2:
+    //             msg = '未知错误'
+    //             break
+    //         default:
+    //     }
+    //     notification.info({
+    //         message: msg,
+    //         placement: "topRight",
+    //     });
+    // }
     return response;
 }, function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
@@ -44,7 +43,7 @@ axios.interceptors.response.use(function (response) {
         msg = '响应失败，权限不够'
     }
     else {
-        msg = '响应失败，未知错误'
+        msg = '响应失败，未知错误 httpcode ' + error.status
     }
     notification.info({
         message: msg,
@@ -56,7 +55,7 @@ axios.interceptors.response.use(function (response) {
 
 
 
-import { AcademicApi, AccountApi, AdminApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, StudentApi, TeacherApi } from "../api"
+import { AcademicApi, AccountApi, AdminApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, StudentApi, TeacherApi, TimeTableApi } from "../api"
 export const Academic = new AcademicApi(undefined, baseURL, axios)
 export const Account = new AccountApi(undefined, baseURL, axios)
 export const Admin = new AdminApi(undefined, baseURL, axios)
@@ -66,3 +65,4 @@ export const Course = new CourseApi(undefined, baseURL, axios)
 export const CourseSelection = new CourseSelectionApi(undefined, baseURL, axios)
 export const Student = new StudentApi(undefined, baseURL, axios)
 export const Teacher = new TeacherApi(undefined, baseURL, axios)
+export const TimeTable = new TimeTableApi(undefined, baseURL, axios)

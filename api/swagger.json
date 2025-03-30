@@ -2394,6 +2394,46 @@
           }
         }
       }
+    },
+    "/api/time-table/{id}": {
+      "get": {
+        "tags": [
+          "TimeTable"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeTableResDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeTableResDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeTableResDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2522,12 +2562,11 @@
       },
       "AttendanceStatus": {
         "enum": [
-          0,
-          1,
-          2
+          "Leave",
+          "Absent",
+          "None"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "ChangePasswordReqDto": {
         "required": [
@@ -2582,20 +2621,17 @@
       },
       "CheckMethod": {
         "enum": [
-          0,
-          1
+          "Normal",
+          "Password"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "CourseRequestDto": {
         "required": [
-          "endTime",
+          "courseTimes",
           "location",
           "name",
-          "startTime",
-          "teacherId",
-          "weekday"
+          "teacherId"
         ],
         "type": "object",
         "properties": {
@@ -2603,17 +2639,11 @@
             "minLength": 1,
             "type": "string"
           },
-          "weekday": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
+          "courseTimes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseTimeReqDto"
+            }
           },
           "location": {
             "minLength": 1,
@@ -2633,8 +2663,7 @@
           "name",
           "startTime",
           "studentIds",
-          "teacherId",
-          "weekday"
+          "teacherId"
         ],
         "type": "object",
         "properties": {
@@ -2646,9 +2675,12 @@
             "minLength": 1,
             "type": "string"
           },
-          "weekday": {
-            "minLength": 1,
-            "type": "string"
+          "courseTimes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseTimeResDto"
+            },
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -2768,6 +2800,56 @@
               "$ref": "#/components/schemas/CourseSelectionResDto"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CourseTimeReqDto": {
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "timeTableId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "weekday": {
+            "$ref": "#/components/schemas/Weekday"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CourseTimeResDto": {
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "timeTableId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "weekday": {
+            "$ref": "#/components/schemas/Weekday"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -3384,14 +3466,130 @@
       },
       "PerformanceLevel": {
         "enum": [
-          0,
-          1,
-          2,
-          3,
-          4
+          "None",
+          "Excellent",
+          "Good",
+          "Medium",
+          "Poor"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
+      },
+      "TimeSpan": {
+        "type": "object",
+        "properties": {
+          "ticks": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "days": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "hours": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "milliseconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "microseconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "nanoseconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "minutes": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "seconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totalDays": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalHours": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalMilliseconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalMicroseconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalNanoseconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalMinutes": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalSeconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeTableResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "start": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "end": {
+            "$ref": "#/components/schemas/TimeSpan"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeTableResDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/TimeTableResDto"
+          }
+        },
+        "additionalProperties": false
       },
       "UpdateProfileAcademicReqDto": {
         "required": [
@@ -3480,6 +3678,18 @@
           }
         },
         "additionalProperties": false
+      },
+      "Weekday": {
+        "enum": [
+          "MONDAY",
+          "TUESDAY",
+          "WEDNESDAY",
+          "THURSDAY",
+          "FRIDAY",
+          "SATURDAY",
+          "SUNDAY"
+        ],
+        "type": "string"
       }
     },
     "securitySchemes": {

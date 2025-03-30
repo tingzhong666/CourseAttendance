@@ -46,10 +46,13 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("check")]
-		[Authorize]
 		public async Task<ActionResult<ApiResponse<object>>> Check()
 		{
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			if (User.Identity?.IsAuthenticated ?? false)
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			else
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "未登录", Data = null });
+
 		}
 
 		/// <summary>
@@ -107,8 +110,13 @@ namespace CourseAttendance.Controllers.Account
 		public async Task<ActionResult<ApiResponse<List<GetUserResDto>>>> GetUsers()
 		{
 			var users = await _userManager.Users.ToListAsync();
-			var res = await Task.WhenAll(users.Select(async x => await x.ToGetUsersResDto(_userRepository)));
-			return Ok(new ApiResponse<List<GetUserResDto>> { Code = 1, Msg = "", Data = [.. res] });
+			var resDtos = new List<GetUserResDto>();
+			foreach (var model in users)
+			{
+				var resDto = await model.ToGetUsersResDto(_userRepository);
+				resDtos.Add(resDto);
+			}
+			return Ok(new ApiResponse<List<GetUserResDto>> { Code = 1, Msg = "", Data = [.. resDtos] });
 		}
 
 

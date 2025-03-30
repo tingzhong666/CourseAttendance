@@ -1,8 +1,11 @@
-﻿namespace CourseAttendance.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace CourseAttendance.Enums
 {
 	/// <summary>
 	/// 签到方式
 	/// </summary>
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum CheckMethod
 	{
 		/// <summary>

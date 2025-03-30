@@ -14,10 +14,12 @@ namespace CourseAttendance.Controllers
 	{
 
 		private readonly CourseRepository _courseRepository;
+		private readonly CourseTimeRepository _courseTimeRepository;
 
-		public CourseController(CourseRepository courseRepository)
+		public CourseController(CourseRepository courseRepository, CourseTimeRepository courseTimeRepository)
 		{
 			_courseRepository = courseRepository;
+			_courseTimeRepository = courseTimeRepository;
 		}
 
 		// 获取所有
@@ -35,13 +37,15 @@ namespace CourseAttendance.Controllers
 			// 分页
 			courses = courses.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
 
-			return Ok(new ApiResponse<CourseResponseListDto> { 
+			return Ok(new ApiResponse<CourseResponseListDto>
+			{
 				Code = 1,
 				Msg = "",
-				Data = new CourseResponseListDto {
-					DataList = courses.ToList().Select(x => x.ToResponseDto()).ToList(), 
-					Total = total 
-				} 
+				Data = new CourseResponseListDto
+				{
+					DataList = courses.ToList().Select(x => x.ToResponseDto()).Where(x => x != null).Cast<CourseResponseDto>().ToList(),
+					Total = total
+				}
 			});
 		}
 
@@ -65,6 +69,7 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<CourseResponseDto?>>> CreateCourse([FromBody] CourseRequestDto course)
 		{
+			// 课程创建
 			var model = course.ToModel();
 			if (model == null)
 				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "创建失败", Data = null });
@@ -72,10 +77,19 @@ namespace CourseAttendance.Controllers
 			if (res == 0)
 				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "创建失败", Data = null });
 
+			// 上课时间创建
+			var courseTimeModels = course.CourseTimes.Select(x => x.ToModel()).ToList();
+			foreach (var courseTimeModel in courseTimeModels)
+			{
+				res = await _courseTimeRepository.AddAsync(courseTimeModel);
+				if (res == 0)
+					return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间创建失败", Data = null });
+			}
+
 			model = await _courseRepository.GetByIdAsync(model.Id);
 
 
-			return Ok(new ApiResponse<CourseResponseDto?> { Code = 1, Msg = "创建失败", Data = model.ToResponseDto() });
+			return Ok(new ApiResponse<CourseResponseDto?> { Code = 1, Msg = "", Data = model.ToResponseDto() });
 		}
 
 		// 更新
@@ -90,6 +104,43 @@ namespace CourseAttendance.Controllers
 			if (res == 0)
 				return Ok(new ApiResponse<object> { Code = 2, Msg = "更新失败", Data = null });
 
+
+			// 上课时间更新
+			var courseTimeModels = dto.CourseTimes.Select(x => x.ToModel()).ToList();
+			// 缺少的删除
+			model = await _courseRepository.GetByIdAsync(model.Id);
+			var delCourseTimeModels = model.CourseTimes
+											.Where(x =>
+												courseTimeModels.FirstOrDefault(v =>
+													v.TimeTableId == x.TimeTableId && v.CourseId == x.CourseId) == null
+											).ToList();
+			foreach (var courseTimeModel in delCourseTimeModels)
+			{
+				res = await _courseTimeRepository.DeleteAsync(courseTimeModel.CourseId, courseTimeModel.TimeTableId);
+				if (res == 0)
+					return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间删除失败", Data = null });
+			}
+
+			// 更新与创建
+			foreach (var courseTimeModel in courseTimeModels)
+			{
+				var courseTimeModel2 = await _courseTimeRepository.GetByIdAsync(courseTimeModel.CourseId, courseTimeModel.TimeTableId);
+				// 没有就创建
+				if (courseTimeModel2 == null)
+				{
+					res = await _courseTimeRepository.AddAsync(courseTimeModel);
+					if (res == 0)
+						return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间创建失败", Data = null });
+				}
+				// 有就更新
+				else
+				{
+					res = await _courseTimeRepository.UpdateAsync(courseTimeModel);
+					if (res == 0)
+						return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间更新失败", Data = null });
+				}
+			}
+
 			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
@@ -98,9 +149,25 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> DeleteCourse(int id)
 		{
+			var model = await _courseRepository.GetByIdAsync(id);
+			if (model == null)
+				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败，不存在", Data = null });
+
+			// 上课时间删除
+			var courseTimeModels = model.CourseTimes;
+			foreach (var courseTimeModel in courseTimeModels)
+			{
+				var ress = await _courseTimeRepository.DeleteAsync(courseTimeModel.CourseId, courseTimeModel.TimeTableId);
+				if (ress == 0)
+					return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间删除失败", Data = null });
+			}
+
+			// 课程删除
 			var res = await _courseRepository.DeleteAsync(id);
 			if (res == 0)
 				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败", Data = null });
+
+
 			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 	}

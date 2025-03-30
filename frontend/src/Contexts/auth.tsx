@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { UserProfile } from "../Models/User";
+import { UserProfile } from "../models/User";
 import * as api from "../services/http/httpInstance"
 import { useNavigate } from "react-router";
 import { notification } from "antd";
@@ -37,10 +37,9 @@ export const UserProvider = ({ children }: Props) => {
         }
 
         // 验证是否有效
-        await check()
-
-        // 获取信息
-        await getUserInfo()
+        if (await check())
+            // 获取信息
+            await getUserInfo()
 
         setIsReady(true)
     }
@@ -78,7 +77,9 @@ export const UserProvider = ({ children }: Props) => {
         let res = await api.Account.apiAccountCheckGet()
         if (res.data.code != 1) {
             navigate('/login')
+            return false
         }
+        return true
     }
 
     const logout = () => {

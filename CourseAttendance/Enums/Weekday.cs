@@ -3,30 +3,38 @@
 namespace CourseAttendance.Enums
 {
 	/// <summary>
-	/// 上课表现
+	/// 周几
 	/// </summary>
 	[JsonConverter(typeof(JsonStringEnumConverter))]
-	public enum PerformanceLevel
+	public enum Weekday
 	{
 		/// <summary>
-		/// 无
+		/// 周一
 		/// </summary>
-		None = 0,
+		MONDAY,
 		/// <summary>
-		/// 优
+		/// 周二
 		/// </summary>
-		Excellent,
+		TUESDAY,
 		/// <summary>
-		/// 良
+		/// 周三
 		/// </summary>
-		Good,
+		WEDNESDAY,
 		/// <summary>
-		/// 中
+		/// 周四
 		/// </summary>
-		Medium,
+		THURSDAY,
 		/// <summary>
-		/// 差
+		/// 周五
 		/// </summary>
-		Poor
+		FRIDAY,
+		/// <summary>
+		/// 周六
+		/// </summary>
+		SATURDAY,
+		/// <summary>
+		/// 周日
+		/// </summary>
+		SUNDAY
 	}
 }
