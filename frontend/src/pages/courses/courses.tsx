@@ -6,7 +6,7 @@ import { CourseResponseDto, CourseTimeResDto } from '../../services/api';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import { useAuth } from '../../Contexts/auth';
 import { CreateUUID, WeekdayMap } from '../../Utils/Utils';
-import CourseAdd from '../../conponents/courseAdd';
+import CourseAdd from '../../components/courseAdd';
 
 interface CourseTimeData {
     // 周几
@@ -28,11 +28,14 @@ interface CourseData extends CourseResponseDto {
 
 export default () => {
     const auth = useAuth()
+
+    // 查询参数
     const [data, setData] = useState([] as Array<CourseData>)
     const [total, setTotal] = useState(0)
     const [current, setCurrent] = useState(1)
     const [limit, setLimit] = useState(20)
     const [queryStr, setQueryStr] = useState('')
+
     const [addShow, setAddShow] = useState(false)
 
     useEffect(() => {
@@ -178,10 +181,10 @@ export default () => {
 
     return (<Space direction='vertical' style={{ width: '100%' }}>
         <Space>
-            <Search placeholder="输入查询对的课程名" onSearch={onSearch} enterButton />
+            <Search placeholder="输入查询的课程名" onSearch={onSearch} enterButton />
 
             {/* 管理员 教务处 老师 可以新增课程 */}
-            {auth.user?.roles.includes('Admihn') ||
+            {auth.user?.roles.includes('Admin') ||
                 auth.user?.roles.includes('Academic') ||
                 auth.user?.roles.includes('Teacher') ?
                 <Button type='primary' onClick={() => add()}>新增</Button>

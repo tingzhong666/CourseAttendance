@@ -1,8 +1,10 @@
-﻿using CourseAttendance.DtoModel.ReqDtos;
+﻿using CourseAttendance.DtoModel;
+using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
 using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
 using CourseAttendance.mapper.UserExts;
+using CourseAttendance.Model;
 using CourseAttendance.Model.Users;
 using CourseAttendance.Repositories.Users;
 using CourseAttendance.Services;
@@ -107,16 +109,34 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<ActionResult<ApiResponse<List<GetUserResDto>>>> GetUsers()
+		public async Task<ActionResult<ApiResponse<ListDto<GetUserResDto>>>> GetUsers([FromQuery] ReqQueryDto query)
 		{
-			var users = await _userManager.Users.ToListAsync();
+			var users = _userManager.Users;
+
+
+			// 查询 姓名/工号/学号
+			if (query.q != null && query.q != "")
+			{
+				users = users.Where(x => x.Name.Contains(query.q));
+				users = users.Where(x => x.UserName.Contains(query.q));
+			}
+
+
+			// 执行查询
+			var queryRes = await users.ToListAsync();
+
+			var total = queryRes.Count();
+			// 分页
+			queryRes = queryRes.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
+
+
 			var resDtos = new List<GetUserResDto>();
-			foreach (var model in users)
+			foreach (var model in queryRes)
 			{
 				var resDto = await model.ToGetUsersResDto(_userRepository);
 				resDtos.Add(resDto);
 			}
-			return Ok(new ApiResponse<List<GetUserResDto>> { Code = 1, Msg = "", Data = [.. resDtos] });
+			return Ok(new ApiResponse<ListDto<GetUserResDto>> { Code = 1, Msg = "", Data = new ListDto<GetUserResDto> { DataList = resDtos, Total = total } });
 		}
 
 

@@ -1110,27 +1110,46 @@ export interface GetUserResDtoApiResponse {
 /**
  * 
  * @export
- * @interface GetUserResDtoListApiResponse
+ * @interface GetUserResDtoListDto
  */
-export interface GetUserResDtoListApiResponse {
+export interface GetUserResDtoListDto {
+    /**
+     * 
+     * @type {Array<GetUserResDto>}
+     * @memberof GetUserResDtoListDto
+     */
+    'dataList'?: Array<GetUserResDto> | null;
     /**
      * 
      * @type {number}
-     * @memberof GetUserResDtoListApiResponse
+     * @memberof GetUserResDtoListDto
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserResDtoListDtoApiResponse
+ */
+export interface GetUserResDtoListDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetUserResDtoListDtoApiResponse
      */
     'code'?: number;
     /**
      * 
      * @type {string}
-     * @memberof GetUserResDtoListApiResponse
+     * @memberof GetUserResDtoListDtoApiResponse
      */
     'msg'?: string | null;
     /**
      * 
-     * @type {Array<GetUserResDto>}
-     * @memberof GetUserResDtoListApiResponse
+     * @type {GetUserResDtoListDto}
+     * @memberof GetUserResDtoListDtoApiResponse
      */
-    'data'?: Array<GetUserResDto> | null;
+    'data'?: GetUserResDtoListDto;
 }
 /**
  * 
@@ -2110,10 +2129,13 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiAccountGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/account`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2129,6 +2151,18 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             // authentication Bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['Page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['Limit'] = limit;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
 
 
     
@@ -2365,11 +2399,14 @@ export const AccountApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountGet(options);
+        async apiAccountGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountGet(page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2470,11 +2507,14 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountGet(options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListApiResponse> {
-            return localVarFp.apiAccountGet(options).then((request) => request(axios, basePath));
+        apiAccountGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListDtoApiResponse> {
+            return localVarFp.apiAccountGet(page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2563,12 +2603,15 @@ export class AccountApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {string} [q] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApi
      */
-    public apiAccountGet(options?: RawAxiosRequestConfig) {
-        return AccountApiFp(this.configuration).apiAccountGet(options).then((request) => request(this.axios, this.basePath));
+    public apiAccountGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return AccountApiFp(this.configuration).apiAccountGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

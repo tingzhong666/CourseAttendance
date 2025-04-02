@@ -355,23 +355,48 @@
         "tags": [
           "Account"
         ],
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserResDtoListApiResponse"
+                  "$ref": "#/components/schemas/GetUserResDtoListDtoApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserResDtoListApiResponse"
+                  "$ref": "#/components/schemas/GetUserResDtoListDtoApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserResDtoListApiResponse"
+                  "$ref": "#/components/schemas/GetUserResDtoListDtoApiResponse"
                 }
               }
             }
@@ -3300,7 +3325,24 @@
         },
         "additionalProperties": false
       },
-      "GetUserResDtoListApiResponse": {
+      "GetUserResDtoListDto": {
+        "type": "object",
+        "properties": {
+          "dataList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetUserResDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetUserResDtoListDtoApiResponse": {
         "type": "object",
         "properties": {
           "code": {
@@ -3312,11 +3354,7 @@
             "nullable": true
           },
           "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GetUserResDto"
-            },
-            "nullable": true
+            "$ref": "#/components/schemas/GetUserResDtoListDto"
           }
         },
         "additionalProperties": false
