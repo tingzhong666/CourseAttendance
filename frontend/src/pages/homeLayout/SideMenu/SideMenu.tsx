@@ -1,16 +1,24 @@
 ﻿import { Button, Menu, MenuProps } from 'antd'
 import { SelectInfo } from 'rc-menu/lib/interface'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuth } from '../../../Contexts/auth'
+import { useLocation } from 'react-router'
+import { MenuItemGroupType } from 'antd/es/menu/interface'
 
 
 export default () => {
     const navigate = useNavigate()
     const auth = useAuth()
+    const routeLocation = useLocation()
 
-    type MenuItem = Required<MenuProps>['items'][number];
-    const items: MenuItem[] = [
+    useEffect(() => {
+        findParent()
+    }, [])
+
+
+    type MenuItem = Required<MenuProps>['items'];
+    const items: MenuItem = [
         { key: '/home', label: '首页' },
         {
             key: 'sub1',
@@ -31,7 +39,15 @@ export default () => {
                 { key: '/modify-userinfo', label: '个人信息修改' },
             ],
         },
-        { key: '/grades-manager', label: '班级管理' },
+        {
+            key: 'grades-manager',
+            label: '班级管理',
+            children: [
+                { key: '/majors-category-manager', label: '大专业管理' },
+                { key: '/majors-subcategory-manager', label: '专业管理' },
+                { key: '/classes-manager', label: '班级管理' },
+            ],
+        },
         { key: '/logout', label: '退出登录' },
     ]
 
@@ -44,15 +60,23 @@ export default () => {
         navigate(x.key)
     }
 
+
+    const [openKeys, setOpenKeys] = useState<Array<string>>([])
+    const findParent = () => {
+        const tmp = items.map(x => x as MenuItemGroupType).find(x => x.children?.find(v => v?.key == routeLocation.pathname))
+        setOpenKeys([...openKeys, tmp?.key + ''])
+    }
+
     return (
         <div>
             <Menu
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                defaultSelectedKeys={[routeLocation.pathname]}
                 mode="inline"
                 theme="dark"
                 items={items}
                 onSelect={x => selecetChange(x)}
+                openKeys={openKeys}
+                onOpenChange={setOpenKeys}
             />
         </div>
     )

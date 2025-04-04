@@ -2,7 +2,7 @@
 
 namespace CourseAttendance.DtoModel.ResDtos
 {
-	public class GetStudentResDto : GetUserResDto
+	public class GetStudentResDto 
 	{
 		/// <summary>
 		/// 班级

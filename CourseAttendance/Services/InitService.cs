@@ -1,4 +1,4 @@
-﻿using CourseAttendance.Controllers.Account;
+﻿using CourseAttendance.Controllers;
 using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
 using CourseAttendance.Repositories;
@@ -9,16 +9,16 @@ namespace CourseAttendance.Services
 	public class InitService
 	{
 		private readonly UserRepository _userRepository;
-		private readonly AdminRepository _adminRepository;
 		private readonly WebSystemConfigRepository _webSystemConfigRepository;
 		private readonly TimeTableRepository _timeTableRepository;
+		private readonly UserService _userService;
 
-		public InitService(UserRepository userRepository, AdminRepository adminRepository, WebSystemConfigRepository webSystemConfigRepository, TimeTableRepository timeTableRepository)
+		public InitService(UserRepository userRepository, WebSystemConfigRepository webSystemConfigRepository, TimeTableRepository timeTableRepository, UserService userService)
 		{
 			_userRepository = userRepository;
-			_adminRepository = adminRepository;
 			_webSystemConfigRepository = webSystemConfigRepository;
 			_timeTableRepository = timeTableRepository;
+			_userService = userService;
 		}
 
 		public async Task Run()
@@ -52,21 +52,33 @@ namespace CourseAttendance.Services
 
 		private async Task CreateAdmin()
 		{
-			var dto = new CreateUserAdminReqDto
+			var model = await _userRepository._userManager.FindByNameAsync("admin");
+			if (model == null)
 			{
-				Name = "admin",
-				UserName = "admin",
-				PassWord = "Admin123456!"
-			};
-			var userModel = await AccountController.CreateUser(dto, _userRepository);
-			if (userModel != null)
-			{
-				var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
-
-				var adminModel = dto.ToModel();
-				adminModel.UserId = userModel.Id;
-				var result = await _adminRepository.AddAdminAsync(adminModel);
+				await _userService.CreateUserAsync(new CreateUserReqDto
+				{
+					Name = "admin",
+					UserName = "admin",
+					PassWord = "Admin123456!",
+					Roles = [Enums.UserRole.Admin],
+					CreateAdminExt = new CreateUserAdminReqDto { },
+				});
 			}
+			//var dto = new CreateUserAdminReqDto
+			//{
+			//	Name = "admin",
+			//	UserName = "admin",
+			//	PassWord = "Admin123456!"
+			//};
+			//var userModel = await AccountController.CreateUser(dto, _userRepository);
+			//if (userModel != null)
+			//{
+			//	var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
+
+			//	var adminModel = dto.ToModel();
+			//	adminModel.UserId = userModel.Id;
+			//	var result = await _adminRepository.AddAdminAsync(adminModel);
+			//}
 		}
 	}
 }

@@ -11,6 +11,9 @@ import UserManager from "../pages/user-manager/user-manager";
 import StudentManager from "../pages/student-manager/student-manager";
 import ModifyPw from "../pages/modify-pw/modify-pw";
 import ModifyUserinfo from "../pages/modify-userinfo/modify-userinfo";
+import ClassesManager from "../pages/classes-manager/classes-manager";
+import MajorsSubcategoryManager from "../pages/majors-subcategory-manager/majors-subcategory-manager";
+import MajorsCategoryManager from "../pages/majors-category-manager/majors-category-manager";
 
 export const router = createBrowserRouter([
     {
@@ -27,6 +30,9 @@ export const router = createBrowserRouter([
                     { path: "student-manager", element: <StudentManager /> },
                     { path: "modify-pw", element: <ModifyPw /> },
                     { path: "modify-userinfo", element: <ModifyUserinfo /> },
+                    { path: "classes-manager", element: <ClassesManager /> },
+                    { path: "majors-category-manager", element: <MajorsCategoryManager /> },
+                    { path: "majors-subcategory-manager", element: <MajorsSubcategoryManager /> },
                 ]
             },
             { path: "login", element: <Login /> },

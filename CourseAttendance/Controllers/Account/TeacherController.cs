@@ -126,34 +126,34 @@ namespace CourseAttendance.Controllers.Account
 		}
 
 
-		/// <summary>
-		/// 创建
-		/// </summary>
-		/// <param name="dto"></param>
-		/// <returns></returns>
-		[HttpPost]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<ApiResponse<GetTeacherResDto>>> CreateUser(CreateUserTeacherReqDto dto)
-		{
-			var userModel = await AccountController.CreateUser(dto, _userRepository);
-			if (userModel == null)
-				return Ok(new ApiResponse<GetTeacherResDto> { Code = 2, Msg = "创建失败", Data = null });
+		///// <summary>
+		///// 创建
+		///// </summary>
+		///// <param name="dto"></param>
+		///// <returns></returns>
+		//[HttpPost]
+		//[Authorize(Roles = "Admin")]
+		//public async Task<ActionResult<ApiResponse<GetTeacherResDto>>> CreateUser(CreateUserTeacherReqDto dto)
+		//{
+		//	var userModel = await AccountController.CreateUser(dto, _userRepository);
+		//	if (userModel == null)
+		//		return Ok(new ApiResponse<GetTeacherResDto> { Code = 2, Msg = "创建失败", Data = null });
 
-			var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Teacher");
+		//	var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Teacher");
 
-			var teacherModel = dto.ToModel();
-			teacherModel.UserId = userModel.Id;
-			var result = await _teacherRepository.AddAsync(teacherModel);
-			if (result == 0 || !resRole.Succeeded)
-			{
-				var res = await _userRepository.DeleteAsync(userModel.Id);
-				return Ok(new ApiResponse<GetTeacherResDto> { Code = 2, Msg = "创建失败", Data = null });
-			}
+		//	var teacherModel = dto.ToModel();
+		//	teacherModel.UserId = userModel.Id;
+		//	var result = await _teacherRepository.AddAsync(teacherModel);
+		//	if (result == 0 || !resRole.Succeeded)
+		//	{
+		//		var res = await _userRepository.DeleteAsync(userModel.Id);
+		//		return Ok(new ApiResponse<GetTeacherResDto> { Code = 2, Msg = "创建失败", Data = null });
+		//	}
 
-			teacherModel = await _teacherRepository.GetByIdAsync(userModel.Id);
+		//	teacherModel = await _teacherRepository.GetByIdAsync(userModel.Id);
 
-			return Ok(new ApiResponse<GetTeacherResDto> { Code = 1, Msg = "", Data = await teacherModel.ToGetTeacherResDto(userModel, _userRepository) });
-		}
+		//	return Ok(new ApiResponse<GetTeacherResDto> { Code = 1, Msg = "", Data = await teacherModel.ToGetTeacherResDto(userModel, _userRepository) });
+		//}
 
 
 		///// <summary>

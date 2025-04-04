@@ -1,6 +1,6 @@
 ﻿namespace CourseAttendance.DtoModel.ResDtos
 {
-	public class GetAdminResDto : GetUserResDto
+	public class GetAdminResDto
 	{
 	}
 }

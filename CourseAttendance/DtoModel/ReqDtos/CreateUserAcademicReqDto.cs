@@ -1,6 +1,6 @@
 ﻿namespace CourseAttendance.DtoModel.ReqDtos
 {
-	public class CreateUserAcademicReqDto : CreateUserReqDto
+	public class CreateUserAcademicReqDto
 	{
 	}
 }

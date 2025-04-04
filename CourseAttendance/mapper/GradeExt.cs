@@ -15,6 +15,10 @@ namespace CourseAttendance.mapper
 				Name = model.Name,
 				CreatedAt = model.CreatedAt,
 				UpdatedAt = model.UpdatedAt,
+				Num = model.Num,
+				MajorsSubcategoriesId = model.MajorsSubcategoriesId,
+				//MajorsCategoriesId = model.MajorsCategoriesId,
+				Year = model.Year,
 			};
 		}
 	}

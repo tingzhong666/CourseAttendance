@@ -1,6 +1,8 @@
-﻿using CourseAttendance.DtoModel;
+﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel;
 using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
+using CourseAttendance.Enums;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
 using CourseAttendance.mapper.UpdateProfileReqDtoExtends;
 using CourseAttendance.mapper.UserExts;
@@ -14,23 +16,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace CourseAttendance.Controllers.Account
+namespace CourseAttendance.Controllers
 {
 	[Route("api/account")]
 	[ApiController]
 	public class AccountController : ControllerBase
 	{
-		protected readonly UserManager<User> _userManager;
-		protected readonly UserRepository _userRepository;
-		protected readonly TokenService _tokenService;
-		protected readonly SignInManager<User> _signInManager;
+		private readonly UserManager<User> _userManager;
+		private readonly UserRepository _userRepository;
+		private readonly TokenService _tokenService;
+		private readonly SignInManager<User> _signInManager;
+		private readonly UserService _userService;
 
-		public AccountController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager, UserRepository userRepository)
+		public AccountController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager, UserRepository userRepository, UserService userService)
 		{
 			_userManager = userManager;
 			_tokenService = tokenService;
 			_signInManager = signInManager;
 			_userRepository = userRepository;
+			_userService = userService;
 		}
 
 		#region 通用
@@ -88,21 +92,21 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <param name="user"></param>
 		/// <returns></returns>
-		[NonAction]
-		public static async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user, ControllerBase controller, UserRepository _userRepository)
-		{
-			var userName = controller.User.FindFirst(ClaimTypes.GivenName)?.Value;
-			if (userName == null)
-				return IdentityResult.Failed([new IdentityError { Description = "获取当前用户名失败" }]);
-			var userModel = await _userRepository._userManager.FindByNameAsync(userName);
-			if (userModel == null)
-				return IdentityResult.Failed([new IdentityError { Description = "获取当前用户Id失败" }]);
+		//[NonAction]
+		//public static async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user, ControllerBase controller, UserRepository _userRepository)
+		//{
+		//	var userName = controller.User.FindFirst(ClaimTypes.GivenName)?.Value;
+		//	if (userName == null)
+		//		return IdentityResult.Failed([new IdentityError { Description = "获取当前用户名失败" }]);
+		//	var userModel = await _userRepository._userManager.FindByNameAsync(userName);
+		//	if (userModel == null)
+		//		return IdentityResult.Failed([new IdentityError { Description = "获取当前用户Id失败" }]);
 
-			var model = user.ToUserModel();
-			model.Id = userModel.Id;
-			var result = await _userRepository.UpdateAsync(model);
-			return result;
-		}
+		//	var model = user.ToUserModel();
+		//	model.Id = userModel.Id;
+		//	var result = await _userRepository.UpdateAsync(model);
+		//	return result;
+		//}
 
 		/// <summary>
 		/// 获取所有用户
@@ -133,7 +137,7 @@ namespace CourseAttendance.Controllers.Account
 			var resDtos = new List<GetUserResDto>();
 			foreach (var model in queryRes)
 			{
-				var resDto = await model.ToGetUsersResDto(_userRepository);
+				var resDto = await _userService.ModelToDtoAsync(model);
 				resDtos.Add(resDto);
 			}
 			return Ok(new ApiResponse<ListDto<GetUserResDto>> { Code = 1, Msg = "", Data = new ListDto<GetUserResDto> { DataList = resDtos, Total = total } });
@@ -153,8 +157,46 @@ namespace CourseAttendance.Controllers.Account
 			{
 				return NotFound();
 			}
-			return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await user.ToGetUsersResDto(_userRepository) });
+			return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await _userService.ModelToDtoAsync(user) });
 		}
+
+		//[NonAction]
+		//public async Task<GetUserResDto> ModelToDto(User model)
+		//{
+		//	var dto = await model.ToGetUsersResDto(_userRepository);
+		//	foreach (var x in dto.Roles)
+		//	{
+		//		switch (x)
+		//		{
+		//			case UserRole.Admin:
+		//				{
+		//					var extModel = await _adminRepository.GetAdminByIdAsync(dto.Id);
+		//					dto.GetAdminExt = extModel.ToGetAdminResDto();
+		//				}
+		//				break;
+		//			case UserRole.Academic:
+		//				{
+		//					var extModel = await _academicRepository.GetByIdAsync(dto.Id);
+		//					dto.GetAcademicExt = extModel.ToGetAcademicResDto();
+		//				}
+		//				break;
+		//			case UserRole.Teacher:
+		//				{
+		//					var extModel = await _teacherRepository.GetByIdAsync(dto.Id);
+		//					dto.GetTeacherExt = extModel.ToGetTeacherResDto();
+		//				}
+		//				break;
+		//			case UserRole.Student:
+		//				{
+		//					var extModel = await _studentRepository.GetByIdAsync(dto.Id);
+		//					dto.GetStudentExt = extModel.ToGetStudentResDto();
+		//				}
+		//				break;
+		//		}
+		//	}
+
+		//	return dto;
+		//}
 
 
 		/// <summary>
@@ -174,7 +216,7 @@ namespace CourseAttendance.Controllers.Account
 				return Ok(new ApiResponse<GetUserResDto> { Code = 5, Msg = "获取当前用户信息失败", Data = null });
 			}
 
-			return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await user.ToGetUsersResDto(_userRepository) });
+			return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await _userService.ModelToDtoAsync(user) });
 		}
 
 
@@ -214,29 +256,111 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <param name="dto"></param>
 		/// <returns></returns>
-		[NonAction]
-		public static async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto dto, string id, UserRepository _userRepository)
-		{
-			var model = dto.ToUserModel();
-			model.Id = id;
-			var result = await _userRepository.UpdateAsync(model);
-			return result;
-		}
+		//[NonAction]
+		//public static async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto dto, string id, UserRepository _userRepository)
+		//{
+		//	var model = dto.ToUserModel();
+		//	model.Id = id;
+		//	var result = await _userRepository.UpdateAsync(model);
+		//	return result;
+		//}
 
 
 		/// <summary>
 		/// 创建
 		/// </summary>
 		/// <returns></returns>
-		[NonAction]
-		public static async Task<User?> CreateUser(CreateUserReqDto dto, UserRepository _userRepository)
-		{
-			var model = dto.ToModel();
-			var res = await _userRepository.AddAsync(model, dto.PassWord);
-			if (!res.Succeeded) return null;
-			return model;
-		}
+		//[NonAction]
+		//public static async Task<User?> CreateUser(CreateUserReqDto dto, UserRepository _userRepository)
+		//{
+		//	var model = dto.ToModel();
+		//	var res = await _userRepository.AddAsync(model, dto.PassWord);
+		//	if (!res.Succeeded) return null;
+		//	return model;
+		//}
+		//[NonAction]
+		//public async Task CreateUser_(CreateUserReqDto dto)
+		//{
+		//	using var transaction = _context.Database.BeginTransaction();
+		//	try
+		//	{
+		//		// 通用用户表
+		//		var model = dto.ToModel();
+		//		var res = await _userRepository.AddAsync(model, dto.PassWord);
+		//		if (!res.Succeeded) throw new Exception("创建失败");
+		//		foreach (var x in dto.Roles)
+		//		{
+		//			res = await _userRepository._userManager.AddToRoleAsync(model, x.ToString());
+		//			if (!res.Succeeded) throw new Exception("创建失败，权限添加失败");
+		//		}
 
+		//		// 扩展信息用户表
+		//		foreach (var x in dto.Roles)
+		//		{
+		//			switch (x)
+		//			{
+		//				case UserRole.Admin:
+		//					{
+		//						var extModel = dto.CreateAdminExt?.ToModel();
+		//						if (extModel == null) throw new Exception("创建失败");
+		//						extModel.UserId = model.Id;
+		//						var result = await _adminRepository.AddAdminAsync(extModel);
+		//						if (result == 0) throw new Exception("创建失败");
+		//					}
+		//					break;
+		//				case UserRole.Academic:
+		//					{
+		//						var extModel = dto.CreateAcademicExt?.ToModel();
+		//						if (extModel == null) throw new Exception("创建失败");
+		//						extModel.UserId = model.Id;
+		//						var result = await _academicRepository.AddAsync(extModel);
+		//						if (result == 0) throw new Exception("创建失败");
+		//					}
+		//					break;
+		//				case UserRole.Teacher:
+		//					{
+		//						var extModel = dto.CreateTeacherExt?.ToModel();
+		//						if (extModel == null) throw new Exception("创建失败");
+		//						extModel.UserId = model.Id;
+		//						var result = await _teacherRepository.AddAsync(extModel);
+		//						if (result == 0) throw new Exception("创建失败");
+		//					}
+		//					break;
+		//				case UserRole.Student:
+		//					{
+		//						var extModel = dto.CreateStudentExt?.ToModel();
+		//						if (extModel == null) throw new Exception("创建失败");
+		//						extModel.UserId = model.Id;
+		//						var result = await _studentRepository.AddAsync(extModel);
+		//						if (result == 0) throw new Exception("创建失败");
+		//					}
+		//					break;
+		//			}
+		//		}
+
+		//		await transaction.CommitAsync();
+		//	}
+		//	catch (Exception)
+		//	{
+		//		await transaction.RollbackAsync();
+		//		throw;
+		//	}
+		//}
+
+		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		public async Task<ActionResult<ApiResponse<GetUserResDto>>> CreateUser([FromBody] CreateUserReqDto dto)
+		{
+			try
+			{
+				var id = await _userService.CreateUserAsync(dto);
+				return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await _userService.GetInfoById(id) });
+			}
+			catch (Exception err)
+			{
+				return Ok(new ApiResponse<GetUserResDto> { Code = 2, Msg = err.Message, Data = null });
+			}
+		}
 
 		/// <summary>
 		/// 删除

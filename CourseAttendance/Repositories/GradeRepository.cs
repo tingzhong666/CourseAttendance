@@ -41,6 +41,9 @@ namespace CourseAttendance.Repositories
 
 			model.Name = grade.Name;
 			model.UpdatedAt = DateTime.Now;
+			model.Year = grade.Year;
+			model.MajorsSubcategoriesId = grade.MajorsSubcategoriesId;
+			model.Num = grade.Num;
 
 			_context.Grades.Update(model);
 			return await _context.SaveChangesAsync();

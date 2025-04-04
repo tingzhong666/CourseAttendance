@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using CourseAttendance.Model.Users;
 using CourseAttendance.Services;
 using Microsoft.OpenApi.Models;
-using CourseAttendance.Controllers.Account;
 using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
 using Microsoft.AspNetCore.Http.Features;
@@ -109,10 +108,12 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<WebSystemConfigRepository>();
 builder.Services.AddScoped<TimeTableRepository>();
 builder.Services.AddScoped<CourseTimeRepository>();
+builder.Services.AddScoped<MajorsCategoryRepository>();
+builder.Services.AddScoped<MajorsSubcategoryRepository>();
 
-builder.Services.AddScoped<TokenService, TokenService>();
-
-builder.Services.AddScoped<InitService, InitService>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<InitService>();
 
 
 // 配置文件上传限制

@@ -1,8 +1,11 @@
-﻿namespace CourseAttendance.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace CourseAttendance.Enums
 {
 	/// <summary>
-	/// 用户身份 权限 用不到了
+	/// 用户身份 权限
 	/// </summary>
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum UserRole
 	{
 		/// <summary>

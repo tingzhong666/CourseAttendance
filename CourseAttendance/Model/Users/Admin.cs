@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using CourseAttendance.DtoModel.ResDtos;
 
 namespace CourseAttendance.Model.Users
 {
@@ -9,6 +10,7 @@ namespace CourseAttendance.Model.Users
 		[ForeignKey("User")]
 		public string UserId { get; set; } 
 
-		public virtual User User { get; set; } 
+		public virtual User User { get; set; }
+
 	}
 }

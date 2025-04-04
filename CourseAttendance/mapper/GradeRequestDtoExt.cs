@@ -13,7 +13,11 @@ namespace CourseAttendance.mapper
 
 			return new Grade
 			{
-				Name = dto.Name
+				Name = dto.Name,
+				Year = dto.Year,
+				//MajorsCategoriesId = dto.MajorsCategoriesId,
+				MajorsSubcategoriesId = dto.MajorsSubcategoriesId,
+				Num = dto.Num,
 			};
 		}
 	}

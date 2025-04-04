@@ -6,18 +6,24 @@ namespace CourseAttendance.mapper.UserExts
 {
 	public static class AcademicExt
 	{
-		public static async Task<GetAcademicResDto> ToGetAcademicResDto(this Academic model, User UserModel, UserRepository userRepository)
+		public static GetAcademicResDto ToGetAcademicResDto(this Academic model)
 		{
-			var roles = await userRepository._userManager.GetRolesAsync(UserModel);
 			return new GetAcademicResDto
 			{
-				Id = model.UserId,
-				Name = UserModel.Name,
-				UserName = UserModel.UserName,
-				Email = UserModel.Email,
-				PhoneNumber = UserModel.PhoneNumber,
-				Roles = [.. roles ?? []],
 			};
 		}
+		//public static async Task<GetAcademicResDto> ToGetAcademicResDto(this Academic model, User UserModel, UserRepository userRepository)
+		//{
+		//	var roles = await userRepository._userManager.GetRolesAsync(UserModel);
+		//	return new GetAcademicResDto
+		//	{
+		//		Id = model.UserId,
+		//		Name = UserModel.Name,
+		//		UserName = UserModel.UserName,
+		//		Email = UserModel.Email,
+		//		PhoneNumber = UserModel.PhoneNumber,
+		//		Roles = [.. roles ?? []],
+		//	};
+		//}
 	}
 }

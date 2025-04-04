@@ -2,7 +2,7 @@
 
 namespace CourseAttendance.DtoModel.ReqDtos
 {
-	public class CreateUserStudentReqDto : CreateUserReqDto
+	public class CreateUserStudentReqDto 
 	{
 		/// <summary>
 		/// 班级ID

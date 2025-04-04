@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAttendance.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250330080445_init")]
+    [Migration("20250404095812_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -160,16 +160,66 @@ namespace CourseAttendance.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MajorsSubcategoriesId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Num")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("MajorsSubcategoriesId");
+
                     b.ToTable("Grades");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.MajorsCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MajorsCategories");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.MajorsSubcategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MajorsCategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MajorsCategoriesId");
+
+                    b.ToTable("MajorsSubcategories");
                 });
 
             modelBuilder.Entity("CourseAttendance.Model.TimeTable", b =>
@@ -356,25 +406,25 @@ namespace CourseAttendance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "C897C093-BEEA-798C-A116-0DA80A51784A",
+                            Id = "2325ECCC-C9B5-6026-BDDB-DF35C7761CE2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "33F1A562-4F0B-C638-D624-2E92FE629D4D",
+                            Id = "A68C4FE1-8F75-E515-2E4C-8AB1E2C814F1",
                             Name = "Academic",
                             NormalizedName = "ACADEMIC"
                         },
                         new
                         {
-                            Id = "523A6FB2-7348-7F06-8DC0-8697BED79A68",
+                            Id = "BA576549-1FE7-4A5E-F4E1-FA359040BD55",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "0F93B20D-BEA0-1628-F7A3-6E9E8A817A4E",
+                            Id = "B7E953C4-6438-0AAB-8894-602E2A5BF1AD",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -554,6 +604,28 @@ namespace CourseAttendance.Migrations
                     b.Navigation("TimeTable");
                 });
 
+            modelBuilder.Entity("CourseAttendance.Model.Grade", b =>
+                {
+                    b.HasOne("CourseAttendance.Model.MajorsSubcategory", "MajorsSubcategory")
+                        .WithMany("Grades")
+                        .HasForeignKey("MajorsSubcategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MajorsSubcategory");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.MajorsSubcategory", b =>
+                {
+                    b.HasOne("CourseAttendance.Model.MajorsCategory", "MajorsCategory")
+                        .WithMany("MajorsSubcategories")
+                        .HasForeignKey("MajorsCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MajorsCategory");
+                });
+
             modelBuilder.Entity("CourseAttendance.Model.Users.Academic", b =>
                 {
                     b.HasOne("CourseAttendance.Model.Users.User", "User")
@@ -669,6 +741,16 @@ namespace CourseAttendance.Migrations
             modelBuilder.Entity("CourseAttendance.Model.Grade", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.MajorsCategory", b =>
+                {
+                    b.Navigation("MajorsSubcategories");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.MajorsSubcategory", b =>
+                {
+                    b.Navigation("Grades");
                 });
 
             modelBuilder.Entity("CourseAttendance.Model.TimeTable", b =>

@@ -129,33 +129,33 @@ namespace CourseAttendance.Controllers.Account
 			return Ok(new ApiResponse<GetAdminResDto> { Code = 1, Msg = "", Data = await admin.ToGetAdminResDto(user, _userRepository) });
 		}
 
-		/// <summary>
-		/// 创建
-		/// </summary>
-		/// <param name="dto"></param>
-		/// <returns></returns>
-		[HttpPost]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<ApiResponse<GetAdminResDto>>> CreateUser(CreateUserAdminReqDto dto)
-		{
-			var userModel = await AccountController.CreateUser(dto, _userRepository);
-			if (userModel == null)
-				return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "创建失败", Data = null });
+		///// <summary>
+		///// 创建
+		///// </summary>
+		///// <param name="dto"></param>
+		///// <returns></returns>
+		//[HttpPost]
+		//[Authorize(Roles = "Admin")]
+		//public async Task<ActionResult<ApiResponse<GetAdminResDto>>> CreateUser(CreateUserAdminReqDto dto)
+		//{
+		//	var userModel = await AccountController.CreateUser(dto, _userRepository);
+		//	if (userModel == null)
+		//		return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "创建失败", Data = null });
 
-			var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
+		//	var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
 
-			var adminModel = dto.ToModel();
-			adminModel.UserId = userModel.Id;
-			var result = await _adminRepository.AddAdminAsync(adminModel);
+		//	var adminModel = dto.ToModel();
+		//	adminModel.UserId = userModel.Id;
+		//	var result = await _adminRepository.AddAdminAsync(adminModel);
 
-			if (result == 0 || !resRole.Succeeded)
-			{
-				var res = await _userRepository.DeleteAsync(userModel.Id);
-				return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "创建失败", Data = null });
-			}
-			adminModel = await _adminRepository.GetAdminByIdAsync(userModel.Id);
-			return Ok(new ApiResponse<GetAdminResDto> { Code = 1, Msg = "", Data = await adminModel.ToGetAdminResDto(userModel, _userRepository) });
-		}
+		//	if (result == 0 || !resRole.Succeeded)
+		//	{
+		//		var res = await _userRepository.DeleteAsync(userModel.Id);
+		//		return Ok(new ApiResponse<GetAdminResDto> { Code = 2, Msg = "创建失败", Data = null });
+		//	}
+		//	adminModel = await _adminRepository.GetAdminByIdAsync(userModel.Id);
+		//	return Ok(new ApiResponse<GetAdminResDto> { Code = 1, Msg = "", Data = await adminModel.ToGetAdminResDto(userModel, _userRepository) });
+		//}
 
 
 		///// <summary>

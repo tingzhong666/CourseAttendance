@@ -123,8 +123,8 @@ export default () => {
     }
 
     // 获取课程列表
-    const getData = async () => {
-        const res = await api.Course.apiCourseGet(current - 1, limit, queryStr)
+    const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
+        const res = await api.Course.apiCourseGet(current_ - 1, limit_, queryStr_)
 
         const tmp = res.data.data?.dataList?.map(async x => {
             const cd = x as CourseData
@@ -164,7 +164,7 @@ export default () => {
 
         setQueryStr(value)
         setCurrent(1)
-        await getData();
+        await getData(1, undefined, value);
     }
 
     // 页码及分页大小变化
@@ -173,7 +173,7 @@ export default () => {
         setLimit(pageSize)
 
 
-        await getData();
+        await getData(page, pageSize);
     }
     const add = (): void => {
         setAddShow(true)

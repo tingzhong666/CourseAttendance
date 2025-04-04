@@ -128,52 +128,52 @@ namespace CourseAttendance.Controllers.Account
 			return Ok(new ApiResponse<GetStudentResDto> { Code = 1, Msg = "获取用户失败", Data = await student.ToGetStudentResDto(user, _userRepository) });
 		}
 
-		/// <summary>
-		/// 创建
-		/// </summary>
-		/// <param name="dto"></param>
-		/// <returns></returns>
-		[HttpPost]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<ApiResponse<GetStudentResDto>>> CreateUser(CreateUserStudentReqDto dto)
-		{
-			try
-			{
-				var userModel = await AccountController.CreateUser(dto, _userRepository);
-				if (userModel == null)
-					return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败", Data = null });
+		///// <summary>
+		///// 创建
+		///// </summary>
+		///// <param name="dto"></param>
+		///// <returns></returns>
+		//[HttpPost]
+		//[Authorize(Roles = "Admin")]
+		//public async Task<ActionResult<ApiResponse<GetStudentResDto>>> CreateUser(CreateUserStudentReqDto dto)
+		//{
+		//	try
+		//	{
+		//		var userModel = await AccountController.CreateUser(dto, _userRepository);
+		//		if (userModel == null)
+		//			return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败", Data = null });
 
-				var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Student");
+		//		var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Student");
 
-				var studentModel = dto.ToModel();
-				studentModel.UserId = userModel.Id;
-				var result = await _studentRepository.AddAsync(studentModel);
-				if (result == 0 || !resRole.Succeeded)
-				{
-					var res = await _userRepository.DeleteAsync(userModel.Id);
-					return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败", Data = null });
-				}
+		//		var studentModel = dto.ToModel();
+		//		studentModel.UserId = userModel.Id;
+		//		var result = await _studentRepository.AddAsync(studentModel);
+		//		if (result == 0 || !resRole.Succeeded)
+		//		{
+		//			var res = await _userRepository.DeleteAsync(userModel.Id);
+		//			return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败", Data = null });
+		//		}
 
-				studentModel = await _studentRepository.GetByIdAsync(userModel.Id);
+		//		studentModel = await _studentRepository.GetByIdAsync(userModel.Id);
 
-				return Ok(new ApiResponse<GetStudentResDto> { Code = 1, Msg = "", Data = await studentModel.ToGetStudentResDto(userModel, _userRepository) });
-			}
-			catch (DbUpdateException ex)
-			{
-				// 检查异常信息是否包含特定外键约束的名称
-				if (ex.InnerException != null && ex.InnerException.Message.Contains("FK_Students_Grades_GradeId"))
-				{
-					return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败，班级不存在", Data = null });
-				}
+		//		return Ok(new ApiResponse<GetStudentResDto> { Code = 1, Msg = "", Data = await studentModel.ToGetStudentResDto(userModel, _userRepository) });
+		//	}
+		//	catch (DbUpdateException ex)
+		//	{
+		//		// 检查异常信息是否包含特定外键约束的名称
+		//		if (ex.InnerException != null && ex.InnerException.Message.Contains("FK_Students_Grades_GradeId"))
+		//		{
+		//			return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败，班级不存在", Data = null });
+		//		}
 
-				// 处理其他数据库错误
-				return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = $"数据库错误: {ex.InnerException?.Message}", Data = null });
-			}
-			catch (Exception err)
-			{
-				return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败", Data = null });
-			}
-		}
+		//		// 处理其他数据库错误
+		//		return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = $"数据库错误: {ex.InnerException?.Message}", Data = null });
+		//	}
+		//	catch (Exception err)
+		//	{
+		//		return Ok(new ApiResponse<GetStudentResDto> { Code = 2, Msg = "创建失败", Data = null });
+		//	}
+		//}
 
 
 		///// <summary>

@@ -573,76 +573,69 @@ export interface CourseTimeResDto {
 /**
  * 
  * @export
- * @interface CreateUserAcademicReqDto
+ * @interface CreateUserReqDto
  */
-export interface CreateUserAcademicReqDto {
+export interface CreateUserReqDto {
     /**
      * 
      * @type {string}
-     * @memberof CreateUserAcademicReqDto
+     * @memberof CreateUserReqDto
      */
     'email'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserAcademicReqDto
+     * @memberof CreateUserReqDto
      */
     'phone'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserAcademicReqDto
+     * @memberof CreateUserReqDto
      */
     'name': string;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserAcademicReqDto
+     * @memberof CreateUserReqDto
      */
     'userName': string;
     /**
      * 
      * @type {string}
-     * @memberof CreateUserAcademicReqDto
+     * @memberof CreateUserReqDto
      */
     'passWord': string;
-}
-/**
- * 
- * @export
- * @interface CreateUserAdminReqDto
- */
-export interface CreateUserAdminReqDto {
     /**
      * 
-     * @type {string}
-     * @memberof CreateUserAdminReqDto
+     * @type {Array<UserRole>}
+     * @memberof CreateUserReqDto
      */
-    'email'?: string | null;
+    'roles': Array<UserRole>;
     /**
      * 
-     * @type {string}
-     * @memberof CreateUserAdminReqDto
+     * @type {object}
+     * @memberof CreateUserReqDto
      */
-    'phone'?: string | null;
+    'createAcademicExt'?: object;
     /**
      * 
-     * @type {string}
-     * @memberof CreateUserAdminReqDto
+     * @type {object}
+     * @memberof CreateUserReqDto
      */
-    'name': string;
+    'createAdminExt'?: object;
     /**
      * 
-     * @type {string}
-     * @memberof CreateUserAdminReqDto
+     * @type {CreateUserStudentReqDto}
+     * @memberof CreateUserReqDto
      */
-    'userName': string;
+    'createStudentExt'?: CreateUserStudentReqDto;
     /**
      * 
-     * @type {string}
-     * @memberof CreateUserAdminReqDto
+     * @type {object}
+     * @memberof CreateUserReqDto
      */
-    'passWord': string;
+    'createTeacherExt'?: object;
 }
 /**
  * 
@@ -650,36 +643,6 @@ export interface CreateUserAdminReqDto {
  * @interface CreateUserStudentReqDto
  */
 export interface CreateUserStudentReqDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserStudentReqDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserStudentReqDto
-     */
-    'phone'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserStudentReqDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserStudentReqDto
-     */
-    'userName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserStudentReqDto
-     */
-    'passWord': string;
     /**
      * 
      * @type {number}
@@ -690,218 +653,9 @@ export interface CreateUserStudentReqDto {
 /**
  * 
  * @export
- * @interface CreateUserTeacherReqDto
- */
-export interface CreateUserTeacherReqDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserTeacherReqDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserTeacherReqDto
-     */
-    'phone'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserTeacherReqDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserTeacherReqDto
-     */
-    'userName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateUserTeacherReqDto
-     */
-    'passWord': string;
-}
-/**
- * 
- * @export
- * @interface GetAcademicResDto
- */
-export interface GetAcademicResDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAcademicResDto
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAcademicResDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAcademicResDto
-     */
-    'userName': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GetAcademicResDto
-     */
-    'roles': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAcademicResDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAcademicResDto
-     */
-    'phoneNumber'?: string | null;
-}
-/**
- * 
- * @export
- * @interface GetAcademicResDtoApiResponse
- */
-export interface GetAcademicResDtoApiResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof GetAcademicResDtoApiResponse
-     */
-    'code'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAcademicResDtoApiResponse
-     */
-    'msg'?: string | null;
-    /**
-     * 
-     * @type {GetAcademicResDto}
-     * @memberof GetAcademicResDtoApiResponse
-     */
-    'data'?: GetAcademicResDto;
-}
-/**
- * 
- * @export
- * @interface GetAdminResDto
- */
-export interface GetAdminResDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAdminResDto
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAdminResDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAdminResDto
-     */
-    'userName': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GetAdminResDto
-     */
-    'roles': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAdminResDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAdminResDto
-     */
-    'phoneNumber'?: string | null;
-}
-/**
- * 
- * @export
- * @interface GetAdminResDtoApiResponse
- */
-export interface GetAdminResDtoApiResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof GetAdminResDtoApiResponse
-     */
-    'code'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetAdminResDtoApiResponse
-     */
-    'msg'?: string | null;
-    /**
-     * 
-     * @type {GetAdminResDto}
-     * @memberof GetAdminResDtoApiResponse
-     */
-    'data'?: GetAdminResDto;
-}
-/**
- * 
- * @export
  * @interface GetStudentResDto
  */
 export interface GetStudentResDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetStudentResDto
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetStudentResDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetStudentResDto
-     */
-    'userName': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GetStudentResDto
-     */
-    'roles': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetStudentResDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetStudentResDto
-     */
-    'phoneNumber'?: string | null;
     /**
      * 
      * @type {number}
@@ -918,126 +672,15 @@ export interface GetStudentResDto {
 /**
  * 
  * @export
- * @interface GetStudentResDtoApiResponse
- */
-export interface GetStudentResDtoApiResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof GetStudentResDtoApiResponse
-     */
-    'code'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetStudentResDtoApiResponse
-     */
-    'msg'?: string | null;
-    /**
-     * 
-     * @type {GetStudentResDto}
-     * @memberof GetStudentResDtoApiResponse
-     */
-    'data'?: GetStudentResDto;
-}
-/**
- * 
- * @export
- * @interface GetStudentResDtoListApiResponse
- */
-export interface GetStudentResDtoListApiResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof GetStudentResDtoListApiResponse
-     */
-    'code'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetStudentResDtoListApiResponse
-     */
-    'msg'?: string | null;
-    /**
-     * 
-     * @type {Array<GetStudentResDto>}
-     * @memberof GetStudentResDtoListApiResponse
-     */
-    'data'?: Array<GetStudentResDto> | null;
-}
-/**
- * 
- * @export
  * @interface GetTeacherResDto
  */
 export interface GetTeacherResDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTeacherResDto
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTeacherResDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTeacherResDto
-     */
-    'userName': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GetTeacherResDto
-     */
-    'roles': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTeacherResDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTeacherResDto
-     */
-    'phoneNumber'?: string | null;
     /**
      * 
      * @type {Array<number>}
      * @memberof GetTeacherResDto
      */
     'courseIds'?: Array<number> | null;
-}
-/**
- * 
- * @export
- * @interface GetTeacherResDtoApiResponse
- */
-export interface GetTeacherResDtoApiResponse {
-    /**
-     * 
-     * @type {number}
-     * @memberof GetTeacherResDtoApiResponse
-     */
-    'code'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTeacherResDtoApiResponse
-     */
-    'msg'?: string | null;
-    /**
-     * 
-     * @type {GetTeacherResDto}
-     * @memberof GetTeacherResDtoApiResponse
-     */
-    'data'?: GetTeacherResDto;
 }
 /**
  * 
@@ -1065,10 +708,10 @@ export interface GetUserResDto {
     'userName': string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<UserRole>}
      * @memberof GetUserResDto
      */
-    'roles': Array<string>;
+    'roles': Array<UserRole>;
     /**
      * 
      * @type {string}
@@ -1081,6 +724,30 @@ export interface GetUserResDto {
      * @memberof GetUserResDto
      */
     'phoneNumber'?: string | null;
+    /**
+     * 
+     * @type {object}
+     * @memberof GetUserResDto
+     */
+    'getAcademicExt'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof GetUserResDto
+     */
+    'getAdminExt'?: object;
+    /**
+     * 
+     * @type {GetStudentResDto}
+     * @memberof GetUserResDto
+     */
+    'getStudentExt'?: GetStudentResDto;
+    /**
+     * 
+     * @type {GetTeacherResDto}
+     * @memberof GetUserResDto
+     */
+    'getTeacherExt'?: GetTeacherResDto;
 }
 /**
  * 
@@ -1106,6 +773,31 @@ export interface GetUserResDtoApiResponse {
      * @memberof GetUserResDtoApiResponse
      */
     'data'?: GetUserResDto;
+}
+/**
+ * 
+ * @export
+ * @interface GetUserResDtoListApiResponse
+ */
+export interface GetUserResDtoListApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetUserResDtoListApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetUserResDtoListApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {Array<GetUserResDto>}
+     * @memberof GetUserResDtoListApiResponse
+     */
+    'data'?: Array<GetUserResDto> | null;
 }
 /**
  * 
@@ -1163,6 +855,30 @@ export interface GradeRequestDto {
      * @memberof GradeRequestDto
      */
     'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeRequestDto
+     */
+    'majorsCategoriesId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeRequestDto
+     */
+    'majorsSubcategoriesId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeRequestDto
+     */
+    'num'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeRequestDto
+     */
+    'year'?: number;
 }
 /**
  * 
@@ -1194,6 +910,24 @@ export interface GradeResponseDto {
      * @memberof GradeResponseDto
      */
     'updatedAt'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeResponseDto
+     */
+    'majorsSubcategoriesId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeResponseDto
+     */
+    'num'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeResponseDto
+     */
+    'year'?: number;
 }
 /**
  * 
@@ -1307,6 +1041,220 @@ export interface LoginResApiResponse {
      * @memberof LoginResApiResponse
      */
     'data'?: LoginRes;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsCategoryReqDto
+ */
+export interface MajorsCategoryReqDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsCategoryReqDto
+     */
+    'name'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsCategoryResDto
+ */
+export interface MajorsCategoryResDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsCategoryResDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsCategoryResDto
+     */
+    'name'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsCategoryResDtoApiResponse
+ */
+export interface MajorsCategoryResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsCategoryResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsCategoryResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {MajorsCategoryResDto}
+     * @memberof MajorsCategoryResDtoApiResponse
+     */
+    'data'?: MajorsCategoryResDto;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsCategoryResDtoListDto
+ */
+export interface MajorsCategoryResDtoListDto {
+    /**
+     * 
+     * @type {Array<MajorsCategoryResDto>}
+     * @memberof MajorsCategoryResDtoListDto
+     */
+    'dataList'?: Array<MajorsCategoryResDto> | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsCategoryResDtoListDto
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsCategoryResDtoListDtoApiResponse
+ */
+export interface MajorsCategoryResDtoListDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsCategoryResDtoListDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsCategoryResDtoListDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {MajorsCategoryResDtoListDto}
+     * @memberof MajorsCategoryResDtoListDtoApiResponse
+     */
+    'data'?: MajorsCategoryResDtoListDto;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsSubcategoryReqDto
+ */
+export interface MajorsSubcategoryReqDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsSubcategoryReqDto
+     */
+    'name'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsSubcategoryReqDto
+     */
+    'majorsCategoryId'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsSubcategoryResDto
+ */
+export interface MajorsSubcategoryResDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsSubcategoryResDto
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsSubcategoryResDto
+     */
+    'name'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsSubcategoryResDto
+     */
+    'majorsCategoriesId'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsSubcategoryResDtoApiResponse
+ */
+export interface MajorsSubcategoryResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsSubcategoryResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsSubcategoryResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {MajorsSubcategoryResDto}
+     * @memberof MajorsSubcategoryResDtoApiResponse
+     */
+    'data'?: MajorsSubcategoryResDto;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsSubcategoryResDtoListDto
+ */
+export interface MajorsSubcategoryResDtoListDto {
+    /**
+     * 
+     * @type {Array<MajorsSubcategoryResDto>}
+     * @memberof MajorsSubcategoryResDtoListDto
+     */
+    'dataList'?: Array<MajorsSubcategoryResDto> | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsSubcategoryResDtoListDto
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MajorsSubcategoryResDtoListDtoApiResponse
+ */
+export interface MajorsSubcategoryResDtoListDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof MajorsSubcategoryResDtoListDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MajorsSubcategoryResDtoListDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {MajorsSubcategoryResDtoListDto}
+     * @memberof MajorsSubcategoryResDtoListDtoApiResponse
+     */
+    'data'?: MajorsSubcategoryResDtoListDto;
 }
 /**
  * 
@@ -1506,109 +1454,19 @@ export interface TimeTableResDtoApiResponse {
 /**
  * 
  * @export
- * @interface UpdateProfileAcademicReqDto
+ * @enum {string}
  */
-export interface UpdateProfileAcademicReqDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAcademicReqDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAcademicReqDto
-     */
-    'phone'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAcademicReqDto
-     */
-    'name': string;
-}
-/**
- * 
- * @export
- * @interface UpdateProfileAdminReqDto
- */
-export interface UpdateProfileAdminReqDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAdminReqDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAdminReqDto
-     */
-    'phone'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAdminReqDto
-     */
-    'name': string;
-}
-/**
- * 
- * @export
- * @interface UpdateProfileStudentReqDto
- */
-export interface UpdateProfileStudentReqDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileStudentReqDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileStudentReqDto
-     */
-    'phone'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileStudentReqDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateProfileStudentReqDto
-     */
-    'gradeId'?: number;
-}
-/**
- * 
- * @export
- * @interface UpdateProfileTeacherReqDto
- */
-export interface UpdateProfileTeacherReqDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileTeacherReqDto
-     */
-    'email'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileTeacherReqDto
-     */
-    'phone'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileTeacherReqDto
-     */
-    'name': string;
-}
+
+export const UserRole = {
+    Admin: 'Admin',
+    Academic: 'Academic',
+    Teacher: 'Teacher',
+    Student: 'Student'
+} as const;
+
+export type UserRole = typeof UserRole[keyof typeof UserRole];
+
+
 /**
  * 
  * @export
@@ -1626,391 +1484,6 @@ export const Weekday = {
 } as const;
 
 export type Weekday = typeof Weekday[keyof typeof Weekday];
-
-
-
-/**
- * AcademicApi - axios parameter creator
- * @export
- */
-export const AcademicApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('apiAcademicIdGet', 'id', id)
-            const localVarPath = `/api/academic/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {CreateUserAcademicReqDto} [createUserAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicPost: async (createUserAcademicReqDto?: CreateUserAcademicReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/academic`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createUserAcademicReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} [id] 
-         * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicProfilePut: async (id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/academic/profile`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (id !== undefined) {
-                localVarQueryParameter['id'] = id;
-            }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileAcademicReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicProfileSlefGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/academic/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicProfileSlefPut: async (updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/academic/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileAcademicReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * AcademicApi - functional programming interface
- * @export
- */
-export const AcademicApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AcademicApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAcademicIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAcademicResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicIdGet(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {CreateUserAcademicReqDto} [createUserAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAcademicPost(createUserAcademicReqDto?: CreateUserAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAcademicResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicPost(createUserAcademicReqDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} [id] 
-         * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAcademicProfilePut(id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicProfilePut(id, updateProfileAcademicReqDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicProfilePut']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAcademicProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAcademicResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicProfileSlefGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicProfileSlefGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAcademicProfileSlefPut(updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAcademicProfileSlefPut(updateProfileAcademicReqDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AcademicApi.apiAcademicProfileSlefPut']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * AcademicApi - factory interface
- * @export
- */
-export const AcademicApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AcademicApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAcademicResDtoApiResponse> {
-            return localVarFp.apiAcademicIdGet(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {CreateUserAcademicReqDto} [createUserAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicPost(createUserAcademicReqDto?: CreateUserAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetAcademicResDtoApiResponse> {
-            return localVarFp.apiAcademicPost(createUserAcademicReqDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} [id] 
-         * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicProfilePut(id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiAcademicProfilePut(id, updateProfileAcademicReqDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetAcademicResDtoApiResponse> {
-            return localVarFp.apiAcademicProfileSlefGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAcademicProfileSlefPut(updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiAcademicProfileSlefPut(updateProfileAcademicReqDto, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * AcademicApi - object-oriented interface
- * @export
- * @class AcademicApi
- * @extends {BaseAPI}
- */
-export class AcademicApi extends BaseAPI {
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AcademicApi
-     */
-    public apiAcademicIdGet(id: string, options?: RawAxiosRequestConfig) {
-        return AcademicApiFp(this.configuration).apiAcademicIdGet(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {CreateUserAcademicReqDto} [createUserAcademicReqDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AcademicApi
-     */
-    public apiAcademicPost(createUserAcademicReqDto?: CreateUserAcademicReqDto, options?: RawAxiosRequestConfig) {
-        return AcademicApiFp(this.configuration).apiAcademicPost(createUserAcademicReqDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} [id] 
-     * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AcademicApi
-     */
-    public apiAcademicProfilePut(id?: string, updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig) {
-        return AcademicApiFp(this.configuration).apiAcademicProfilePut(id, updateProfileAcademicReqDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AcademicApi
-     */
-    public apiAcademicProfileSlefGet(options?: RawAxiosRequestConfig) {
-        return AcademicApiFp(this.configuration).apiAcademicProfileSlefGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {UpdateProfileAcademicReqDto} [updateProfileAcademicReqDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AcademicApi
-     */
-    public apiAcademicProfileSlefPut(updateProfileAcademicReqDto?: UpdateProfileAcademicReqDto, options?: RawAxiosRequestConfig) {
-        return AcademicApiFp(this.configuration).apiAcademicProfileSlefPut(updateProfileAcademicReqDto, options).then((request) => request(this.axios, this.basePath));
-    }
-}
 
 
 
@@ -2288,6 +1761,43 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {CreateUserReqDto} [createUserReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAccountPost: async (createUserReqDto?: CreateUserReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/account`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createUserReqDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2449,6 +1959,18 @@ export const AccountApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {CreateUserReqDto} [createUserReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAccountPost(createUserReqDto?: CreateUserReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountPost(createUserReqDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2542,6 +2064,15 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          */
         apiAccountLoginPost(loginModel?: LoginModel, options?: RawAxiosRequestConfig): AxiosPromise<LoginResApiResponse> {
             return localVarFp.apiAccountLoginPost(loginModel, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CreateUserReqDto} [createUserReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAccountPost(createUserReqDto?: CreateUserReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoApiResponse> {
+            return localVarFp.apiAccountPost(createUserReqDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2649,6 +2180,17 @@ export class AccountApi extends BaseAPI {
 
     /**
      * 
+     * @param {CreateUserReqDto} [createUserReqDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public apiAccountPost(createUserReqDto?: CreateUserReqDto, options?: RawAxiosRequestConfig) {
+        return AccountApiFp(this.configuration).apiAccountPost(createUserReqDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApi
@@ -2665,391 +2207,6 @@ export class AccountApi extends BaseAPI {
      */
     public apiAccountTestGet(options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).apiAccountTestGet(options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * AdminApi - axios parameter creator
- * @export
- */
-export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('apiAdminIdGet', 'id', id)
-            const localVarPath = `/api/admin/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {CreateUserAdminReqDto} [createUserAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminPost: async (createUserAdminReqDto?: CreateUserAdminReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/admin`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createUserAdminReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} [id] 
-         * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminProfilePut: async (id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/admin/profile`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (id !== undefined) {
-                localVarQueryParameter['id'] = id;
-            }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileAdminReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminProfileSlefGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/admin/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminProfileSlefPut: async (updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/admin/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileAdminReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * AdminApi - functional programming interface
- * @export
- */
-export const AdminApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAdminIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAdminResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminIdGet(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminIdGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {CreateUserAdminReqDto} [createUserAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAdminPost(createUserAdminReqDto?: CreateUserAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAdminResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminPost(createUserAdminReqDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminPost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {string} [id] 
-         * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAdminProfilePut(id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminProfilePut(id, updateProfileAdminReqDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminProfilePut']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAdminProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAdminResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminProfileSlefGet(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminProfileSlefGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAdminProfileSlefPut(updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAdminProfileSlefPut(updateProfileAdminReqDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiAdminProfileSlefPut']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * AdminApi - factory interface
- * @export
- */
-export const AdminApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AdminApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAdminResDtoApiResponse> {
-            return localVarFp.apiAdminIdGet(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {CreateUserAdminReqDto} [createUserAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminPost(createUserAdminReqDto?: CreateUserAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetAdminResDtoApiResponse> {
-            return localVarFp.apiAdminPost(createUserAdminReqDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} [id] 
-         * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminProfilePut(id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiAdminProfilePut(id, updateProfileAdminReqDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetAdminResDtoApiResponse> {
-            return localVarFp.apiAdminProfileSlefGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAdminProfileSlefPut(updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiAdminProfileSlefPut(updateProfileAdminReqDto, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * AdminApi - object-oriented interface
- * @export
- * @class AdminApi
- * @extends {BaseAPI}
- */
-export class AdminApi extends BaseAPI {
-    /**
-     * 
-     * @param {string} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AdminApi
-     */
-    public apiAdminIdGet(id: string, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiAdminIdGet(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {CreateUserAdminReqDto} [createUserAdminReqDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AdminApi
-     */
-    public apiAdminPost(createUserAdminReqDto?: CreateUserAdminReqDto, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiAdminPost(createUserAdminReqDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} [id] 
-     * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AdminApi
-     */
-    public apiAdminProfilePut(id?: string, updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiAdminProfilePut(id, updateProfileAdminReqDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AdminApi
-     */
-    public apiAdminProfileSlefGet(options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiAdminProfileSlefGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {UpdateProfileAdminReqDto} [updateProfileAdminReqDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AdminApi
-     */
-    public apiAdminProfileSlefPut(updateProfileAdminReqDto?: UpdateProfileAdminReqDto, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiAdminProfileSlefPut(updateProfileAdminReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3879,7 +3036,7 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoListApiResponse>> {
+        async apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesIdStudentsGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesIdStudentsGet']?.[localVarOperationServerIndex]?.url;
@@ -3962,7 +3119,7 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoListApiResponse> {
+        apiClassesIdStudentsGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListApiResponse> {
             return localVarFp.apiClassesIdStudentsGet(id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4975,21 +4132,107 @@ export class CourseSelectionApi extends BaseAPI {
 
 
 /**
- * StudentApi - axios parameter creator
+ * MajorsCategoryApi - axios parameter creator
  * @export
  */
-export const StudentApiAxiosParamCreator = function (configuration?: Configuration) {
+export const MajorsCategoryApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {number} [id] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiMajorsCategoryDelete: async (id?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-category`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiMajorsCategoryGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-category`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['Page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['Limit'] = limit;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiMajorsCategoryIdGet: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('apiStudentIdGet', 'id', id)
-            const localVarPath = `/api/student/{id}`
+            assertParamExists('apiMajorsCategoryIdGet', 'id', id)
+            const localVarPath = `/api/majors-category/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5019,12 +4262,12 @@ export const StudentApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {CreateUserStudentReqDto} [createUserStudentReqDto] 
+         * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentPost: async (createUserStudentReqDto?: CreateUserStudentReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/student`;
+        apiMajorsCategoryPost: async (majorsCategoryReqDto?: MajorsCategoryReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-category`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5047,7 +4290,7 @@ export const StudentApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createUserStudentReqDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(majorsCategoryReqDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5056,13 +4299,13 @@ export const StudentApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} [id] 
-         * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
+         * @param {number} [id] 
+         * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentProfilePut: async (id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/student/profile`;
+        apiMajorsCategoryPut: async (id?: number, majorsCategoryReqDto?: MajorsCategoryReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-category`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5089,77 +4332,7 @@ export const StudentApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileStudentReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiStudentProfileSlefGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/student/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiStudentProfileSlefPut: async (updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/student/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileStudentReqDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(majorsCategoryReqDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5170,211 +4343,306 @@ export const StudentApiAxiosParamCreator = function (configuration?: Configurati
 };
 
 /**
- * StudentApi - functional programming interface
+ * MajorsCategoryApi - functional programming interface
  * @export
  */
-export const StudentApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = StudentApiAxiosParamCreator(configuration)
+export const MajorsCategoryApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MajorsCategoryApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {number} [id] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentIdGet(id, options);
+        async apiMajorsCategoryDelete(id?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsCategoryDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsCategoryApi.apiMajorsCategoryDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {CreateUserStudentReqDto} [createUserStudentReqDto] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentPost(createUserStudentReqDto?: CreateUserStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentPost(createUserStudentReqDto, options);
+        async apiMajorsCategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsCategoryResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsCategoryGet(page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsCategoryApi.apiMajorsCategoryGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} [id] 
-         * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentProfilePut(id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentProfilePut(id, updateProfileStudentReqDto, options);
+        async apiMajorsCategoryIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsCategoryResDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsCategoryIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentProfilePut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsCategoryApi.apiMajorsCategoryIdGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
+         * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStudentResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentProfileSlefGet(options);
+        async apiMajorsCategoryPost(majorsCategoryReqDto?: MajorsCategoryReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsCategoryPost(majorsCategoryReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentProfileSlefGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsCategoryApi.apiMajorsCategoryPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
+         * @param {number} [id] 
+         * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiStudentProfileSlefPut(updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiStudentProfileSlefPut(updateProfileStudentReqDto, options);
+        async apiMajorsCategoryPut(id?: number, majorsCategoryReqDto?: MajorsCategoryReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsCategoryPut(id, majorsCategoryReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['StudentApi.apiStudentProfileSlefPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsCategoryApi.apiMajorsCategoryPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * StudentApi - factory interface
+ * MajorsCategoryApi - factory interface
  * @export
  */
-export const StudentApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = StudentApiFp(configuration)
+export const MajorsCategoryApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MajorsCategoryApiFp(configuration)
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {number} [id] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoApiResponse> {
-            return localVarFp.apiStudentIdGet(id, options).then((request) => request(axios, basePath));
+        apiMajorsCategoryDelete(id?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiMajorsCategoryDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {CreateUserStudentReqDto} [createUserStudentReqDto] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentPost(createUserStudentReqDto?: CreateUserStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoApiResponse> {
-            return localVarFp.apiStudentPost(createUserStudentReqDto, options).then((request) => request(axios, basePath));
+        apiMajorsCategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<MajorsCategoryResDtoListDtoApiResponse> {
+            return localVarFp.apiMajorsCategoryGet(page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} [id] 
-         * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentProfilePut(id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiStudentProfilePut(id, updateProfileStudentReqDto, options).then((request) => request(axios, basePath));
+        apiMajorsCategoryIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<MajorsCategoryResDtoApiResponse> {
+            return localVarFp.apiMajorsCategoryIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetStudentResDtoApiResponse> {
-            return localVarFp.apiStudentProfileSlefGet(options).then((request) => request(axios, basePath));
+        apiMajorsCategoryPost(majorsCategoryReqDto?: MajorsCategoryReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiMajorsCategoryPost(majorsCategoryReqDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
+         * @param {number} [id] 
+         * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiStudentProfileSlefPut(updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiStudentProfileSlefPut(updateProfileStudentReqDto, options).then((request) => request(axios, basePath));
+        apiMajorsCategoryPut(id?: number, majorsCategoryReqDto?: MajorsCategoryReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiMajorsCategoryPut(id, majorsCategoryReqDto, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * StudentApi - object-oriented interface
+ * MajorsCategoryApi - object-oriented interface
  * @export
- * @class StudentApi
+ * @class MajorsCategoryApi
  * @extends {BaseAPI}
  */
-export class StudentApi extends BaseAPI {
+export class MajorsCategoryApi extends BaseAPI {
     /**
      * 
-     * @param {string} id 
+     * @param {number} [id] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudentApi
+     * @memberof MajorsCategoryApi
      */
-    public apiStudentIdGet(id: string, options?: RawAxiosRequestConfig) {
-        return StudentApiFp(this.configuration).apiStudentIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsCategoryDelete(id?: number, options?: RawAxiosRequestConfig) {
+        return MajorsCategoryApiFp(this.configuration).apiMajorsCategoryDelete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {CreateUserStudentReqDto} [createUserStudentReqDto] 
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {string} [q] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudentApi
+     * @memberof MajorsCategoryApi
      */
-    public apiStudentPost(createUserStudentReqDto?: CreateUserStudentReqDto, options?: RawAxiosRequestConfig) {
-        return StudentApiFp(this.configuration).apiStudentPost(createUserStudentReqDto, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsCategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return MajorsCategoryApiFp(this.configuration).apiMajorsCategoryGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} [id] 
-     * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
+     * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudentApi
+     * @memberof MajorsCategoryApi
      */
-    public apiStudentProfilePut(id?: string, updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig) {
-        return StudentApiFp(this.configuration).apiStudentProfilePut(id, updateProfileStudentReqDto, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsCategoryIdGet(id: number, options?: RawAxiosRequestConfig) {
+        return MajorsCategoryApiFp(this.configuration).apiMajorsCategoryIdGet(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudentApi
+     * @memberof MajorsCategoryApi
      */
-    public apiStudentProfileSlefGet(options?: RawAxiosRequestConfig) {
-        return StudentApiFp(this.configuration).apiStudentProfileSlefGet(options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsCategoryPost(majorsCategoryReqDto?: MajorsCategoryReqDto, options?: RawAxiosRequestConfig) {
+        return MajorsCategoryApiFp(this.configuration).apiMajorsCategoryPost(majorsCategoryReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {UpdateProfileStudentReqDto} [updateProfileStudentReqDto] 
+     * @param {number} [id] 
+     * @param {MajorsCategoryReqDto} [majorsCategoryReqDto] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof StudentApi
+     * @memberof MajorsCategoryApi
      */
-    public apiStudentProfileSlefPut(updateProfileStudentReqDto?: UpdateProfileStudentReqDto, options?: RawAxiosRequestConfig) {
-        return StudentApiFp(this.configuration).apiStudentProfileSlefPut(updateProfileStudentReqDto, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsCategoryPut(id?: number, majorsCategoryReqDto?: MajorsCategoryReqDto, options?: RawAxiosRequestConfig) {
+        return MajorsCategoryApiFp(this.configuration).apiMajorsCategoryPut(id, majorsCategoryReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 
 /**
- * TeacherApi - axios parameter creator
+ * MajorsSubcategoryApi - axios parameter creator
  * @export
  */
-export const TeacherApiAxiosParamCreator = function (configuration?: Configuration) {
+export const MajorsSubcategoryApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {number} [id] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiMajorsSubcategoryDelete: async (id?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-subcategory`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiMajorsSubcategoryGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-subcategory`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['Page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['Limit'] = limit;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiMajorsSubcategoryIdGet: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('apiTeacherIdGet', 'id', id)
-            const localVarPath = `/api/teacher/{id}`
+            assertParamExists('apiMajorsSubcategoryIdGet', 'id', id)
+            const localVarPath = `/api/majors-subcategory/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5404,12 +4672,12 @@ export const TeacherApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {CreateUserTeacherReqDto} [createUserTeacherReqDto] 
+         * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherPost: async (createUserTeacherReqDto?: CreateUserTeacherReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/teacher`;
+        apiMajorsSubcategoryPost: async (majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-subcategory`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5432,7 +4700,7 @@ export const TeacherApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createUserTeacherReqDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(majorsSubcategoryReqDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5441,13 +4709,13 @@ export const TeacherApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} [id] 
-         * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
+         * @param {number} [id] 
+         * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherProfilePut: async (id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/teacher/profile`;
+        apiMajorsSubcategoryPut: async (id?: number, majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/majors-subcategory`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5474,77 +4742,7 @@ export const TeacherApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileTeacherReqDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiTeacherProfileSlefGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/teacher/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiTeacherProfileSlefPut: async (updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/teacher/profile-slef`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileTeacherReqDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(majorsSubcategoryReqDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5555,190 +4753,199 @@ export const TeacherApiAxiosParamCreator = function (configuration?: Configurati
 };
 
 /**
- * TeacherApi - functional programming interface
+ * MajorsSubcategoryApi - functional programming interface
  * @export
  */
-export const TeacherApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = TeacherApiAxiosParamCreator(configuration)
+export const MajorsSubcategoryApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MajorsSubcategoryApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {number} [id] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherIdGet(id, options);
+        async apiMajorsSubcategoryDelete(id?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsSubcategoryApi.apiMajorsSubcategoryDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {CreateUserTeacherReqDto} [createUserTeacherReqDto] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherPost(createUserTeacherReqDto?: CreateUserTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherPost(createUserTeacherReqDto, options);
+        async apiMajorsSubcategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryGet(page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsSubcategoryApi.apiMajorsSubcategoryGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} [id] 
-         * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherProfilePut(id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherProfilePut(id, updateProfileTeacherReqDto, options);
+        async apiMajorsSubcategoryIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsSubcategoryResDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherProfilePut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsSubcategoryApi.apiMajorsSubcategoryIdGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
+         * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherProfileSlefGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTeacherResDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherProfileSlefGet(options);
+        async apiMajorsSubcategoryPost(majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryPost(majorsSubcategoryReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherProfileSlefGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsSubcategoryApi.apiMajorsSubcategoryPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
+         * @param {number} [id] 
+         * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTeacherProfileSlefPut(updateProfileTeacherReqDto, options);
+        async apiMajorsSubcategoryPut(id?: number, majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryPut(id, majorsSubcategoryReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TeacherApi.apiTeacherProfileSlefPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MajorsSubcategoryApi.apiMajorsSubcategoryPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * TeacherApi - factory interface
+ * MajorsSubcategoryApi - factory interface
  * @export
  */
-export const TeacherApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = TeacherApiFp(configuration)
+export const MajorsSubcategoryApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MajorsSubcategoryApiFp(configuration)
     return {
         /**
          * 
-         * @param {string} id 
+         * @param {number} [id] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDtoApiResponse> {
-            return localVarFp.apiTeacherIdGet(id, options).then((request) => request(axios, basePath));
+        apiMajorsSubcategoryDelete(id?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiMajorsSubcategoryDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {CreateUserTeacherReqDto} [createUserTeacherReqDto] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherPost(createUserTeacherReqDto?: CreateUserTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDtoApiResponse> {
-            return localVarFp.apiTeacherPost(createUserTeacherReqDto, options).then((request) => request(axios, basePath));
+        apiMajorsSubcategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse> {
+            return localVarFp.apiMajorsSubcategoryGet(page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} [id] 
-         * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherProfilePut(id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiTeacherProfilePut(id, updateProfileTeacherReqDto, options).then((request) => request(axios, basePath));
+        apiMajorsSubcategoryIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<MajorsSubcategoryResDtoApiResponse> {
+            return localVarFp.apiMajorsSubcategoryIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherProfileSlefGet(options?: RawAxiosRequestConfig): AxiosPromise<GetTeacherResDtoApiResponse> {
-            return localVarFp.apiTeacherProfileSlefGet(options).then((request) => request(axios, basePath));
+        apiMajorsSubcategoryPost(majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiMajorsSubcategoryPost(majorsSubcategoryReqDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
+         * @param {number} [id] 
+         * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiTeacherProfileSlefPut(updateProfileTeacherReqDto, options).then((request) => request(axios, basePath));
+        apiMajorsSubcategoryPut(id?: number, majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiMajorsSubcategoryPut(id, majorsSubcategoryReqDto, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * TeacherApi - object-oriented interface
+ * MajorsSubcategoryApi - object-oriented interface
  * @export
- * @class TeacherApi
+ * @class MajorsSubcategoryApi
  * @extends {BaseAPI}
  */
-export class TeacherApi extends BaseAPI {
+export class MajorsSubcategoryApi extends BaseAPI {
     /**
      * 
-     * @param {string} id 
+     * @param {number} [id] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TeacherApi
+     * @memberof MajorsSubcategoryApi
      */
-    public apiTeacherIdGet(id: string, options?: RawAxiosRequestConfig) {
-        return TeacherApiFp(this.configuration).apiTeacherIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsSubcategoryDelete(id?: number, options?: RawAxiosRequestConfig) {
+        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryDelete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {CreateUserTeacherReqDto} [createUserTeacherReqDto] 
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {string} [q] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TeacherApi
+     * @memberof MajorsSubcategoryApi
      */
-    public apiTeacherPost(createUserTeacherReqDto?: CreateUserTeacherReqDto, options?: RawAxiosRequestConfig) {
-        return TeacherApiFp(this.configuration).apiTeacherPost(createUserTeacherReqDto, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsSubcategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} [id] 
-     * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
+     * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TeacherApi
+     * @memberof MajorsSubcategoryApi
      */
-    public apiTeacherProfilePut(id?: string, updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig) {
-        return TeacherApiFp(this.configuration).apiTeacherProfilePut(id, updateProfileTeacherReqDto, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsSubcategoryIdGet(id: number, options?: RawAxiosRequestConfig) {
+        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryIdGet(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
+     * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TeacherApi
+     * @memberof MajorsSubcategoryApi
      */
-    public apiTeacherProfileSlefGet(options?: RawAxiosRequestConfig) {
-        return TeacherApiFp(this.configuration).apiTeacherProfileSlefGet(options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsSubcategoryPost(majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options?: RawAxiosRequestConfig) {
+        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryPost(majorsSubcategoryReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {UpdateProfileTeacherReqDto} [updateProfileTeacherReqDto] 
+     * @param {number} [id] 
+     * @param {MajorsSubcategoryReqDto} [majorsSubcategoryReqDto] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TeacherApi
+     * @memberof MajorsSubcategoryApi
      */
-    public apiTeacherProfileSlefPut(updateProfileTeacherReqDto?: UpdateProfileTeacherReqDto, options?: RawAxiosRequestConfig) {
-        return TeacherApiFp(this.configuration).apiTeacherProfileSlefPut(updateProfileTeacherReqDto, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsSubcategoryPut(id?: number, majorsSubcategoryReqDto?: MajorsSubcategoryReqDto, options?: RawAxiosRequestConfig) {
+        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryPut(id, majorsSubcategoryReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

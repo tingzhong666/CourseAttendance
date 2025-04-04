@@ -1,4 +1,5 @@
-﻿using CourseAttendance.Model;
+﻿using CourseAttendance.Enums;
+using CourseAttendance.Model;
 using CourseAttendance.Model.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -26,7 +27,9 @@ namespace CourseAttendance.AppDataContext
 		public DbSet<WebSystemConfig> WebSystemConfigs { get; set; }
 		public DbSet<TimeTable> TimeTables { get; set; }
 		public DbSet<CourseTime> CourseTimes { get; set; }
-		
+		public DbSet<MajorsCategory> MajorsCategories { get; set; }
+		public DbSet<MajorsSubcategory> MajorsSubcategories { get; set; }
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -83,37 +86,46 @@ namespace CourseAttendance.AppDataContext
 					.HasForeignKey(p => p.TimeTableId)
 					.OnDelete(DeleteBehavior.Restrict);
 			}
-
-
-			List<IdentityRole> roles =
-			[
+			// 身份权限
+			var roles = new List<IdentityRole>()
+			{
 				new IdentityRole
 				{
-					Id="C897C093-BEEA-798C-A116-0DA80A51784A",
-					Name = "Admin",
-					NormalizedName = "ADMIN"
+					Id="2325ECCC-C9B5-6026-BDDB-DF35C7761CE2",
+					Name = UserRole.Admin.ToString(),
+					NormalizedName = UserRole.Admin.ToString()?.ToUpperInvariant() ?? ""
 				},
 				new IdentityRole
 				{
-					Id="33F1A562-4F0B-C638-D624-2E92FE629D4D",
-					Name = "Academic",
-					NormalizedName = "ACADEMIC"
+					Id="A68C4FE1-8F75-E515-2E4C-8AB1E2C814F1",
+					Name = UserRole.Academic.ToString(),
+					NormalizedName = UserRole.Academic.ToString()?.ToUpperInvariant() ?? ""
 				},
 				new IdentityRole
 				{
-					Id="523A6FB2-7348-7F06-8DC0-8697BED79A68",
-					Name = "Teacher",
-					NormalizedName = "TEACHER"
+					Id="BA576549-1FE7-4A5E-F4E1-FA359040BD55",
+					Name = UserRole.Teacher.ToString(),
+					NormalizedName = UserRole.Teacher.ToString()?.ToUpperInvariant() ?? ""
 				},
 				new IdentityRole
 				{
-					Id="0F93B20D-BEA0-1628-F7A3-6E9E8A817A4E",
-					Name = "Student",
-					NormalizedName = "STUDENT"
+					Id="B7E953C4-6438-0AAB-8894-602E2A5BF1AD",
+					Name = UserRole.Student.ToString(),
+					NormalizedName = UserRole.Student.ToString()?.ToUpperInvariant() ?? ""
 				},
-			];
+			};
+			//foreach (var x in Enum.GetValues(typeof(UserRole)))
+			//{
+			//	roles.Add(new IdentityRole
+			//	{
+			//		//Id = Guid.NewGuid().ToString(),
+			//		Name = x.ToString(),
+			//		NormalizedName = x.ToString()?.ToUpperInvariant() ?? ""
+			//	});
+			//}
 			modelBuilder.Entity<IdentityRole>().HasData(roles);
 
+			// 用户的工号唯一
 			modelBuilder.Entity<User>().HasIndex(x => x.UserName).IsUnique();
 		}
 

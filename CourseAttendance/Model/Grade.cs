@@ -4,17 +4,29 @@ using CourseAttendance.Model.Users;
 
 namespace CourseAttendance.Model
 {
-    public class Grade
+	public class Grade
 	{
 		[Key]
 		public int Id { get; set; }
 
 		[Required]
 		public string Name { get; set; }
-		// 大专业系
-		// 专业
-		// 班级序号
-		// 入校年份
+		/// <summary>
+		/// 专业
+		/// </summary>
+		[ForeignKey("MajorsSubcategory")]
+		[Required]
+		public int MajorsSubcategoriesId { get; set; }
+		/// <summary>
+		/// 班级序号
+		/// </summary>
+		[Required]
+		public int Num { get; set; }
+		/// <summary>
+		/// 入校年份 年级
+		/// </summary>
+		[Required]
+		public int Year { get; set; }
 
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
@@ -24,5 +36,6 @@ namespace CourseAttendance.Model
 		//public virtual Counselor Counselor { get; set; } // 对应的辅导员
 
 		public virtual ICollection<Student> Students { get; set; } // 班级与学生的关系
+		public virtual MajorsSubcategory MajorsSubcategory { get; set; }
 	}
 }

@@ -4,6 +4,7 @@ import { UserProfile } from "../models/User";
 import * as api from "../services/http/httpInstance"
 import { useNavigate } from "react-router";
 import { notification } from "antd";
+import { UserRole } from "../services/api";
 
 
 type UserContextType = {
@@ -12,7 +13,7 @@ type UserContextType = {
     token: string | null
     //setToken: React.Dispatch<React.SetStateAction<string | null>>
     logout: () => void,
-    roleMap: (role: string) => string
+    roleMap: (role: UserRole) => string
 };
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
@@ -92,15 +93,15 @@ export const UserProvider = ({ children }: Props) => {
     }
 
     // 身份映射
-    const roleMap = (role: string): string => {
+    const roleMap = (role: UserRole): string => {
         switch (role) {
-            case 'Admin':
+            case UserRole.Admin:
                 return '管理员'
-            case 'Academic':
+            case UserRole.Academic:
                 return '教务处人员'
-            case 'Teacher':
+            case UserRole.Teacher:
                 return '老师'
-            case 'Student':
+            case UserRole.Student:
                 return '学生'
             default:
                 return ''

@@ -5,6 +5,7 @@ using CourseAttendance.mapper;
 using CourseAttendance.mapper.UserExts;
 using CourseAttendance.Repositories;
 using CourseAttendance.Repositories.Users;
+using CourseAttendance.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +19,14 @@ namespace CourseAttendance.Controllers
 	{
 
 		private readonly GradeRepository _gradeRepository;
-		private readonly UserRepository _userRepository;
 		private readonly StudentRepository _studentRepository;
+		private readonly UserService _userService;
 
-		public ClassesController(GradeRepository gradeRepository, UserRepository userRepository, StudentRepository studentRepository)
+		public ClassesController(GradeRepository gradeRepository, StudentRepository studentRepository, UserService userService)
 		{
 			_gradeRepository = gradeRepository;
-			_userRepository = userRepository;
 			_studentRepository = studentRepository;
+			_userService = userService;
 		}
 
 		/// <summary>
@@ -116,26 +117,21 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpGet("{id}/students")]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
-		public async Task<ActionResult<ApiResponse<List<GetStudentResDto>>>> GetStudents(int id)
+		public async Task<ActionResult<ApiResponse<List<GetUserResDto>>>> GetStudents(int id)
 		{
 			var grade = await _gradeRepository.GetByIdAsync(id);
 			if (grade == null)
 				return Ok(new ApiResponse<List<GetStudentResDto>> { Code = 2, Msg = "", Data = null });
 
-			var students = grade.Students.Select(async s =>
-			{
-				return await s.ToGetStudentResDto(s.User, _userRepository);
-			});
+			var studentsRes = new List<GetUserResDto>();
 
-			var studentsRes = new List<GetStudentResDto>();
-			// 全部操作同步执行，因为数据库上下文不支持多线程
-			foreach (var student in grade.Students)
+			foreach (var item in grade.Students)
 			{
-				var studentDto = await student.ToGetStudentResDto(student.User, _userRepository);
-				studentsRes.Add(studentDto);
+				var userDto = await _userService.GetInfoById(item.UserId);
+				if (userDto != null) studentsRes.Add(userDto);
 			}
 
-			return Ok(new ApiResponse<List<GetStudentResDto>> { Code = 1, Msg = "", Data = studentsRes });
+			return Ok(new ApiResponse<List<GetUserResDto>> { Code = 1, Msg = "", Data = studentsRes });
 		}
 
 		/// <summary>

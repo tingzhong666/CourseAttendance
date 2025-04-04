@@ -88,21 +88,21 @@ namespace CourseAttendance.Controllers.Account
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		[HttpGet("{id}")]
-		public async Task<ActionResult<ApiResponse<GetAcademicResDto>>> GetUser(string id)
-		{
-			var user = await _userRepository._userManager.FindByIdAsync(id);
-			if (user == null)
-			{
-				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "没有此用户", Data = null });
-			}
-			var academic = await _academicRepository.GetByIdAsync(id);
-			if (academic == null)
-			{
-				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "没有此用户", Data = null });
-			}
-			return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "", Data = await academic.ToGetAcademicResDto(user, _userRepository) });
-		}
+		//[HttpGet("{id}")]
+		//public async Task<ActionResult<ApiResponse<GetAcademicResDto>>> GetUser(string id)
+		//{
+		//	var user = await _userRepository._userManager.FindByIdAsync(id);
+		//	if (user == null)
+		//	{
+		//		return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "没有此用户", Data = null });
+		//	}
+		//	var academic = await _academicRepository.GetByIdAsync(id);
+		//	if (academic == null)
+		//	{
+		//		return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "没有此用户", Data = null });
+		//	}
+		//	return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "", Data = await academic.ToGetAcademicResDto(user, _userRepository) });
+		//}
 
 		/// <summary>
 		/// 获取用户信息 本身
@@ -128,36 +128,36 @@ namespace CourseAttendance.Controllers.Account
 			return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "获取当前用户信息失败", Data = await academic.ToGetAcademicResDto(user, _userRepository) });
 		}
 
-		/// <summary>
-		/// 创建
-		/// </summary>
-		/// <param name="dto"></param>
-		/// <returns></returns>
-		[HttpPost]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<ApiResponse<GetAcademicResDto>>> CreateUser([FromBody] CreateUserAcademicReqDto dto)
-		{
-			var userModel = await AccountController.CreateUser(dto, _userRepository);
-			if (userModel == null)
-				return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "创建失败", Data = null });
+		///// <summary>
+		///// 创建
+		///// </summary>
+		///// <param name="dto"></param>
+		///// <returns></returns>
+		//[HttpPost]
+		//[Authorize(Roles = "Admin")]
+		//public async Task<ActionResult<ApiResponse<GetAcademicResDto>>> CreateUser([FromBody] CreateUserAcademicReqDto dto)
+		//{
+		//	var userModel = await AccountController.CreateUser(dto, _userRepository);
+		//	if (userModel == null)
+		//		return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "创建失败", Data = null });
 
-			var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Academic");
+		//	var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Academic");
 
-			var academicModel = dto.ToModel();
-			academicModel.UserId = userModel.Id;
-			var result = await _academicRepository.AddAsync(academicModel);
+		//	var academicModel = dto.ToModel();
+		//	academicModel.UserId = userModel.Id;
+		//	var result = await _academicRepository.AddAsync(academicModel);
 
-			if (result == 0 || !resRole.Succeeded)
-			{
-				var res = await _userRepository.DeleteAsync(userModel.Id);
-				if (!res.Succeeded)
-					return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "创建失败", Data = null });
-			}
+		//	if (result == 0 || !resRole.Succeeded)
+		//	{
+		//		var res = await _userRepository.DeleteAsync(userModel.Id);
+		//		if (!res.Succeeded)
+		//			return Ok(new ApiResponse<GetAcademicResDto> { Code = 2, Msg = "创建失败", Data = null });
+		//	}
 
-			academicModel = await _academicRepository.GetByIdAsync(userModel.Id);
+		//	academicModel = await _academicRepository.GetByIdAsync(userModel.Id);
 
-			return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "创建失败", Data = await academicModel.ToGetAcademicResDto(userModel, _userRepository) });
-		}
+		//	return Ok(new ApiResponse<GetAcademicResDto> { Code = 1, Msg = "创建失败", Data = await academicModel.ToGetAcademicResDto(userModel, _userRepository) });
+		//}
 
 
 		///// <summary>
