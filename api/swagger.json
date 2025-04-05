@@ -432,6 +432,51 @@
         }
       }
     },
+    "/api/account/update-user": {
+      "put": {
+        "tags": [
+          "Account"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileReqDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileReqDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileReqDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileReqDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/attendance": {
       "get": {
         "tags": [
@@ -725,23 +770,48 @@
         "tags": [
           "Classes"
         ],
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GradeResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/GradeResponseDtoListDtoApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GradeResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/GradeResponseDtoListDtoApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GradeResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/GradeResponseDtoListDtoApiResponse"
                 }
               }
             }
@@ -1825,6 +1895,14 @@
         ],
         "parameters": [
           {
+            "name": "MajorId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "Page",
             "in": "query",
             "schema": {
@@ -2721,14 +2799,11 @@
         "additionalProperties": false
       },
       "GradeRequestDto": {
-        "required": [
-          "name"
-        ],
         "type": "object",
         "properties": {
           "name": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "majorsCategoriesId": {
             "type": "integer",
@@ -2800,7 +2875,24 @@
         },
         "additionalProperties": false
       },
-      "GradeResponseDtoListApiResponse": {
+      "GradeResponseDtoListDto": {
+        "type": "object",
+        "properties": {
+          "dataList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GradeResponseDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GradeResponseDtoListDtoApiResponse": {
         "type": "object",
         "properties": {
           "code": {
@@ -2812,11 +2904,7 @@
             "nullable": true
           },
           "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GradeResponseDto"
-            },
-            "nullable": true
+            "$ref": "#/components/schemas/GradeResponseDtoListDto"
           }
         },
         "additionalProperties": false
@@ -3172,6 +3260,51 @@
           },
           "data": {
             "$ref": "#/components/schemas/TimeTableResDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateProfileReqDto": {
+        "required": [
+          "name",
+          "roles",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserRole"
+            }
+          },
+          "createAcademicExt": {
+            "$ref": "#/components/schemas/CreateUserAcademicReqDto"
+          },
+          "createAdminExt": {
+            "$ref": "#/components/schemas/CreateUserAdminReqDto"
+          },
+          "createStudentExt": {
+            "$ref": "#/components/schemas/CreateUserStudentReqDto"
+          },
+          "createTeacherExt": {
+            "$ref": "#/components/schemas/CreateUserTeacherReqDto"
           }
         },
         "additionalProperties": false

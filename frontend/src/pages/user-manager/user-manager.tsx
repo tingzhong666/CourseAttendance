@@ -5,7 +5,7 @@ import { ColumnsType } from "antd/es/table"
 import { useEffect, useState } from "react"
 import { useAuth } from "../../Contexts/auth"
 import Search, { SearchProps } from "antd/es/input/Search"
-import UserAdd from "../../components/userAdd"
+import UserAdd, { UserAddProps } from "../../components/userAdd"
 export default () => {
     // 查询参数
     const [data, setData] = useState([] as Array<GetUserResDto>)
@@ -16,6 +16,8 @@ export default () => {
 
     const auth = useAuth()
     const [addShow, setAddShow] = useState(false)
+    const [putId, setPutId] = useState('')
+    const [addModel, setAddModel] = useState<UserAddProps['model']>('add')
 
     useEffect(() => {
         init()
@@ -66,16 +68,13 @@ export default () => {
             key: 'action',
             render: (_, record) => {
 
-                const confirm: PopconfirmProps['onConfirm'] = (e) => {
-                    message.success('Click on Yes');
-                  };
                 return (
                     <Space size="middle">
-                        <a>修改</a>
+                        <a onClick={() => put(record.id)}>修改</a>
                         <Popconfirm
                             title="提示"
                             description={`确定删除用户 ${record.name} ?`}
-                            onConfirm={confirm}
+                            onConfirm={() => del(record)}
                             okText="确定"
                             cancelText="取消"
                         >
@@ -97,7 +96,18 @@ export default () => {
     }
 
     const add = (): void => {
+        setAddModel('add')
         setAddShow(true)
+    }
+    const del = async (v: GetUserResDto) => {
+        await api.Account.apiAccountIdDelete(v.id)
+
+        await getData()
+    }
+    const put = (id: string) => {
+        setAddModel('put')
+        setAddShow(true)
+        setPutId(id)
     }
     // 查询
     const onSearch: SearchProps['onSearch'] = async (value, _e, info) => {
@@ -122,8 +132,9 @@ export default () => {
             columns={columns}
             pagination={{ position: ['bottomCenter'], total, showSizeChanger: true, current, pageSize: limit, onChange: onPageChange }}
             dataSource={data}
+            rowKey="id"
         />
 
-        <UserAdd show={addShow} showChange={x => setAddShow(x)}/>
+        <UserAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />
     </Space>)
 }

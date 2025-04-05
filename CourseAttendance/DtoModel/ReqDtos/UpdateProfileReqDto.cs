@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CourseAttendance.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace CourseAttendance.DtoModel.ReqDtos
 {
@@ -17,6 +18,21 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		/// 姓名
 		/// </summary>
 		[Required]
-		public required string Name { get; set; }
+		public  string Name { get; set; }
+		/// <summary>
+		/// 工号
+		/// </summary>
+		[Required]
+		public  string UserName { get; set; }
+		/// <summary>
+		/// 身份权限
+		/// </summary>
+		[Required]
+		public List<UserRole> Roles { get; set; }
+		public CreateUserAcademicReqDto? CreateAcademicExt { get; set; }
+		public CreateUserAdminReqDto? CreateAdminExt { get; set; }
+		public CreateUserStudentReqDto? CreateStudentExt { get; set; }
+		public CreateUserTeacherReqDto? CreateTeacherExt { get; set; }
+
 	}
 }

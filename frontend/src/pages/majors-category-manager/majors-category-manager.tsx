@@ -3,9 +3,11 @@ import Search, { SearchProps } from "antd/es/input/Search"
 import { MajorsCategoryResDto } from "../../services/api"
 import { ColumnsType } from "antd/es/table"
 import { useAuth } from "../../Contexts/auth"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import * as api from '../../services/http/httpInstance'
 import MajorsCategoryAdd, { MajorsCategoryAddProps } from "../../components/MajorsCategoryAdd"
+import { useMajor } from "../../Contexts/major"
+import { useLocation } from "react-router"
 
 export default () => {
     const auth = useAuth()
@@ -16,10 +18,24 @@ export default () => {
     const [limit, setLimit] = useState(20)
     const [queryStr, setQueryStr] = useState('')
 
+    const major = useMajor()
+    // 是否有增改删操作
+    const [isChange, setIsChange] = useState(false)
+    const isChangeRef = useRef(isChange);
+
+    useEffect(() => {
+        isChangeRef.current = isChange;
+    }, [isChange]);
 
     useEffect(() => {
         init()
+
+        return () => {
+            if (isChangeRef.current)
+                major.update()
+        }
     }, [])
+
 
     const init = async () => {
         await getData()
@@ -36,6 +52,7 @@ export default () => {
         await api.MajorsCategory.apiMajorsCategoryDelete(v.id)
 
         await getData()
+        setIsChange(true)
     };
     const columns: ColumnsType<MajorsCategoryResDto> = [
         {
@@ -87,11 +104,13 @@ export default () => {
     const add = () => {
         setAddModel('add')
         setAddShow(true)
+        setIsChange(true)
     }
     const put = (id: number) => {
         setAddModel('put')
         setAddShow(true)
         setPutId(id)
+        setIsChange(true)
     }
     return (<Space direction='vertical' style={{ width: '100%' }}>
         <Space>
@@ -108,6 +127,7 @@ export default () => {
             columns={columns}
             pagination={{ position: ['bottomCenter'], total, showSizeChanger: true, current, pageSize: limit, onChange: onPageChange }}
             dataSource={data}
+            rowKey="id"
         />
 
         <MajorsCategoryAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />

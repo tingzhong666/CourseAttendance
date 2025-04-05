@@ -14,24 +14,25 @@ interface Props {
 export type MajorsCategoryAddProps = Props;
 
 export default (prop: Props) => {
+    // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-
-    useEffect(() => {
-        init()
-
-    }, [])
+    const [title, setTitle] = useState('');
 
 
+    // 初始化
     const init = async () => {
         if (prop.model == 'put') {
             var res = await api.MajorsCategory.apiMajorsCategoryIdGet(prop.putId || -1)
-            // console.log(res.data.data)
-            // setInitValueForm(res.data.data || {})
             form.setFieldsValue(res.data.data)
+            setTitle('修改专业')
         }
         else if (prop.model == 'add') {
-            form.resetFields ()
+            form.resetFields()
+            setTitle('新增专业')
+        }
+        else if (prop.model == 'get') {
+            setTitle('专业详情')
         }
 
     }
@@ -42,13 +43,13 @@ export default (prop: Props) => {
         if (prop.show) {
             init()
         }
-
     }, [prop.show])
     useEffect(() => {
         prop.showChange(isModalOpen)
     }, [isModalOpen])
 
 
+    // 弹框
     const handleCancel = () => {
         setIsModalOpen(false);
     }
@@ -59,9 +60,8 @@ export default (prop: Props) => {
         form.submit()
     }
 
+    // 表单
     const [form] = Form.useForm();
-    // const [initValueForm, setInitValueForm] = useState({} as MajorsCategoryResDto)
-
     const onFinish = async (values: MajorsCategoryReqDto) => {
         setConfirmLoading(true)
 
@@ -87,7 +87,6 @@ export default (prop: Props) => {
                 layout="vertical"
                 form={form}
                 onFinish={onFinish}
-            // initialValues={initValueForm}
             >
                 <Form.Item<MajorsCategoryReqDto> name='name'>
                     <Input placeholder="大专业名"></Input>

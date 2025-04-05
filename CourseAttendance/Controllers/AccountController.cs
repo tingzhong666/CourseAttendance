@@ -347,6 +347,7 @@ namespace CourseAttendance.Controllers
 		//	}
 		//}
 
+		
 		[HttpPost]
 		[Authorize(Roles = "Admin")]
 		public async Task<ActionResult<ApiResponse<GetUserResDto>>> CreateUser([FromBody] CreateUserReqDto dto)
@@ -402,6 +403,28 @@ namespace CourseAttendance.Controllers
 			}
 
 			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+		}
+
+		/// <summary>
+		/// 更新用户信息
+		/// </summary>
+		/// <param name="dto"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpPut("update-user")]
+		[Authorize(Roles = "Admin")]
+		public async Task<OkObjectResult> Update([FromBody] UpdateProfileReqDto dto, string id)
+		{
+			try
+			{
+				var res = await _userService.UpdateAsync(dto, id);
+				if (res != null) throw new Exception(res);
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			}
+			catch (Exception err)
+			{
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 		#endregion
 	}

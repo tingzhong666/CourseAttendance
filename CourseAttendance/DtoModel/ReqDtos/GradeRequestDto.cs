@@ -4,8 +4,7 @@ namespace CourseAttendance.DtoModel.ReqDtos
 {
 	public class GradeRequestDto
 	{
-		[Required]
-		public string Name { get; set; }
+		public string? Name { get; set; }
 		/// <summary>
 		/// 大专业系
 		/// </summary>

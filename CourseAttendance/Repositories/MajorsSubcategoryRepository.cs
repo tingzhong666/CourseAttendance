@@ -63,14 +63,19 @@ namespace CourseAttendance.Repositories
 		}
 
 
-		public async Task<(List<MajorsSubcategory> queryRes, int total)> GetAllAsync(ReqQueryDto query)
+		public async Task<(List<MajorsSubcategory> queryRes, int total)> GetAllAsync(MajorsSubReqQueryDto query)
 		{
 			var queryable = _context.MajorsSubcategories.AsQueryable();
 			if (query.q != null && query.q != "")
-				queryable = queryable.Where(x => x.Name == query.q);
+				queryable = queryable.Where(x => x.Name.Contains(query.q));
+			if (query.MajorId != null)
+				queryable = queryable.Where(x => x.MajorsCategoriesId == query.MajorId);
 
 			// 执行查询
-			var queryRes = await queryable.ToListAsync();
+			var queryRes = await queryable
+				.Include(x => x.MajorsCategory)
+				.Include(x => x.Grades)
+				.ToListAsync();
 
 			var total = queryRes.Count;
 			// 分页

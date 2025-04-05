@@ -1,4 +1,5 @@
 ﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel;
 using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.mapper;
@@ -35,11 +36,26 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpGet]
 		[Authorize(Roles = "Admin, Academic, Teacher")]
-		public async Task<ActionResult<ApiResponse<List<GradeResponseDto>>>> GetClasses()
+		public async Task<ActionResult<ApiResponse<ListDto<GradeResponseDto>>>> GetClasses([FromQuery] ReqQueryDto query)
 		{
-			var grades = await _gradeRepository.GetAllAsync();
-			var response = grades.Select(g => g.ToResponseDto()).ToList();
-			return Ok(new ApiResponse<List<GradeResponseDto>> { Code = 1, Msg = "", Data = response });
+			try
+			{
+				var (queryRes, total) = await _gradeRepository.GetAllAsync(query);
+				return Ok(new ApiResponse<ListDto<GradeResponseDto>>
+				{
+					Code = 1,
+					Msg = "",
+					Data = new ListDto<GradeResponseDto>
+					{
+						DataList = queryRes.Select(x => x.ToResponseDto()).ToList(),
+						Total = total
+					}
+				});
+			}
+			catch (Exception err)
+			{
+				return Ok(new ApiResponse<ListDto<GradeResponseDto>> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 		/// <summary>

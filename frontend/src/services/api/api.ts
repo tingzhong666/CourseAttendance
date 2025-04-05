@@ -854,7 +854,7 @@ export interface GradeRequestDto {
      * @type {string}
      * @memberof GradeRequestDto
      */
-    'name': string;
+    'name'?: string | null;
     /**
      * 
      * @type {number}
@@ -957,27 +957,46 @@ export interface GradeResponseDtoApiResponse {
 /**
  * 
  * @export
- * @interface GradeResponseDtoListApiResponse
+ * @interface GradeResponseDtoListDto
  */
-export interface GradeResponseDtoListApiResponse {
+export interface GradeResponseDtoListDto {
+    /**
+     * 
+     * @type {Array<GradeResponseDto>}
+     * @memberof GradeResponseDtoListDto
+     */
+    'dataList'?: Array<GradeResponseDto> | null;
     /**
      * 
      * @type {number}
-     * @memberof GradeResponseDtoListApiResponse
+     * @memberof GradeResponseDtoListDto
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface GradeResponseDtoListDtoApiResponse
+ */
+export interface GradeResponseDtoListDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeResponseDtoListDtoApiResponse
      */
     'code'?: number;
     /**
      * 
      * @type {string}
-     * @memberof GradeResponseDtoListApiResponse
+     * @memberof GradeResponseDtoListDtoApiResponse
      */
     'msg'?: string | null;
     /**
      * 
-     * @type {Array<GradeResponseDto>}
-     * @memberof GradeResponseDtoListApiResponse
+     * @type {GradeResponseDtoListDto}
+     * @memberof GradeResponseDtoListDtoApiResponse
      */
-    'data'?: Array<GradeResponseDto> | null;
+    'data'?: GradeResponseDtoListDto;
 }
 /**
  * 
@@ -1454,6 +1473,67 @@ export interface TimeTableResDtoApiResponse {
 /**
  * 
  * @export
+ * @interface UpdateProfileReqDto
+ */
+export interface UpdateProfileReqDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileReqDto
+     */
+    'email'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileReqDto
+     */
+    'phone'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileReqDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileReqDto
+     */
+    'userName': string;
+    /**
+     * 
+     * @type {Array<UserRole>}
+     * @memberof UpdateProfileReqDto
+     */
+    'roles': Array<UserRole>;
+    /**
+     * 
+     * @type {object}
+     * @memberof UpdateProfileReqDto
+     */
+    'createAcademicExt'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof UpdateProfileReqDto
+     */
+    'createAdminExt'?: object;
+    /**
+     * 
+     * @type {CreateUserStudentReqDto}
+     * @memberof UpdateProfileReqDto
+     */
+    'createStudentExt'?: CreateUserStudentReqDto;
+    /**
+     * 
+     * @type {object}
+     * @memberof UpdateProfileReqDto
+     */
+    'createTeacherExt'?: object;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 
@@ -1862,6 +1942,48 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} [id] 
+         * @param {UpdateProfileReqDto} [updateProfileReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAccountUpdateUserPut: async (id?: string, updateProfileReqDto?: UpdateProfileReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/account/update-user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileReqDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1991,6 +2113,19 @@ export const AccountApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountTestGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} [id] 
+         * @param {UpdateProfileReqDto} [updateProfileReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountUpdateUserPut(id, updateProfileReqDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountUpdateUserPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -2089,6 +2224,16 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          */
         apiAccountTestGet(options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountTestGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [id] 
+         * @param {UpdateProfileReqDto} [updateProfileReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAccountUpdateUserPut(id, updateProfileReqDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2207,6 +2352,18 @@ export class AccountApi extends BaseAPI {
      */
     public apiAccountTestGet(options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).apiAccountTestGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [id] 
+     * @param {UpdateProfileReqDto} [updateProfileReqDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig) {
+        return AccountApiFp(this.configuration).apiAccountUpdateUserPut(id, updateProfileReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2711,10 +2868,13 @@ export const ClassesApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiClassesGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/classes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2730,6 +2890,18 @@ export const ClassesApiAxiosParamCreator = function (configuration?: Configurati
             // authentication Bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['Page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['Limit'] = limit;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
 
 
     
@@ -2984,11 +3156,14 @@ export const ClassesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDtoListApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesGet(options);
+        async apiClassesGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesGet(page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3079,11 +3254,14 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesGet(options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDtoListApiResponse> {
-            return localVarFp.apiClassesGet(options).then((request) => request(axios, basePath));
+        apiClassesGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDtoListDtoApiResponse> {
+            return localVarFp.apiClassesGet(page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3153,12 +3331,15 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
 export class ClassesApi extends BaseAPI {
     /**
      * 
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {string} [q] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ClassesApi
      */
-    public apiClassesGet(options?: RawAxiosRequestConfig) {
-        return ClassesApiFp(this.configuration).apiClassesGet(options).then((request) => request(this.axios, this.basePath));
+    public apiClassesGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return ClassesApiFp(this.configuration).apiClassesGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4587,13 +4768,14 @@ export const MajorsSubcategoryApiAxiosParamCreator = function (configuration?: C
         },
         /**
          * 
+         * @param {number} [majorId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiMajorsSubcategoryGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiMajorsSubcategoryGet: async (majorId?: number, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/majors-subcategory`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4609,6 +4791,10 @@ export const MajorsSubcategoryApiAxiosParamCreator = function (configuration?: C
             // authentication Bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (majorId !== undefined) {
+                localVarQueryParameter['MajorId'] = majorId;
+            }
 
             if (page !== undefined) {
                 localVarQueryParameter['Page'] = page;
@@ -4773,14 +4959,15 @@ export const MajorsSubcategoryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [majorId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiMajorsSubcategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryGet(page, limit, q, options);
+        async apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryGet(majorId, page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MajorsSubcategoryApi.apiMajorsSubcategoryGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4843,14 +5030,15 @@ export const MajorsSubcategoryApiFactory = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {number} [majorId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiMajorsSubcategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse> {
-            return localVarFp.apiMajorsSubcategoryGet(page, limit, q, options).then((request) => request(axios, basePath));
+        apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse> {
+            return localVarFp.apiMajorsSubcategoryGet(majorId, page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4903,6 +5091,7 @@ export class MajorsSubcategoryApi extends BaseAPI {
 
     /**
      * 
+     * @param {number} [majorId] 
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
@@ -4910,8 +5099,8 @@ export class MajorsSubcategoryApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof MajorsSubcategoryApi
      */
-    public apiMajorsSubcategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryGet(majorId, page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -32,6 +32,7 @@ namespace CourseAttendance.Repositories.Users
 			model.Name = user.Name;
 			model.Email = user.Email;
 			model.PhoneNumber = user.PhoneNumber;
+			model.UserName = user.UserName;
 			return await _userManager.UpdateAsync(model);
 		}
 

@@ -1,4 +1,5 @@
 ﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,11 +22,26 @@ namespace CourseAttendance.Repositories
 				.FirstOrDefaultAsync(g => g.Id == id);
 		}
 
-		public async Task<IEnumerable<Grade>> GetAllAsync()
+		public async Task<(List<Grade> queryRes, int total)> GetAllAsync(ReqQueryDto query)
 		{
-			return await _context.Grades
+			var queryable = _context.Grades.AsQueryable();
+			if (query.q != null && query.q != "")
+				queryable = queryable.Where(x =>
+					x.Name.Contains(query.q)  ||
+					x.MajorsSubcategory.Name.Contains(query.q) ||
+					x.MajorsSubcategory.MajorsCategory.Name.Contains(query.q)
+				);
+
+			// 执行查询
+			var queryRes = await queryable
 				.Include(g => g.Students)
 				.ToListAsync();
+
+			var total = queryRes.Count;
+			// 分页
+			queryRes = queryRes.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
+
+			return (queryRes, total);
 		}
 
 		public async Task<int> AddAsync(Grade grade)

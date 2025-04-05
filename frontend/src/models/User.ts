@@ -1,10 +1,12 @@
+import { UserRole } from "../services/api";
+
 export type UserProfile = {
-    // ¹¤ºÅÑ§ºÅ
+    // ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½
     userName: string;
     //email: string;
-    // Éí·Ý
-    roles: [string],
-    // Ãû×Ö
+    // ï¿½ï¿½ï¿½ï¿½
+    roles: [UserRole],
+    // ï¿½ï¿½ï¿½ï¿½
     name: string,
     // id
     id: string

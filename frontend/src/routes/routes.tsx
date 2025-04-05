@@ -14,6 +14,7 @@ import ModifyUserinfo from "../pages/modify-userinfo/modify-userinfo";
 import ClassesManager from "../pages/classes-manager/classes-manager";
 import MajorsSubcategoryManager from "../pages/majors-subcategory-manager/majors-subcategory-manager";
 import MajorsCategoryManager from "../pages/majors-category-manager/majors-category-manager";
+import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
     {
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "", element: <HomeLayout />, children: [
+                    { path: "", element: <Navigate to="/home"></Navigate> },
                     { path: "home", element: <Home /> },
                     { path: "courses", element: <Courses /> },
                     { path: "my-courses", element: <MyCourses /> },

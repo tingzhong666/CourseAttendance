@@ -33,7 +33,7 @@ namespace CourseAttendance.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<ApiResponse<ListDto<MajorsSubcategoryResDto>>>> GetAll([FromQuery] ReqQueryDto query)
+		public async Task<ActionResult<ApiResponse<ListDto<MajorsSubcategoryResDto>>>> GetAll([FromQuery] MajorsSubReqQueryDto query)
 		{
 			try
 			{

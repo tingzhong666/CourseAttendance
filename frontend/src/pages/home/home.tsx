@@ -3,6 +3,7 @@ import { useAuth } from '../../Contexts/auth';
 import { UserOutlined } from '@ant-design/icons';
 import userLogo from '../../assets/user_logo.jpg'
 import { Avatar, Card, Col, Image, Row, Space } from "antd"
+import { CreateUUID } from '../../Utils/Utils';
 export default () => {
     const auth = useAuth()
 
@@ -34,7 +35,7 @@ export default () => {
                     身份
                 </Col>
                 <Col style={textCenter}>
-                    {auth.user?.roles.map(auth.roleMap) + ""}
+                    {auth.user?.roles.map(auth.roleMap)}
                 </Col>
             </Row>
 

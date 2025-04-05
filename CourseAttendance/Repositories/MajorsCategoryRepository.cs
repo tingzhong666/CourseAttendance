@@ -66,10 +66,12 @@ namespace CourseAttendance.Repositories
 		{
 			var queryable = _context.MajorsCategories.AsQueryable();
 			if (query.q != null && query.q != "")
-				queryable = queryable.Where(x => x.Name == query.q);
+				queryable = queryable.Where(x => x.Name.Contains(query.q));
 
 			// 执行查询
-			var queryRes = await queryable.ToListAsync();
+			var queryRes = await queryable
+				.Include(x => x.MajorsSubcategories)
+				.ToListAsync();
 
 			var total = queryRes.Count;
 			// 分页

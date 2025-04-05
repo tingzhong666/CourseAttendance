@@ -38,17 +38,122 @@ namespace CourseAttendance.Services
 		/// <param name="user"></param>
 		/// <param name="Id"></param>
 		/// <returns></returns>
-		public async Task<IdentityResult> UpdateAsync(UpdateProfileReqDto user, string Id)
+		public async Task<string?> UpdateAsync(UpdateProfileReqDto user, string Id)
 		{
-			var userModel = await _userRepository._userManager.FindByIdAsync(Id);
-			if (userModel == null)
-				return IdentityResult.Failed([new IdentityError { Description = "用户Id失败" }]);
+			using var transaction = _context.Database.BeginTransaction();
+			try
+			{
+				var userModel = await _userRepository._userManager.FindByIdAsync(Id);
+				if (userModel == null)
+					throw new Exception("用户获取失败");
 
-			var model = user.ToUserModel();
-			model.Id = userModel.Id;
-			var result = await _userRepository.UpdateAsync(model);
-			return result;
+				// 通用信息更新
+				var model = user.ToUserModel();
+				model.Id = userModel.Id;
+				var result = await _userRepository.UpdateAsync(model);
+				if (result != IdentityResult.Success)
+					throw new Exception("用户信息更新失败");
+
+				// 密码这里不更新 单独抽离一个方法
+
+				// 权限更新，并删除老权限的扩展信息
+				if (user.roles.Count < 1)
+					throw new Exception("用户信息更新失败");
+				var rolesOld = await _userRepository._userManager.GetRolesAsync(model);
+				foreach (var roleOld in rolesOld)
+				{
+					var roleOld_ = Enum.Parse<UserRole>(roleOld);
+					var res = 0;
+					switch (roleOld_)
+					{
+						case UserRole.Admin:
+							res = await _adminRepository.DeleteAdminAsync(model.Id);
+							break;
+						case UserRole.Academic:
+							res = await _academicRepository.DeleteAsync(model.Id);
+							break;
+						case UserRole.Teacher:
+							res = await _teacherRepository.DeleteAsync(model.Id);
+							break;
+						case UserRole.Student:
+							res = await _studentRepository.DeleteAsync(model.Id);
+							break;
+					}
+					if (res == 0) throw new Exception("用户信息更新失败");
+				}
+				result = await _userRepository._userManager.RemoveFromRolesAsync(model, rolesOld);
+				if (result != IdentityResult.Success)
+					throw new Exception("用户信息更新失败");
+				result = await _userRepository._userManager.AddToRolesAsync(model, user.roles.Select(x => x.ToString()));
+				if (result != IdentityResult.Success)
+					throw new Exception("用户信息更新失败");
+
+				// 扩展信息，新增
+				foreach (var role in user.roles)
+				{
+					var res = 0;
+					switch (role)
+					{
+						case UserRole.Admin:
+							if(user.CreateAdminExt == null) throw new Exception("用户信息更新失败");
+							res = await _adminRepository.AddAdminAsync(user.CreateAdminExt.ToModel());
+							break;
+						case UserRole.Academic:
+							if(user.CreateAcademicExt == null) throw new Exception("用户信息更新失败");
+							res = await _academicRepository.AddAsync(user.CreateAcademicExt.ToModel());
+							break;
+						case UserRole.Teacher:
+							if(user.CreateTeacherExt == null) throw new Exception("用户信息更新失败");
+							res = await _teacherRepository.AddAsync(user.CreateTeacherExt.ToModel());
+							break;
+						case UserRole.Student:
+							if(user.CreateStudentExt == null) throw new Exception("用户信息更新失败");
+							res = await _studentRepository.AddAsync(user.CreateStudentExt.ToModel());
+							break;
+					}
+					if (res == 0) throw new Exception("用户信息更新失败");
+				}
+
+				await transaction.CommitAsync();
+				return null;
+			}
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return err.Message;
+			}
 		}
+
+		/// <summary>
+		/// 修改密码
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <param name="pw"></param>
+		/// <returns></returns>
+		public async Task<string?> UpdatePW(string Id,string pw)
+		{
+			using var transaction = _context.Database.BeginTransaction();
+			try
+			{
+				var userModel = await _userRepository._userManager.FindByIdAsync(Id);
+				if (userModel == null)
+					throw new Exception("用户获取失败");
+
+				var res=await _userRepository._userManager.ChangePasswordAsync(userModel, pw, pw);
+				if(res != IdentityResult.Success)
+					throw new Exception("密码修改失败");
+
+
+				await transaction.CommitAsync();
+				return null;
+			}
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return err.Message;
+			}
+		}
+
 
 		/// <summary>
 		/// Model转响应dto
@@ -166,6 +271,11 @@ namespace CourseAttendance.Services
 			}
 		}
 
+		/// <summary>
+		/// 获取单个通过id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		public async Task<GetUserResDto?> GetInfoById(string id)
 		{
 			var model = await _userRepository.GetByIdAsync(id);
