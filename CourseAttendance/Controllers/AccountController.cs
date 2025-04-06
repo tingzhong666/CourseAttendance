@@ -46,7 +46,6 @@ namespace CourseAttendance.Controllers
 			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
-
 		/// <summary>
 		/// 登录状态验证
 		/// </summary>
@@ -88,54 +87,42 @@ namespace CourseAttendance.Controllers
 		}
 
 		/// <summary>
-		/// 更新用户信息 本身
-		/// </summary>
-		/// <param name="user"></param>
-		/// <returns></returns>
-		//[NonAction]
-		//public static async Task<IdentityResult> UpdateProfileSelf(UpdateProfileReqDto user, ControllerBase controller, UserRepository _userRepository)
-		//{
-		//	var userName = controller.User.FindFirst(ClaimTypes.GivenName)?.Value;
-		//	if (userName == null)
-		//		return IdentityResult.Failed([new IdentityError { Description = "获取当前用户名失败" }]);
-		//	var userModel = await _userRepository._userManager.FindByNameAsync(userName);
-		//	if (userModel == null)
-		//		return IdentityResult.Failed([new IdentityError { Description = "获取当前用户Id失败" }]);
-
-		//	var model = user.ToUserModel();
-		//	model.Id = userModel.Id;
-		//	var result = await _userRepository.UpdateAsync(model);
-		//	return result;
-		//}
-
-		/// <summary>
 		/// 获取所有用户
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<ActionResult<ApiResponse<ListDto<GetUserResDto>>>> GetUsers([FromQuery] ReqQueryDto query)
+		public async Task<ActionResult<ApiResponse<ListDto<GetUserResDto>>>> GetUsers([FromQuery] AccountReqQueryDto query)
 		{
 			var users = _userManager.Users;
 
 
 			// 查询 姓名/工号/学号
 			if (query.q != null && query.q != "")
-			{
-				users = users.Where(x => x.Name.Contains(query.q));
-				users = users.Where(x => x.UserName.Contains(query.q));
-			}
-
+				users = users.Where(x => x.Name.Contains(query.q) || x.UserName.Contains(query.q));
 
 			// 执行查询
 			var queryRes = await users.ToListAsync();
 
-			var total = queryRes.Count();
+			var queryRes2 = new List<User>();
+			// 筛选身份
+			if (query.Roles != null && query.Roles.Count != 0)
+			{
+				foreach (var item in queryRes)
+				{
+					var roles = await _userRepository._userManager.GetRolesAsync(item);
+					if (!roles.Any(x => query.Roles.Select(v => v.ToString()).Contains(x))) continue;
+					queryRes2.Add(item);
+				}
+			}
+			else queryRes2 = queryRes;
+
+			var total = queryRes2.Count();
 			// 分页
-			queryRes = queryRes.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
+			queryRes2 = queryRes2.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
 
 
 			var resDtos = new List<GetUserResDto>();
-			foreach (var model in queryRes)
+			foreach (var model in queryRes2)
 			{
 				var resDto = await _userService.ModelToDtoAsync(model);
 				resDtos.Add(resDto);
@@ -160,51 +147,12 @@ namespace CourseAttendance.Controllers
 			return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await _userService.ModelToDtoAsync(user) });
 		}
 
-		//[NonAction]
-		//public async Task<GetUserResDto> ModelToDto(User model)
-		//{
-		//	var dto = await model.ToGetUsersResDto(_userRepository);
-		//	foreach (var x in dto.Roles)
-		//	{
-		//		switch (x)
-		//		{
-		//			case UserRole.Admin:
-		//				{
-		//					var extModel = await _adminRepository.GetAdminByIdAsync(dto.Id);
-		//					dto.GetAdminExt = extModel.ToGetAdminResDto();
-		//				}
-		//				break;
-		//			case UserRole.Academic:
-		//				{
-		//					var extModel = await _academicRepository.GetByIdAsync(dto.Id);
-		//					dto.GetAcademicExt = extModel.ToGetAcademicResDto();
-		//				}
-		//				break;
-		//			case UserRole.Teacher:
-		//				{
-		//					var extModel = await _teacherRepository.GetByIdAsync(dto.Id);
-		//					dto.GetTeacherExt = extModel.ToGetTeacherResDto();
-		//				}
-		//				break;
-		//			case UserRole.Student:
-		//				{
-		//					var extModel = await _studentRepository.GetByIdAsync(dto.Id);
-		//					dto.GetStudentExt = extModel.ToGetStudentResDto();
-		//				}
-		//				break;
-		//		}
-		//	}
-
-		//	return dto;
-		//}
-
-
 		/// <summary>
 		/// 获取用户信息 本身
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("profile-self")]
-		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
+		[Authorize]
 		public async Task<ActionResult<ApiResponse<GetUserResDto>>> GetProfileSlef()
 		{
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
@@ -226,7 +174,7 @@ namespace CourseAttendance.Controllers
 		/// <param name="reqDto"></param>
 		/// <returns></returns>
 		[HttpPut("change-password-self")]
-		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
+		[Authorize]
 		public async Task<ActionResult<ApiResponse<object>>> ChangePasswordSelf(ChangePasswordSelfReqDto reqDto)
 		{
 			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
@@ -248,113 +196,67 @@ namespace CourseAttendance.Controllers
 
 			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
-		#endregion
 
-		#region 超管
+
 		/// <summary>
-		/// 更新用户信息 任意 管理员
+		/// 更新用户信息 自身
 		/// </summary>
 		/// <param name="dto"></param>
+		/// <param name="id"></param>
 		/// <returns></returns>
-		//[NonAction]
-		//public static async Task<IdentityResult> UpdateProfile(UpdateProfileReqDto dto, string id, UserRepository _userRepository)
-		//{
-		//	var model = dto.ToUserModel();
-		//	model.Id = id;
-		//	var result = await _userRepository.UpdateAsync(model);
-		//	return result;
-		//}
+		[HttpPut("update-user-self")]
+		[Authorize]
+		public async Task<OkObjectResult> UpdateSelf([FromBody] UpdateProfileSelfReqDto dto)
+		{
+			try
+			{
+				var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				if (id == null) throw new Exception("未携带ID信息");
 
+				var user = await _userRepository.GetByIdAsync(id);
+				if (user == null)
+					throw new Exception("未找到此用户");
 
+				var roles = await _userRepository._userManager.GetRolesAsync(user);
+				var res = await _userService.UpdateAsync(new UpdateProfileReqDto
+				{
+					UserName = dto.UserName,
+					Roles = roles.Select(x => Enum.Parse<UserRole>(x)).ToList(),
+					CreateAcademicExt = dto.CreateAcademicExt,
+					CreateAdminExt = dto.CreateAdminExt,
+					CreateStudentExt = dto.CreateStudentExt,
+					CreateTeacherExt = dto.CreateTeacherExt,
+					Email = dto.Email,
+					Name = dto.Name,
+					Phone = dto.Phone
+				}, id);
+				if (res != null) throw new Exception(res);
+
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			}
+			catch (Exception err)
+			{
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
+		}
+		#endregion
+
+		#region 超管 教务处
 		/// <summary>
 		/// 创建
 		/// </summary>
 		/// <returns></returns>
-		//[NonAction]
-		//public static async Task<User?> CreateUser(CreateUserReqDto dto, UserRepository _userRepository)
-		//{
-		//	var model = dto.ToModel();
-		//	var res = await _userRepository.AddAsync(model, dto.PassWord);
-		//	if (!res.Succeeded) return null;
-		//	return model;
-		//}
-		//[NonAction]
-		//public async Task CreateUser_(CreateUserReqDto dto)
-		//{
-		//	using var transaction = _context.Database.BeginTransaction();
-		//	try
-		//	{
-		//		// 通用用户表
-		//		var model = dto.ToModel();
-		//		var res = await _userRepository.AddAsync(model, dto.PassWord);
-		//		if (!res.Succeeded) throw new Exception("创建失败");
-		//		foreach (var x in dto.Roles)
-		//		{
-		//			res = await _userRepository._userManager.AddToRoleAsync(model, x.ToString());
-		//			if (!res.Succeeded) throw new Exception("创建失败，权限添加失败");
-		//		}
-
-		//		// 扩展信息用户表
-		//		foreach (var x in dto.Roles)
-		//		{
-		//			switch (x)
-		//			{
-		//				case UserRole.Admin:
-		//					{
-		//						var extModel = dto.CreateAdminExt?.ToModel();
-		//						if (extModel == null) throw new Exception("创建失败");
-		//						extModel.UserId = model.Id;
-		//						var result = await _adminRepository.AddAdminAsync(extModel);
-		//						if (result == 0) throw new Exception("创建失败");
-		//					}
-		//					break;
-		//				case UserRole.Academic:
-		//					{
-		//						var extModel = dto.CreateAcademicExt?.ToModel();
-		//						if (extModel == null) throw new Exception("创建失败");
-		//						extModel.UserId = model.Id;
-		//						var result = await _academicRepository.AddAsync(extModel);
-		//						if (result == 0) throw new Exception("创建失败");
-		//					}
-		//					break;
-		//				case UserRole.Teacher:
-		//					{
-		//						var extModel = dto.CreateTeacherExt?.ToModel();
-		//						if (extModel == null) throw new Exception("创建失败");
-		//						extModel.UserId = model.Id;
-		//						var result = await _teacherRepository.AddAsync(extModel);
-		//						if (result == 0) throw new Exception("创建失败");
-		//					}
-		//					break;
-		//				case UserRole.Student:
-		//					{
-		//						var extModel = dto.CreateStudentExt?.ToModel();
-		//						if (extModel == null) throw new Exception("创建失败");
-		//						extModel.UserId = model.Id;
-		//						var result = await _studentRepository.AddAsync(extModel);
-		//						if (result == 0) throw new Exception("创建失败");
-		//					}
-		//					break;
-		//			}
-		//		}
-
-		//		await transaction.CommitAsync();
-		//	}
-		//	catch (Exception)
-		//	{
-		//		await transaction.RollbackAsync();
-		//		throw;
-		//	}
-		//}
-
-		
 		[HttpPost]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<GetUserResDto>>> CreateUser([FromBody] CreateUserReqDto dto)
 		{
 			try
 			{
+				if (!User.IsInRole(UserRole.Admin.ToString()) && dto.Roles.Contains(UserRole.Admin))
+					throw new Exception("权限不够");
+
 				var id = await _userService.CreateUserAsync(dto);
+
 				return Ok(new ApiResponse<GetUserResDto> { Code = 1, Msg = "", Data = await _userService.GetInfoById(id) });
 			}
 			catch (Exception err)
@@ -369,40 +271,66 @@ namespace CourseAttendance.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("{id}")]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> DeleteUser(string id)
 		{
-			var res = await _userRepository.DeleteAsync(id);
-			if (!res.Succeeded)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败", Data = null });
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "删除成功", Data = null });
+			try
+			{
+				var user = await _userRepository.GetByIdAsync(id);
+				if (user == null)
+					throw new Exception("未找到此用户");
+
+				var roles = await _userRepository._userManager.GetRolesAsync(user);
+				if (!User.IsInRole(UserRole.Admin.ToString()) && roles.Contains(UserRole.Admin.ToString()))
+					throw new Exception("权限不够");
+
+				var res = await _userRepository.DeleteAsync(id);
+				if (!res.Succeeded)
+					throw new Exception("删除失败");
+
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "删除成功", Data = null });
+			}
+			catch (Exception err)
+			{
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 
 		/// <summary>
-		/// 密码修改指定用户 超管
+		/// 密码修改指定用户
 		/// </summary>
 		/// <param name="reqDto"></param>
 		/// <returns></returns>
 		[HttpPut("change-password")]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<ApiResponse<object>>> ChangePassword(ChangePasswordReqDto reqDto)
+		[Authorize(Roles = "Admin,Academic")]
+		public async Task<ActionResult<ApiResponse<object>>> ChangePassword(ResetPasswordReqDto reqDto)
 		{
-
-			var user = await _userRepository.GetByIdAsync(reqDto.UserId);
-			if (user == null)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "未找到此用户", Data = null });
-
-			if (reqDto.NewPassword != reqDto.ConfirmPassword)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "新密码和确认密码不匹配。", Data = null });
-
-			var result = await _userManager.ChangePasswordAsync(user, reqDto.CurrentPassword, reqDto.NewPassword);
-			if (!result.Succeeded)
+			try
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = result.Errors.ToString(), Data = null });
-			}
+				var user = await _userRepository.GetByIdAsync(reqDto.UserId);
+				if (user == null)
+					throw new Exception("未找到此用户");
 
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+				var roles = await _userRepository._userManager.GetRolesAsync(user);
+				if (!User.IsInRole(UserRole.Admin.ToString()) && roles.Contains(UserRole.Admin.ToString()))
+					throw new Exception("权限不够");
+
+				if (reqDto.NewPassword != reqDto.ConfirmPassword)
+					throw new Exception("新密码和确认密码不匹配");
+
+				//var result = await _userManager.ChangePasswordAsync(user, reqDto.CurrentPassword, reqDto.NewPassword);
+				var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+				var result = await _userManager.ResetPasswordAsync(user, passwordResetToken, reqDto.NewPassword);
+				if (!result.Succeeded)
+					throw new Exception(result.Errors.ToString());
+
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			}
+			catch (Exception err)
+			{
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 		/// <summary>
@@ -426,6 +354,8 @@ namespace CourseAttendance.Controllers
 				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
+
+
 		#endregion
 	}
 }

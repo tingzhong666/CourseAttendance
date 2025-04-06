@@ -1,9 +1,8 @@
-﻿namespace CourseAttendance.DtoModel.ReqDtos
+﻿using CourseAttendance.Enums;
+
+namespace CourseAttendance.DtoModel.ReqDtos
 {
-	public class CourseReqQueryDto
+	public class CourseReqQueryDto : ReqQueryDto
 	{
-		public int Page { get; set; } = 1;
-		public int Limit { get; set; } = 10;
-		public string? Name { get; set; } = "";
 	}
 }

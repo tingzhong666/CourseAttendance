@@ -57,7 +57,7 @@ namespace CourseAttendance.Services
 				// 密码这里不更新 单独抽离一个方法
 
 				// 权限更新，并删除老权限的扩展信息
-				if (user.roles.Count < 1)
+				if (user.Roles.Count < 1)
 					throw new Exception("用户信息更新失败");
 				var rolesOld = await _userRepository._userManager.GetRolesAsync(model);
 				foreach (var roleOld in rolesOld)
@@ -81,34 +81,65 @@ namespace CourseAttendance.Services
 					}
 					if (res == 0) throw new Exception("用户信息更新失败");
 				}
-				result = await _userRepository._userManager.RemoveFromRolesAsync(model, rolesOld);
+				result = await _userRepository._userManager.RemoveFromRolesAsync(userModel, rolesOld);
 				if (result != IdentityResult.Success)
 					throw new Exception("用户信息更新失败");
-				result = await _userRepository._userManager.AddToRolesAsync(model, user.roles.Select(x => x.ToString()));
+				result = await _userRepository._userManager.AddToRolesAsync(userModel, user.Roles.Select(x => x.ToString()));
 				if (result != IdentityResult.Success)
 					throw new Exception("用户信息更新失败");
 
 				// 扩展信息，新增
-				foreach (var role in user.roles)
+				foreach (var role in user.Roles)
 				{
 					var res = 0;
 					switch (role)
 					{
 						case UserRole.Admin:
-							if(user.CreateAdminExt == null) throw new Exception("用户信息更新失败");
-							res = await _adminRepository.AddAdminAsync(user.CreateAdminExt.ToModel());
+							{
+								if (user.CreateAdminExt == null)
+								{
+									// 这里由于没有属性，一直都是空的，有属性了再注释
+									user.CreateAdminExt = new();
+									//throw new Exception("用户信息更新失败");
+								}
+								var extModel = user.CreateAdminExt.ToModel();
+								extModel.UserId = userModel.Id;
+								res = await _adminRepository.AddAdminAsync(extModel);
+							}
 							break;
 						case UserRole.Academic:
-							if(user.CreateAcademicExt == null) throw new Exception("用户信息更新失败");
-							res = await _academicRepository.AddAsync(user.CreateAcademicExt.ToModel());
+							{
+								if (user.CreateAcademicExt == null)
+								{
+									// 这里由于没有属性，一直都是空的，有属性了再注释
+									user.CreateAcademicExt = new();
+									//throw new Exception("用户信息更新失败");
+								}
+								var extModel = user.CreateAcademicExt.ToModel();
+								extModel.UserId = userModel.Id;
+								res = await _academicRepository.AddAsync(extModel);
+							}
 							break;
 						case UserRole.Teacher:
-							if(user.CreateTeacherExt == null) throw new Exception("用户信息更新失败");
-							res = await _teacherRepository.AddAsync(user.CreateTeacherExt.ToModel());
+							{
+								if (user.CreateTeacherExt == null)
+								{
+									// 这里由于没有属性，一直都是空的，有属性了再注释
+									user.CreateTeacherExt = new();
+									//throw new Exception("用户信息更新失败");
+								}
+								var extModel = user.CreateTeacherExt.ToModel();
+								extModel.UserId = userModel.Id;
+								res = await _teacherRepository.AddAsync(extModel);
+							}
 							break;
 						case UserRole.Student:
-							if(user.CreateStudentExt == null) throw new Exception("用户信息更新失败");
-							res = await _studentRepository.AddAsync(user.CreateStudentExt.ToModel());
+							{
+								if (user.CreateStudentExt == null) throw new Exception("用户信息更新失败");
+								var extModel = user.CreateStudentExt.ToModel();
+								extModel.UserId = userModel.Id;
+								res = await _studentRepository.AddAsync(extModel);
+							}
 							break;
 					}
 					if (res == 0) throw new Exception("用户信息更新失败");
@@ -130,7 +161,7 @@ namespace CourseAttendance.Services
 		/// <param name="Id"></param>
 		/// <param name="pw"></param>
 		/// <returns></returns>
-		public async Task<string?> UpdatePW(string Id,string pw)
+		public async Task<string?> UpdatePW(string Id, string pw)
 		{
 			using var transaction = _context.Database.BeginTransaction();
 			try
@@ -139,8 +170,8 @@ namespace CourseAttendance.Services
 				if (userModel == null)
 					throw new Exception("用户获取失败");
 
-				var res=await _userRepository._userManager.ChangePasswordAsync(userModel, pw, pw);
-				if(res != IdentityResult.Success)
+				var res = await _userRepository._userManager.ChangePasswordAsync(userModel, pw, pw);
+				if (res != IdentityResult.Success)
 					throw new Exception("密码修改失败");
 
 
@@ -224,6 +255,9 @@ namespace CourseAttendance.Services
 					{
 						case UserRole.Admin:
 							{
+								// 这里由于没有属性，一直都是空的，有属性了再注释
+								if (dto.CreateAdminExt == null) dto.CreateAdminExt = new();
+
 								var extModel = dto.CreateAdminExt?.ToModel();
 								if (extModel == null) throw new Exception("创建失败");
 								extModel.UserId = model.Id;
@@ -233,6 +267,9 @@ namespace CourseAttendance.Services
 							break;
 						case UserRole.Academic:
 							{
+								// 这里由于没有属性，一直都是空的，有属性了再注释
+								if (dto.CreateAcademicExt == null) dto.CreateAcademicExt = new();
+
 								var extModel = dto.CreateAcademicExt?.ToModel();
 								if (extModel == null) throw new Exception("创建失败");
 								extModel.UserId = model.Id;
@@ -242,6 +279,9 @@ namespace CourseAttendance.Services
 							break;
 						case UserRole.Teacher:
 							{
+								// 这里由于没有属性，一直都是空的，有属性了再注释
+								if (dto.CreateTeacherExt == null) dto.CreateTeacherExt = new();
+
 								var extModel = dto.CreateTeacherExt?.ToModel();
 								if (extModel == null) throw new Exception("创建失败");
 								extModel.UserId = model.Id;

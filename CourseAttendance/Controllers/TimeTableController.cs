@@ -1,4 +1,5 @@
-﻿using CourseAttendance.DtoModel.ResDtos;
+﻿using CourseAttendance.DtoModel;
+using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.mapper;
 using CourseAttendance.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -19,14 +20,25 @@ namespace CourseAttendance.Controllers
 		}
 
 		[HttpGet("{id}")]
-		[Authorize]
 		public async Task<ActionResult<ApiResponse<TimeTableResDto>>> GetById(int id)
 		{
 			var model = await _timeTableRepository.GetById(id);
 			if (model == null)
 				return Ok(new ApiResponse<TimeTableResDto> { Code = 2, Msg = "不存在", Data = null });
 
-			return Ok(new ApiResponse<TimeTableResDto> { Code = 1, Msg = "不存在", Data = model.ToDto() });
+			return Ok(new ApiResponse<TimeTableResDto> { Code = 1, Msg = "", Data = model.ToDto() });
+		}
+
+		[HttpGet]
+		public async Task<ActionResult<ApiResponse<List<TimeTableResDto>>>> GetAll()
+		{
+			var (queryRes, total) = await _timeTableRepository.GetAllAsync(new DtoModel.ReqDtos.ReqQueryDto
+			{
+				Limit = 9999,
+				Page = 0,
+				q = ""
+			});
+			return Ok(new ApiResponse<List<TimeTableResDto>> { Code = 1, Msg = "", Data = queryRes.Select(x => x.ToDto()).ToList() });
 		}
 	}
 }

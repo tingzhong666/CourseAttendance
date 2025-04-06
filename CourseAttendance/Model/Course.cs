@@ -18,6 +18,7 @@ namespace CourseAttendance.Model
 
 		[ForeignKey(nameof(Teacher))]
 		public string TeacherUserId { get; set; }
+
 		public virtual Teacher Teacher { get; set; }
 		public virtual List<CourseStudent> CourseStudents { get; set; } // 选课
 		public virtual List<Attendance> Attendances { get; set; } // 考勤

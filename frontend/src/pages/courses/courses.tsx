@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import * as api from '../../services/http/httpInstance'
-import { Button, PaginationProps, Space, Table } from 'antd';
+import { Button, PaginationProps, Popconfirm, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { CourseResponseDto, CourseTimeResDto } from '../../services/api';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import { useAuth } from '../../Contexts/auth';
-import { CreateUUID, WeekdayMap } from '../../Utils/Utils';
-import CourseAdd from '../../components/courseAdd';
+import { CreateUUID, } from '../../Utils/Utils';
+import CourseAdd, { CourseAddProps } from '../../components/courseAdd';
 
 interface CourseTimeData {
     // 周几
@@ -28,6 +28,8 @@ interface CourseData extends CourseResponseDto {
 
 export default () => {
     const auth = useAuth()
+    const [putId, setPutId] = useState(-1)
+    const [addModel, setAddModel] = useState<CourseAddProps['model']>('add')
 
     // 查询参数
     const [data, setData] = useState([] as Array<CourseData>)
@@ -104,7 +106,20 @@ export default () => {
                     <Space size="middle">
                         {auth.user?.roles.includes('Student') && !record.isSelected ? <a onClick={() => selectCourse(record.id)}>选课</a> : <></>}
                         {auth.user?.roles.includes('Student') && record.isSelected ? <a onClick={() => dropCourse(record.id)}>退课</a> : <></>}
-                        {isDel() ? <a>删除</a> : <></>}
+
+                        <a onClick={() => get(record.id || -1)}>查看</a>
+                        {isDel() && <a onClick={() => put(record.id || -1)}>修改</a>}
+                        {isDel() &&
+                            <Popconfirm
+                                title="提示"
+                                description={`确定删除课程 ${record.name} ?`}
+                                onConfirm={() => del(record)}
+                                okText="确定"
+                                cancelText="取消"
+                            >
+                                <Button danger>删除</Button>
+                            </Popconfirm>
+                        }
                     </Space>
                 )
             },
@@ -150,7 +165,7 @@ export default () => {
         const tmp = dto.map(async v => {
             const res = await api.TimeTable.apiTimeTableIdGet(v.timeTableId || -1)
             return {
-                weekday: WeekdayMap(v.weekday),
+                weekday: new Date(v.dateDay || '').getDay() + '',
                 section: res.data.data?.name
             } as CourseTimeData
         }) ?? []
@@ -175,8 +190,25 @@ export default () => {
 
         await getData(page, pageSize);
     }
-    const add = (): void => {
+
+    // 条目操作
+    const add = async () => {
+        setAddModel('add')
         setAddShow(true)
+    }
+    const del = async (v: CourseData) => {
+        await api.Course.apiCourseIdDelete(v.id || -1)
+
+    }
+    const put = async (id: number) => {
+        setAddModel('put')
+        setAddShow(true)
+        setPutId(id)
+    }
+    const get = async (id: number) => {
+        setAddModel('get')
+        setAddShow(true)
+        setPutId(id)
     }
 
     return (<Space direction='vertical' style={{ width: '100%' }}>
@@ -198,6 +230,6 @@ export default () => {
             dataSource={data}
         />
 
-        <CourseAdd show={addShow} showChange={x => setAddShow(x)} />
+        <CourseAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />
     </Space>)
 }

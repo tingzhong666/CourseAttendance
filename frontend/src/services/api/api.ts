@@ -206,37 +206,6 @@ export type AttendanceStatus = typeof AttendanceStatus[keyof typeof AttendanceSt
 /**
  * 
  * @export
- * @interface ChangePasswordReqDto
- */
-export interface ChangePasswordReqDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof ChangePasswordReqDto
-     */
-    'newPassword': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ChangePasswordReqDto
-     */
-    'confirmPassword': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ChangePasswordReqDto
-     */
-    'currentPassword': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ChangePasswordReqDto
-     */
-    'userId': string;
-}
-/**
- * 
- * @export
  * @interface ChangePasswordSelfReqDto
  */
 export interface ChangePasswordSelfReqDto {
@@ -328,18 +297,6 @@ export interface CourseResponseDto {
      * @memberof CourseResponseDto
      */
     'courseTimes'?: Array<CourseTimeResDto> | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseResponseDto
-     */
-    'startTime': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseResponseDto
-     */
-    'endTime': string;
     /**
      * 
      * @type {string}
@@ -512,25 +469,11 @@ export interface CourseTimeReqDto {
     'timeTableId'?: number;
     /**
      * 
-     * @type {Weekday}
-     * @memberof CourseTimeReqDto
-     */
-    'weekday'?: Weekday;
-    /**
-     * 
      * @type {string}
      * @memberof CourseTimeReqDto
      */
-    'startTime'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseTimeReqDto
-     */
-    'endTime'?: string;
+    'dateDay'?: string;
 }
-
-
 /**
  * 
  * @export
@@ -551,25 +494,11 @@ export interface CourseTimeResDto {
     'timeTableId'?: number;
     /**
      * 
-     * @type {Weekday}
-     * @memberof CourseTimeResDto
-     */
-    'weekday'?: Weekday;
-    /**
-     * 
      * @type {string}
      * @memberof CourseTimeResDto
      */
-    'startTime'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseTimeResDto
-     */
-    'endTime'?: string;
+    'dateDay'?: string;
 }
-
-
 /**
  * 
  * @export
@@ -602,12 +531,6 @@ export interface CreateUserReqDto {
     'userName': string;
     /**
      * 
-     * @type {string}
-     * @memberof CreateUserReqDto
-     */
-    'passWord': string;
-    /**
-     * 
      * @type {Array<UserRole>}
      * @memberof CreateUserReqDto
      */
@@ -636,6 +559,12 @@ export interface CreateUserReqDto {
      * @memberof CreateUserReqDto
      */
     'createTeacherExt'?: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserReqDto
+     */
+    'passWord': string;
 }
 /**
  * 
@@ -1320,6 +1249,31 @@ export type PerformanceLevel = typeof PerformanceLevel[keyof typeof PerformanceL
 /**
  * 
  * @export
+ * @interface ResetPasswordReqDto
+ */
+export interface ResetPasswordReqDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResetPasswordReqDto
+     */
+    'newPassword': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResetPasswordReqDto
+     */
+    'confirmPassword': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ResetPasswordReqDto
+     */
+    'userId': string;
+}
+/**
+ * 
+ * @export
  * @interface TimeSpan
  */
 export interface TimeSpan {
@@ -1473,6 +1427,31 @@ export interface TimeTableResDtoApiResponse {
 /**
  * 
  * @export
+ * @interface TimeTableResDtoListApiResponse
+ */
+export interface TimeTableResDtoListApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof TimeTableResDtoListApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TimeTableResDtoListApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {Array<TimeTableResDto>}
+     * @memberof TimeTableResDtoListApiResponse
+     */
+    'data'?: Array<TimeTableResDto> | null;
+}
+/**
+ * 
+ * @export
  * @interface UpdateProfileReqDto
  */
 export interface UpdateProfileReqDto {
@@ -1534,6 +1513,61 @@ export interface UpdateProfileReqDto {
 /**
  * 
  * @export
+ * @interface UpdateProfileSelfReqDto
+ */
+export interface UpdateProfileSelfReqDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'email'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'phone'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'userName': string;
+    /**
+     * 
+     * @type {object}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'createAcademicExt'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'createAdminExt'?: object;
+    /**
+     * 
+     * @type {CreateUserStudentReqDto}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'createStudentExt'?: CreateUserStudentReqDto;
+    /**
+     * 
+     * @type {object}
+     * @memberof UpdateProfileSelfReqDto
+     */
+    'createTeacherExt'?: object;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 
@@ -1547,25 +1581,6 @@ export const UserRole = {
 export type UserRole = typeof UserRole[keyof typeof UserRole];
 
 
-/**
- * 
- * @export
- * @enum {string}
- */
-
-export const Weekday = {
-    Monday: 'MONDAY',
-    Tuesday: 'TUESDAY',
-    Wednesday: 'WEDNESDAY',
-    Thursday: 'THURSDAY',
-    Friday: 'FRIDAY',
-    Saturday: 'SATURDAY',
-    Sunday: 'SUNDAY'
-} as const;
-
-export type Weekday = typeof Weekday[keyof typeof Weekday];
-
-
 
 /**
  * AccountApi - axios parameter creator
@@ -1575,11 +1590,11 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {ChangePasswordReqDto} [changePasswordReqDto] 
+         * @param {ResetPasswordReqDto} [resetPasswordReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountChangePasswordPut: async (changePasswordReqDto?: ChangePasswordReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiAccountChangePasswordPut: async (resetPasswordReqDto?: ResetPasswordReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/account/change-password`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1603,7 +1618,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(changePasswordReqDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(resetPasswordReqDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1682,13 +1697,14 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {Array<UserRole>} [roles] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiAccountGet: async (roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/account`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1704,6 +1720,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
             // authentication Bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (roles) {
+                localVarQueryParameter['Roles'] = roles;
+            }
 
             if (page !== undefined) {
                 localVarQueryParameter['Page'] = page;
@@ -1984,6 +2004,43 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {UpdateProfileSelfReqDto} [updateProfileSelfReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAccountUpdateUserSelfPut: async (updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/account/update-user-self`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileSelfReqDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -1996,12 +2053,12 @@ export const AccountApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {ChangePasswordReqDto} [changePasswordReqDto] 
+         * @param {ResetPasswordReqDto} [resetPasswordReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountChangePasswordPut(changePasswordReqDto?: ChangePasswordReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountChangePasswordPut(changePasswordReqDto, options);
+        async apiAccountChangePasswordPut(resetPasswordReqDto?: ResetPasswordReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountChangePasswordPut(resetPasswordReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountChangePasswordPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2031,14 +2088,15 @@ export const AccountApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {Array<UserRole>} [roles] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountGet(page, limit, q, options);
+        async apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountGet(roles, page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2126,6 +2184,18 @@ export const AccountApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountUpdateUserPut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {UpdateProfileSelfReqDto} [updateProfileSelfReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAccountUpdateUserSelfPut(updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountUpdateUserSelfPut(updateProfileSelfReqDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountUpdateUserSelfPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -2138,12 +2208,12 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {ChangePasswordReqDto} [changePasswordReqDto] 
+         * @param {ResetPasswordReqDto} [resetPasswordReqDto] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountChangePasswordPut(changePasswordReqDto?: ChangePasswordReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
-            return localVarFp.apiAccountChangePasswordPut(changePasswordReqDto, options).then((request) => request(axios, basePath));
+        apiAccountChangePasswordPut(resetPasswordReqDto?: ResetPasswordReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiAccountChangePasswordPut(resetPasswordReqDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2164,14 +2234,15 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {Array<UserRole>} [roles] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListDtoApiResponse> {
-            return localVarFp.apiAccountGet(page, limit, q, options).then((request) => request(axios, basePath));
+        apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListDtoApiResponse> {
+            return localVarFp.apiAccountGet(roles, page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2235,6 +2306,15 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
         apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.apiAccountUpdateUserPut(id, updateProfileReqDto, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {UpdateProfileSelfReqDto} [updateProfileSelfReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAccountUpdateUserSelfPut(updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.apiAccountUpdateUserSelfPut(updateProfileSelfReqDto, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -2247,13 +2327,13 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
 export class AccountApi extends BaseAPI {
     /**
      * 
-     * @param {ChangePasswordReqDto} [changePasswordReqDto] 
+     * @param {ResetPasswordReqDto} [resetPasswordReqDto] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApi
      */
-    public apiAccountChangePasswordPut(changePasswordReqDto?: ChangePasswordReqDto, options?: RawAxiosRequestConfig) {
-        return AccountApiFp(this.configuration).apiAccountChangePasswordPut(changePasswordReqDto, options).then((request) => request(this.axios, this.basePath));
+    public apiAccountChangePasswordPut(resetPasswordReqDto?: ResetPasswordReqDto, options?: RawAxiosRequestConfig) {
+        return AccountApiFp(this.configuration).apiAccountChangePasswordPut(resetPasswordReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2279,6 +2359,7 @@ export class AccountApi extends BaseAPI {
 
     /**
      * 
+     * @param {Array<UserRole>} [roles] 
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
@@ -2286,8 +2367,8 @@ export class AccountApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountApi
      */
-    public apiAccountGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return AccountApiFp(this.configuration).apiAccountGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return AccountApiFp(this.configuration).apiAccountGet(roles, page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2364,6 +2445,17 @@ export class AccountApi extends BaseAPI {
      */
     public apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig) {
         return AccountApiFp(this.configuration).apiAccountUpdateUserPut(id, updateProfileReqDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateProfileSelfReqDto} [updateProfileSelfReqDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    public apiAccountUpdateUserSelfPut(updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options?: RawAxiosRequestConfig) {
+        return AccountApiFp(this.configuration).apiAccountUpdateUserSelfPut(updateProfileSelfReqDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3423,11 +3515,11 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @param {number} [page] 
          * @param {number} [limit] 
-         * @param {string} [name] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet: async (page?: number, limit?: number, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiCourseGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/course`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3452,8 +3544,8 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['Limit'] = limit;
             }
 
-            if (name !== undefined) {
-                localVarQueryParameter['Name'] = name;
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
             }
 
 
@@ -3633,12 +3725,12 @@ export const CourseApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} [page] 
          * @param {number} [limit] 
-         * @param {string} [name] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseGet(page?: number, limit?: number, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(page, limit, name, options);
+        async apiCourseGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCourseGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3706,12 +3798,12 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
          * 
          * @param {number} [page] 
          * @param {number} [limit] 
-         * @param {string} [name] 
+         * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet(page?: number, limit?: number, name?: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseListDtoApiResponse> {
-            return localVarFp.apiCourseGet(page, limit, name, options).then((request) => request(axios, basePath));
+        apiCourseGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseListDtoApiResponse> {
+            return localVarFp.apiCourseGet(page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3764,13 +3856,13 @@ export class CourseApi extends BaseAPI {
      * 
      * @param {number} [page] 
      * @param {number} [limit] 
-     * @param {string} [name] 
+     * @param {string} [q] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseApi
      */
-    public apiCourseGet(page?: number, limit?: number, name?: string, options?: RawAxiosRequestConfig) {
-        return CourseApiFp(this.configuration).apiCourseGet(page, limit, name, options).then((request) => request(this.axios, this.basePath));
+    public apiCourseGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return CourseApiFp(this.configuration).apiCourseGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5148,6 +5240,39 @@ export const TimeTableApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTimeTableGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/time-table`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5195,6 +5320,17 @@ export const TimeTableApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiTimeTableGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TimeTableResDtoListApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiTimeTableGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TimeTableApi.apiTimeTableGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5217,6 +5353,14 @@ export const TimeTableApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiTimeTableGet(options?: RawAxiosRequestConfig): AxiosPromise<TimeTableResDtoListApiResponse> {
+            return localVarFp.apiTimeTableGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5234,6 +5378,16 @@ export const TimeTableApiFactory = function (configuration?: Configuration, base
  * @extends {BaseAPI}
  */
 export class TimeTableApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TimeTableApi
+     */
+    public apiTimeTableGet(options?: RawAxiosRequestConfig) {
+        return TimeTableApiFp(this.configuration).apiTimeTableGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} id 

@@ -1,11 +1,10 @@
-import { Form, FormListFieldData, FormListOperation, Input, Modal, Select } from 'antd'
+import { Form, FormListFieldData, FormListOperation, FormProps, Input, Modal, Select, SelectProps } from 'antd'
 import * as api from '../services/http/httpInstance'
 import { useEffect, useState } from 'react';
-import { CreateUserReqDto, CreateUserStudentReqDto, UpdateProfileReqDto, UserRole } from '../services/api';
-import { SelectProps } from 'antd/es/select';
+import { CreateUserReqDto, UpdateProfileReqDto, UserRole } from '../services/api';
 import { useAuth } from '../Contexts/auth';
-import { useMajor } from '../Contexts/major';
 import { CreateUUID } from '../Utils/Utils';
+import { useMajor } from '../Contexts/major';
 
 interface Props {
     show: boolean
@@ -23,13 +22,12 @@ export default (prop: Props) => {
     const [title, setTitle] = useState('');
 
 
-    const [role, setRole] = useState<UserRole>(UserRole.Student);
     const auth = useAuth()
 
 
     // 初始化
     const init = async () => {
-        if (prop.model == 'put') {
+        if (prop.model == 'put' || prop.model == 'get') {
             var res = await api.Account.apiAccountIdGet(prop.putId || '')
             const toReq: UpdateProfileReqDto = {
                 email: res.data.data?.email,
@@ -48,31 +46,24 @@ export default (prop: Props) => {
             }
 
             form.setFieldsValue(toReq)
-            setTitle('修改班级')
 
-            // 小专业
-            // setMajorsCategoriesSub([{
-            //     label: majorSub?.name,
-            //     value: majorSub?.id
-            // }])
-            // setMajorsCategoriesSubValue(majorSub?.id || -1)
-            // setMajorsCategoriesSubSearchValue(majorSub?.name || '')
-            // // 大专业
-            // setMajorsCategories([{
-            //     label: majorSub?.parentName,
-            //     value: majorSub?.majorsCategoriesId
-            // }])
-            // setMajorsCategoriesValue(majorSub?.majorsCategoriesId || -1)
-            // setMajorsCategoriesSearchValue(majorSub?.parentName || '')
+            onSearchClasses('')
+            setClassesValue(res.data.data?.getStudentExt?.gradeId || -1)
+            setRoles(res.data.data?.roles || [])
         }
         else if (prop.model == 'add') {
             form.resetFields()
-            setTitle('新增用户')
-            // onSearchClasses('')
+            form.setFieldValue('roles', [UserRole.Student])
+            onSearchClasses('')
         }
-        else if (prop.model == 'get') {
+
+        // 标题
+        if (prop.model == 'put')
+            setTitle('修改班级')
+        else if (prop.model == 'get')
             setTitle('用户详情')
-        }
+        else if (prop.model == 'add')
+            setTitle('新增用户')
 
     }
 
@@ -106,68 +97,38 @@ export default (prop: Props) => {
             setConfirmLoading(true)
             if (prop.model == 'add')
                 await api.Account.apiAccountPost(values)
-            else if (prop.model == 'put')
+            else if (prop.model == 'put') {
                 await api.Account.apiAccountUpdateUserPut(prop.putId, values as UpdateProfileReqDto)
+            }
 
+            prop.onFinish()
         } catch {
         }
         setConfirmLoading(false)
     }
 
 
+    // 班级选择
+    const major = useMajor()
+    const [classes, setClasses] = useState<SelectProps['options']>([])
+    const [classesValue, setClassesValue] = useState(-1)
+    const [classesSearchValue, setClassesSearchValue] = useState('')
+    const onSearchClasses = (value: string) => {
+        setClassesSearchValue(value)
+        const tmp = major.classesStr.map(x => ({ label: x.name, value: x.id }))
+        setClasses(tmp || [])
 
+    }
+    const onClassesChange: SelectProps['onChange'] = (v) => {
+        setClassesValue(v)
+        setClassesSearchValue(classes?.find(x => x.value == v)?.label + '')
 
-    // 不同身份的扩展信息
-    const [form2] = Form.useForm();
-    const ExtForm = () => {
-        // 班级选择
-        const major = useMajor()
-        const [classes, setClasses] = useState<SelectProps['options']>([])
-        const [classesValue, setClassesValue] = useState(-1)
-        const [classesSearchValue, setClassesSearchValue] = useState('')
-        const onSearchClasses = (value: string) => {
-            setClassesSearchValue(value)
-            const tmp = major.classesStr.map(x => ({ label: x.name, value: x.id }))
-            setClasses(tmp || [])
-
-        }
-        const onClassesChange: SelectProps['onChange'] = (v) => {
-            setClassesValue(v)
-            setClassesSearchValue(classes?.find(x => x.value == v)?.label + '')
-
-        }
-
-        switch (role) {
-            case UserRole.Admin:
-            case UserRole.Academic:
-            case UserRole.Teacher:
-                return <></>
-            case UserRole.Student:
-                return (
-                    <Form
-                        layout="vertical"
-                        form={form2}
-                    >
-                        <Form.Item<CreateUserStudentReqDto> name="gradId" label="班级">
-                            <Select
-                                showSearch
-                                placeholder="输入搜索班级"
-                                onSearch={onSearchClasses}
-                                options={classes}
-                                optionFilterProp="label"
-                                value={classesValue}
-                                searchValue={classesSearchValue}
-                                onChange={onClassesChange}
-                            />
-                        </Form.Item>
-                    </Form>
-                )
-            default:
-                return <></>
-
-        }
     }
 
+    const [roles, setRoles] = useState<Array<UserRole>>([])
+    const onChange: FormProps['onValuesChange'] = (cv, v) => {
+        setRoles(v.roles)
+    }
     return (
         <Modal
             title={title}
@@ -176,53 +137,74 @@ export default (prop: Props) => {
             onCancel={handleCancel}
             confirmLoading={confirmLoading}
         >
-            <Form
+            <Form<CreateUserReqDto>
                 layout="vertical"
                 form={form}
                 onFinish={onFinish}
+                onValuesChange={onChange}
             >
-                <Form.Item<CreateUserReqDto> name="name">
-                    <Input placeholder="姓名" />
+                <Form.Item<CreateUserReqDto> name="name" label="姓名"
+                    rules={[{ required: true, message: '不能为空' }]}
+                >
+                    <Input placeholder="姓名" disabled={prop.model == 'get'} />
                 </Form.Item>
-                <Form.Item<CreateUserReqDto> name="userName">
-                    <Input placeholder="工号/学号" />
+                <Form.Item<CreateUserReqDto> name="userName" label="工号/学号"
+                    rules={[{ required: true, message: '不能为空' }]}
+                >
+                    <Input placeholder="工号/学号" disabled={prop.model == 'get'} />
                 </Form.Item>
-                <Form.Item<CreateUserReqDto> name="passWord">
-                    <Input.Password placeholder="密码" />
+
+                {prop.model == 'add' &&
+                    <Form.Item<CreateUserReqDto> name="passWord" label="密码"
+                        rules={[{ required: true, message: '不能为空' }]}
+                    >
+                        <Input.Password placeholder="密码" />
+                    </Form.Item>
+                }
+
+                <Form.Item<CreateUserReqDto> name="email" label="email"
+                >
+                    <Input placeholder="email" disabled={prop.model == 'get'} />
                 </Form.Item>
-                <Form.Item<CreateUserReqDto> name="email">
-                    <Input placeholder="email" />
-                </Form.Item>
-                <Form.Item<CreateUserReqDto> name="phone">
-                    <Input placeholder="手机号" />
+                <Form.Item<CreateUserReqDto> name="phone" label="手机号"
+                >
+                    <Input placeholder="手机号" disabled={prop.model == 'get'} />
                 </Form.Item>
                 <Form.List name="roles">
                     {
-                        (fields: FormListFieldData[], operation: FormListOperation) => {
-
-                            if (fields.length != 1) operation.add()
-
-
-                            const handleChange = (value: UserRole) => {
-                                setRole(value)
-                            }
-
-                            return (
-                                <Form.Item {...fields[0]} key={CreateUUID()}>
-                                    <Select
-                                        // defaultValue={UserRole.Student}
-                                        onChange={handleChange}
-                                        options={Object.entries(UserRole).map(([, value]) => {
-                                            return { label: auth.roleMap(value), value: value }
-                                        })}
-                                    />
-                                </Form.Item>
-                            )
-                        }
+                        (fields: FormListFieldData[], operation: FormListOperation) => (
+                            <Form.Item {...fields[0]} key={CreateUUID()} label="身份"
+                                rules={[{ required: true, message: '不能为空' }]}
+                            >
+                                <Select
+                                    options={Object.entries(UserRole).map(([, value]) => {
+                                        return { label: auth.roleMap(value), value: value }
+                                    })}
+                                    disabled={prop.model == 'get'}
+                                />
+                            </Form.Item>
+                        )
                     }
                 </Form.List>
+
+                {roles.includes(UserRole.Student) &&
+                    <Form.Item<CreateUserReqDto> name={['createStudentExt', 'gradId']} label="班级"
+                        rules={[{ required: true, message: '不能为空' }]}
+                    >
+                        <Select
+                            showSearch
+                            placeholder="输入搜索班级"
+                            onSearch={onSearchClasses}
+                            options={classes}
+                            optionFilterProp="label"
+                            value={classesValue}
+                            searchValue={classesSearchValue}
+                            onChange={onClassesChange}
+                            disabled={prop.model == 'get'}
+                        />
+                    </Form.Item>
+                }
             </Form>
-            <ExtForm />
         </Modal>
     )
 }

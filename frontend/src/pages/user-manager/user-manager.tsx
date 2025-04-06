@@ -1,4 +1,4 @@
-import { Button, message, PaginationProps, Popconfirm, PopconfirmProps, Space, Table } from "antd"
+import { Button, message, Modal, PaginationProps, Popconfirm, PopconfirmProps, Space, Table } from "antd"
 import * as api from '../../services/http/httpInstance'
 import { GetUserResDto } from "../../services/api"
 import { ColumnsType } from "antd/es/table"
@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { useAuth } from "../../Contexts/auth"
 import Search, { SearchProps } from "antd/es/input/Search"
 import UserAdd, { UserAddProps } from "../../components/userAdd"
+import PWUpdate from "../../components/PWUpdate"
 export default () => {
     // 查询参数
     const [data, setData] = useState([] as Array<GetUserResDto>)
@@ -14,10 +15,15 @@ export default () => {
     const [limit, setLimit] = useState(20)
     const [queryStr, setQueryStr] = useState('')
 
+    // 新增修改查看弹框的参数
     const auth = useAuth()
     const [addShow, setAddShow] = useState(false)
     const [putId, setPutId] = useState('')
     const [addModel, setAddModel] = useState<UserAddProps['model']>('add')
+
+    // 修改密码弹框的参数
+    const [pwUpdateShow, setPWUpdateShow] = useState(false)
+
 
     useEffect(() => {
         init()
@@ -28,7 +34,7 @@ export default () => {
     }
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
 
-        var res = await api.Account.apiAccountGet(current_, limit_, queryStr_)
+        var res = await api.Account.apiAccountGet([],current_, limit_, queryStr_)
 
         //res.data.data?.dataList
         setData(res.data.data?.dataList || [])
@@ -70,7 +76,9 @@ export default () => {
 
                 return (
                     <Space size="middle">
+                        <a onClick={() => get(record.id)}>查看</a>
                         <a onClick={() => put(record.id)}>修改</a>
+                        <Button onClick={() => pwUpdateOpen(record.id)} danger>重置密码</Button>
                         <Popconfirm
                             title="提示"
                             description={`确定删除用户 ${record.name} ?`}
@@ -95,18 +103,27 @@ export default () => {
         await getData(page, pageSize);
     }
 
-    const add = (): void => {
+    // 条目操作
+    const add = async () => {
         setAddModel('add')
         setAddShow(true)
     }
     const del = async (v: GetUserResDto) => {
         await api.Account.apiAccountIdDelete(v.id)
 
-        await getData()
     }
-    const put = (id: string) => {
+    const put = async (id: string) => {
         setAddModel('put')
         setAddShow(true)
+        setPutId(id)
+    }
+    const get = async (id: string) => {
+        setAddModel('get')
+        setAddShow(true)
+        setPutId(id)
+    }
+    const pwUpdateOpen = async (id: string) => {
+        setPWUpdateShow(true)
         setPutId(id)
     }
     // 查询
@@ -135,6 +152,17 @@ export default () => {
             rowKey="id"
         />
 
-        <UserAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />
+        <UserAdd
+            show={addShow}
+            showChange={x => setAddShow(x)}
+            onFinish={getData}
+            model={addModel}
+            putId={putId} />
+
+        <PWUpdate 
+        show={pwUpdateShow} 
+        showChange={x => setPWUpdateShow(x)}
+        putId={putId}
+        />
     </Space>)
 }

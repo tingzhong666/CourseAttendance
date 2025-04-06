@@ -11,9 +11,10 @@ namespace CourseAttendance.mapper
 			{
 				CourseId = dto.CourseId,
 				TimeTableId = dto.TimeTableId,
-				EndTime = dto.EndTime,
-				StartTime = dto.StartTime,
-				Weekday = dto.Weekday,
+				//EndTime = dto.EndTime,
+				//StartTime = dto.StartTime,
+				//Weekday = dto.Weekday,
+				DateDay = dto.DateDay,
 			};
 		}
 	}

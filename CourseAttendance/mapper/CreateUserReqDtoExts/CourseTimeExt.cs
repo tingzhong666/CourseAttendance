@@ -10,10 +10,11 @@ namespace CourseAttendance.mapper.CreateUserReqDtoExts
 			return new CourseTimeResDto
 			{
 				CourseId = model.CourseId,
-				EndTime = model.EndTime,
-				StartTime = model.StartTime,
+				//EndTime = model.EndTime,
+				//StartTime = model.StartTime,
 				TimeTableId = model.TimeTableId,
-				Weekday = model.Weekday,
+				//Weekday = model.Weekday,
+				 DateDay = model.DateDay,
 			};
 		}
 	}

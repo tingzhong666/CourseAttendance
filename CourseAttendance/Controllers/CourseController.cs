@@ -1,4 +1,5 @@
-﻿using CourseAttendance.DtoModel.ReqDtos;
+﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.mapper;
 using CourseAttendance.Model;
@@ -15,11 +16,13 @@ namespace CourseAttendance.Controllers
 
 		private readonly CourseRepository _courseRepository;
 		private readonly CourseTimeRepository _courseTimeRepository;
+		private readonly AppDBContext _context;
 
-		public CourseController(CourseRepository courseRepository, CourseTimeRepository courseTimeRepository)
+		public CourseController(CourseRepository courseRepository, CourseTimeRepository courseTimeRepository, AppDBContext context)
 		{
 			_courseRepository = courseRepository;
 			_courseTimeRepository = courseTimeRepository;
+			_context = context;
 		}
 
 		// 获取所有
@@ -28,9 +31,9 @@ namespace CourseAttendance.Controllers
 		public async Task<ActionResult<ApiResponse<CourseResponseListDto>>> GetCourses([FromQuery] CourseReqQueryDto query)
 		{
 			var courses = await _courseRepository.GetAllAsync();
-			if (query.Name != null && query.Name != "")
+			if (query.q != null && query.q != "")
 			{
-				courses = courses.Where(x => x.Name.Contains(query.Name)).ToList();
+				courses = courses.Where(x => x.Name.Contains(query.q)).ToList();
 			}
 
 			var total = courses.Count();
@@ -69,27 +72,35 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<CourseResponseDto?>>> CreateCourse([FromBody] CourseRequestDto course)
 		{
-			// 课程创建
-			var model = course.ToModel();
-			if (model == null)
-				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "创建失败", Data = null });
-			var res = await _courseRepository.AddAsync(model);
-			if (res == 0)
-				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "创建失败", Data = null });
-
-			// 上课时间创建
-			var courseTimeModels = course.CourseTimes.Select(x => x.ToModel()).ToList();
-			foreach (var courseTimeModel in courseTimeModels)
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
 			{
-				res = await _courseTimeRepository.AddAsync(courseTimeModel);
+				// 课程创建
+				var model = course.ToModel();
+				if (model == null)
+						throw new Exception("创建失败");
+				var res = await _courseRepository.AddAsync(model);
 				if (res == 0)
-					return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间创建失败", Data = null });
+						throw new Exception("创建失败");
+
+				// 上课时间创建
+				var courseTimeModels = course.CourseTimes.Select(x => x.ToModel()).ToList();
+				foreach (var courseTimeModel in courseTimeModels)
+				{
+					res = await _courseTimeRepository.AddAsync(courseTimeModel);
+					if (res == 0)
+						throw new Exception("上课时间创建失败");
+				}
+
+				model = await _courseRepository.GetByIdAsync(model.Id);
+
+
+				return Ok(new ApiResponse<CourseResponseDto?> { Code = 1, Msg = "", Data = model.ToResponseDto() });
 			}
-
-			model = await _courseRepository.GetByIdAsync(model.Id);
-
-
-			return Ok(new ApiResponse<CourseResponseDto?> { Code = 1, Msg = "", Data = model.ToResponseDto() });
+			catch (Exception err)
+			{
+				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 		// 更新

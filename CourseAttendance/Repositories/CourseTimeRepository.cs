@@ -52,11 +52,12 @@ namespace CourseAttendance.Repositories
 		{
 			var model = await _context.CourseTimes.FirstOrDefaultAsync(x => x.CourseId == modelParam.CourseId && x.TimeTableId == modelParam.TimeTableId);
 			if (model == null) return 0;
-			model.StartTime = modelParam.StartTime;
-			model.EndTime = modelParam.EndTime;
-			model.Weekday = modelParam.Weekday;
+			//model.StartTime = modelParam.StartTime;
+			//model.EndTime = modelParam.EndTime;
+			//model.Weekday = modelParam.Weekday;
 			model.CourseId = modelParam.CourseId;
 			model.TimeTableId = modelParam.TimeTableId;
+			model.DateDay = modelParam.DateDay;
 			return await _context.SaveChangesAsync();
 		}
 	}

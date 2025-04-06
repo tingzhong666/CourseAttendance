@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CourseAttendance.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace CourseAttendance.DtoModel.ResDtos
 {
@@ -11,5 +12,10 @@ namespace CourseAttendance.DtoModel.ResDtos
 		public string Name { get; set; }
 		public TimeSpan Start { get; set; }
 		public TimeSpan End { get; set; }
+
+		public static implicit operator TimeTableResDto(List<TimeTable> v)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

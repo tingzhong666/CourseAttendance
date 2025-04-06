@@ -34,7 +34,7 @@ export default () => {
             label: '设置',
             children: [
                 { key: '/user-manager', label: '用户管理' },
-                { key: '/student-manager', label: '学生管理' },
+                // { key: '/student-manager', label: '学生管理' },
                 { key: '/modify-pw', label: '修改密码' },
                 { key: '/modify-userinfo', label: '个人信息修改' },
             ],

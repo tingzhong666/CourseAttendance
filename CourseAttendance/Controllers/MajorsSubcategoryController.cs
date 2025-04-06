@@ -33,6 +33,7 @@ namespace CourseAttendance.Controllers
 		}
 
 		[HttpGet]
+		[Authorize]
 		public async Task<ActionResult<ApiResponse<ListDto<MajorsSubcategoryResDto>>>> GetAll([FromQuery] MajorsSubReqQueryDto query)
 		{
 			try
@@ -57,6 +58,7 @@ namespace CourseAttendance.Controllers
 
 
 		[HttpDelete]
+		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> Del([FromQuery] int id)
 		{
 			try
@@ -72,6 +74,7 @@ namespace CourseAttendance.Controllers
 		}
 
 		[HttpPut]
+		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> Update([FromBody] MajorsSubcategoryReqDto dto, [FromQuery] int id)
 		{
 			try
@@ -90,6 +93,7 @@ namespace CourseAttendance.Controllers
 
 
 		[HttpPost]
+		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> Create([FromBody] MajorsSubcategoryReqDto dto)
 		{
 			try

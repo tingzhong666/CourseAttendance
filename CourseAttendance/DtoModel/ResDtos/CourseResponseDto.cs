@@ -14,12 +14,9 @@ namespace CourseAttendance.DtoModel.ResDtos
 		public List<CourseTimeResDto> CourseTimes { get; set; }
 
 		[Required]
-		public DateTime StartTime { get; set; }
-		[Required]
-		public DateTime EndTime { get; set; }
-
-		[Required]
 		public string Location { get; set; }
+
+
 		public DateTime CreatedAt { get; set; }
 		public DateTime UpdatedAt { get; set; }
 		[Required]

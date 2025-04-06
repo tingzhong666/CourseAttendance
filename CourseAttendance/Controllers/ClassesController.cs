@@ -35,7 +35,7 @@ namespace CourseAttendance.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		[Authorize(Roles = "Admin, Academic, Teacher")]
+		[Authorize]
 		public async Task<ActionResult<ApiResponse<ListDto<GradeResponseDto>>>> GetClasses([FromQuery] ReqQueryDto query)
 		{
 			try
@@ -64,7 +64,7 @@ namespace CourseAttendance.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		[Authorize(Roles = "Admin, Academic, Teacher")]
+		[Authorize]
 		public async Task<ActionResult<ApiResponse<GradeResponseDto>>> GetClass(int id)
 		{
 			var grade = await _gradeRepository.GetByIdAsync(id);
@@ -132,7 +132,7 @@ namespace CourseAttendance.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}/students")]
-		[Authorize(Roles = "Admin, Academic, Teacher")]
+		[Authorize]
 		public async Task<ActionResult<ApiResponse<List<GetUserResDto>>>> GetStudents(int id)
 		{
 			var grade = await _gradeRepository.GetByIdAsync(id);

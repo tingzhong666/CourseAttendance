@@ -12,6 +12,7 @@ namespace CourseAttendance.mapper.UpdateProfileReqDtoExtends
 				Email = user.Email,
 				PhoneNumber = user.Phone,
 				Name = user.Name,
+				UserName = user.UserName,
 			};
 		}
 	}

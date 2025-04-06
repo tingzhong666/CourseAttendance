@@ -25,7 +25,7 @@ axios.interceptors.response.use(function (response) {
         let msg = ''
         switch (response.data.code) {
             case 2:
-                msg = '操作失败，未知错误'
+                msg = '操作失败，未知错误 ' + response.data.msg
                 break
             default:
         }
@@ -55,7 +55,7 @@ axios.interceptors.response.use(function (response) {
 
 
 
-import { AccountApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, TimeTableApi,MajorsCategoryApi,MajorsSubcategoryApi } from "../api"
+import { AccountApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, TimeTableApi, MajorsCategoryApi, MajorsSubcategoryApi } from "../api"
 export const Account = new AccountApi(undefined, baseURL, axios)
 export const Attendance = new AttendanceApi(undefined, baseURL, axios)
 export const Classes = new ClassesApi(undefined, baseURL, axios)

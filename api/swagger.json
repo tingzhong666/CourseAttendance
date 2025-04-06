@@ -123,6 +123,16 @@
         ],
         "parameters": [
           {
+            "name": "Roles",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/UserRole"
+              }
+            }
+          },
+          {
             "name": "Page",
             "in": "query",
             "schema": {
@@ -379,6 +389,42 @@
         }
       }
     },
+    "/api/account/update-user-self": {
+      "put": {
+        "tags": [
+          "Account"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileSelfReqDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileSelfReqDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileSelfReqDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileSelfReqDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/account/change-password": {
       "put": {
         "tags": [
@@ -388,22 +434,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/ChangePasswordReqDto"
+                "$ref": "#/components/schemas/ResetPasswordReqDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ChangePasswordReqDto"
+                "$ref": "#/components/schemas/ResetPasswordReqDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ChangePasswordReqDto"
+                "$ref": "#/components/schemas/ResetPasswordReqDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ChangePasswordReqDto"
+                "$ref": "#/components/schemas/ResetPasswordReqDto"
               }
             }
           }
@@ -1121,7 +1167,7 @@
             }
           },
           {
-            "name": "Name",
+            "name": "q",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2138,6 +2184,35 @@
           }
         }
       }
+    },
+    "/api/time-table": {
+      "get": {
+        "tags": [
+          "TimeTable"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeTableResDtoListApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeTableResDtoListApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeTableResDtoListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2272,34 +2347,6 @@
         ],
         "type": "string"
       },
-      "ChangePasswordReqDto": {
-        "required": [
-          "confirmPassword",
-          "currentPassword",
-          "newPassword",
-          "userId"
-        ],
-        "type": "object",
-        "properties": {
-          "newPassword": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "confirmPassword": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "currentPassword": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "userId": {
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
       "ChangePasswordSelfReqDto": {
         "required": [
           "confirmPassword",
@@ -2362,10 +2409,8 @@
       },
       "CourseResponseDto": {
         "required": [
-          "endTime",
           "location",
           "name",
-          "startTime",
           "studentIds",
           "teacherId"
         ],
@@ -2385,14 +2430,6 @@
               "$ref": "#/components/schemas/CourseTimeResDto"
             },
             "nullable": true
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
-            "type": "string",
-            "format": "date-time"
           },
           "location": {
             "minLength": 1,
@@ -2519,14 +2556,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "weekday": {
-            "$ref": "#/components/schemas/Weekday"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
+          "dateDay": {
             "type": "string",
             "format": "date-time"
           }
@@ -2544,14 +2574,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "weekday": {
-            "$ref": "#/components/schemas/Weekday"
-          },
-          "startTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endTime": {
+          "dateDay": {
             "type": "string",
             "format": "date-time"
           }
@@ -2591,10 +2614,6 @@
             "minLength": 1,
             "type": "string"
           },
-          "passWord": {
-            "minLength": 1,
-            "type": "string"
-          },
           "roles": {
             "type": "array",
             "items": {
@@ -2612,6 +2631,10 @@
           },
           "createTeacherExt": {
             "$ref": "#/components/schemas/CreateUserTeacherReqDto"
+          },
+          "passWord": {
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3147,6 +3170,29 @@
         ],
         "type": "string"
       },
+      "ResetPasswordReqDto": {
+        "required": [
+          "confirmPassword",
+          "newPassword",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "newPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "confirmPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "userId": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "TimeSpan": {
         "type": "object",
         "properties": {
@@ -3264,6 +3310,27 @@
         },
         "additionalProperties": false
       },
+      "TimeTableResDtoListApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "msg": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeTableResDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateProfileReqDto": {
         "required": [
           "name",
@@ -3309,24 +3376,50 @@
         },
         "additionalProperties": false
       },
+      "UpdateProfileSelfReqDto": {
+        "required": [
+          "name",
+          "userName"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "userName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "createAcademicExt": {
+            "$ref": "#/components/schemas/CreateUserAcademicReqDto"
+          },
+          "createAdminExt": {
+            "$ref": "#/components/schemas/CreateUserAdminReqDto"
+          },
+          "createStudentExt": {
+            "$ref": "#/components/schemas/CreateUserStudentReqDto"
+          },
+          "createTeacherExt": {
+            "$ref": "#/components/schemas/CreateUserTeacherReqDto"
+          }
+        },
+        "additionalProperties": false
+      },
       "UserRole": {
         "enum": [
           "Admin",
           "Academic",
           "Teacher",
           "Student"
-        ],
-        "type": "string"
-      },
-      "Weekday": {
-        "enum": [
-          "MONDAY",
-          "TUESDAY",
-          "WEDNESDAY",
-          "THURSDAY",
-          "FRIDAY",
-          "SATURDAY",
-          "SUNDAY"
         ],
         "type": "string"
       }
