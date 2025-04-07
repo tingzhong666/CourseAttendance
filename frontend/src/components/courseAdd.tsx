@@ -1,7 +1,7 @@
 import { Modal, Form, Input, Button, Select, SelectProps } from 'antd'
 import { useEffect, useState } from 'react'
 import * as api from '../services/http/httpInstance'
-import { CourseRequestDto, UserRole } from '../services/api'
+import { CourseRequestDto, CourseTimeReqDto, TimeTableResDto, UserRole } from '../services/api'
 import dayjs from 'dayjs'
 import TimeQuantumForm, { TimeQuantum } from './TimeQuantumForm'
 
@@ -42,6 +42,9 @@ export default (prop: Props) => {
             setTitle('新增课程')
         else if (prop.model == 'get')
             setTitle('课程详情')
+
+        const res = await api.TimeTable.apiTimeTableGet()
+        setTimeTables(res.data.data || [])
     }
 
     useEffect(() => {
@@ -60,30 +63,70 @@ export default (prop: Props) => {
     };
 
     const handleOk = () => {
-        setIsModalOpen(false);
 
         form.submit()
     };
 
+    // 课时
+    const [timeTables, setTimeTables] = useState<Array<TimeTableResDto>>([])
+
+
     const onFinish = async (values: CourseReqData) => {
-        setConfirmLoading(true)
+        try {
+            setConfirmLoading(true)
+            values.courseTimes = values.timeQuantum.flatMap(x => {
+                // 获得时间段内的所有周几
+                let current = x.start.startOf('week').add(0, 'day');
+                switch (x.day) {
+                    case '周一':
+                        current = current.add(0, 'day');
+                        break;
+                    case '周二':
+                        current = current.add(1, 'day');
+                        break;
+                    case '周三':
+                        current = current.add(2, 'day');
+                        break;
+                    case '周四':
+                        current = current.add(3, 'day');
+                        break;
+                    case '周五':
+                        current = current.add(4, 'day');
+                        break;
+                    case '周六':
+                        current = current.add(5, 'day');
+                        break;
+                    case '周日':
+                        current = current.add(6, 'day');
+                        break;
+                }
 
-        console.log(values)
-        // var res = await api.Course.apiCoursePost(values)
+                const allDays: dayjs.Dayjs[] = []
+                while (current.isBefore(x.end.startOf('week').add(6, 'day')) || current.isSame(x.end.startOf('week').add(6, 'day'))) {
+                    allDays.push(current);
+                    current = current.add(1, 'week') // 每次加一周
+                }
 
-        // if (res.data.code != 1) {
-        //     switch (res.data.code) {
-        //         case 3:
-        //             notification.info({
-        //                 message: `请求失败，无效的工号或密码`,
-        //                 placement: "topRight",
-        //             })
-        //             break
-        //     }
-        //     return;
-        // }
+                // 拼接当天课时
+                let allDays2: CourseTimeReqDto[] = allDays.map(v => {
+                    return {
+                        dateDay: v.toString(),
+                        timeTableId: x.timeTable,
+                        // courseId 要课程创建后才有，交给服务端
+                        //courseId: -1
+                    }
+                })
+                return allDays2
+            })
+            //console.log(values)
+            var res = await api.Course.apiCoursePost(values)
 
+            prop.onFinish()
+            setIsModalOpen(false);
+        } catch (e) {
+        }
         setConfirmLoading(false)
+
     }
 
 
@@ -133,6 +176,11 @@ export default (prop: Props) => {
 
                 <Form.Item<CourseReqData> name='timeQuantum' label='课时'>
                     <TimeQuantumForm />
+                </Form.Item>
+
+
+                <Form.Item<CourseReqData> name="location" label='位置地点'>
+                    <Input placeholder="位置地点" />
                 </Form.Item>
             </Form>
         </Modal>

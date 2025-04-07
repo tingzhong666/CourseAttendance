@@ -78,13 +78,18 @@ namespace CourseAttendance.Controllers
 				// 课程创建
 				var model = course.ToModel();
 				if (model == null)
-						throw new Exception("创建失败");
+					throw new Exception("创建失败");
 				var res = await _courseRepository.AddAsync(model);
 				if (res == 0)
-						throw new Exception("创建失败");
+					throw new Exception("创建失败");
 
 				// 上课时间创建
-				var courseTimeModels = course.CourseTimes.Select(x => x.ToModel()).ToList();
+				var courseTimeModels = course.CourseTimes.Select(x =>
+				{
+					var modelCT = x.ToModel();
+					modelCT.CourseId = model.Id;
+					return modelCT;
+				}).ToList();
 				foreach (var courseTimeModel in courseTimeModels)
 				{
 					res = await _courseTimeRepository.AddAsync(courseTimeModel);
