@@ -9,6 +9,9 @@ namespace CourseAttendance.Model
 	/// </summary>
 	public class CourseTime
 	{
+		[Key]
+		public int Id { get; set; }
+
 		/// <summary>
 		/// 课程ID
 		/// </summary>

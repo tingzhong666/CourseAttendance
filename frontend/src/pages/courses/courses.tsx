@@ -5,14 +5,18 @@ import { ColumnsType } from 'antd/es/table';
 import { CourseResponseDto, CourseTimeResDto } from '../../services/api';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import { useAuth } from '../../Contexts/auth';
-import { CreateUUID, } from '../../Utils/Utils';
+import { CreateUUID, WeekdayToString, } from '../../Utils/Utils';
 import CourseAdd, { CourseAddProps } from '../../components/courseAdd';
+import { WeekDay } from '../../Models/WeekDay';
+import lodash from 'lodash'
+import dayjs from 'dayjs';
 
 interface CourseTimeData {
     // 周几
-    weekday: string,
+    weekday: WeekDay,
     // 第几节
     section: string,
+    key: string
 }
 
 interface CourseData extends CourseResponseDto {
@@ -71,15 +75,23 @@ export default () => {
             //dataIndex: 'tags',
             render: (_, record) => {
 
-                var renders = record.timeDatas?.map(x => {
+                //var renders = record.timeDatas?.map(x => {
 
+                //    return (
+                //        <div key={x.key}>
+                //            {x.weekday}- {x.section}
+                //        </div>
+                //    )
+                //})
+
+                const asd=lodash.groupBy(record.courseTimes, x => dayjs(x.dateDay).day())
+                var renders =lodash.map(asd, (value, key) => {
+                    const res = await api.TimeTable.apiTimeTableIdGet(value.at(0)?.timeTableId || -1)
                     return (
                         <div key={CreateUUID()}>
-                            {x.weekday}- {x.section}
-                        </div>
-                    )
+                            {key}- {res.data?.data?.name}
+                        </div>)
                 })
-
                 return (<>
                     {renders}
                 </>)
@@ -152,6 +164,10 @@ export default () => {
             cd.isTeach = cd.teacherId == auth.user?.id
             // 课程时间
             cd.timeDatas = await timeDataConvert(cd.courseTimes || [])
+
+            const asd = lodash.groupBy(cd.courseTimes, x => dayjs(x.dateDay).day())
+            console.log(asd)
+
             return cd
         }) ?? []
 
@@ -165,8 +181,9 @@ export default () => {
         const tmp = dto.map(async v => {
             const res = await api.TimeTable.apiTimeTableIdGet(v.timeTableId || -1)
             return {
-                weekday: new Date(v.dateDay || '').getDay() + '',
-                section: res.data.data?.name
+                weekday: WeekdayToString(new Date(v.dateDay || '').getDay()),
+                section: res.data.data?.name,
+                key: CreateUUID()
             } as CourseTimeData
         }) ?? []
 

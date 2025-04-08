@@ -71,20 +71,20 @@ namespace CourseAttendance.AppDataContext
 
 			// 多对多 上课的时间 课程与作息表
 			{
-				modelBuilder.Entity<CourseTime>()
-					.HasKey(ct => new { ct.CourseId, ct.TimeTableId });
+				//modelBuilder.Entity<CourseTime>()
+				//	.HasKey(ct => new { ct.CourseId, ct.TimeTableId });
 
-				modelBuilder.Entity<CourseTime>()
-					.HasOne(u => u.Course)
-					.WithMany(u => u.CourseTimes)
-					.HasForeignKey(p => p.CourseId)
-					.OnDelete(DeleteBehavior.Restrict);
+				//modelBuilder.Entity<CourseTime>()
+				//	.HasOne(u => u.Course)
+				//	.WithMany(u => u.CourseTimes)
+				//	.HasForeignKey(p => p.CourseId)
+				//	.OnDelete(DeleteBehavior.Restrict);
 
-				modelBuilder.Entity<CourseTime>()
-					.HasOne(u => u.TimeTable)
-					.WithMany(u => u.CourseTimes)
-					.HasForeignKey(p => p.TimeTableId)
-					.OnDelete(DeleteBehavior.Restrict);
+				//modelBuilder.Entity<CourseTime>()
+				//	.HasOne(u => u.TimeTable)
+				//	.WithMany(u => u.CourseTimes)
+				//	.HasForeignKey(p => p.TimeTableId)
+				//	.OnDelete(DeleteBehavior.Restrict);
 			}
 			// 身份权限
 			var roles = new List<IdentityRole>()

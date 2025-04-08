@@ -99,7 +99,7 @@ namespace CourseAttendance.Controllers
 
 				model = await _courseRepository.GetByIdAsync(model.Id);
 
-
+				await transaction.CommitAsync();
 				return Ok(new ApiResponse<CourseResponseDto?> { Code = 1, Msg = "", Data = model.ToResponseDto() });
 			}
 			catch (Exception err)
