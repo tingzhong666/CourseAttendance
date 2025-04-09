@@ -16,6 +16,10 @@ interface CourseTimeData {
     weekday: WeekDay,
     // 第几节
     section: string,
+    // 开始周
+    startWeek: dayjs.Dayjs,
+    // 结束周
+    endWeek: dayjs.Dayjs,
     key: string
 }
 
@@ -74,22 +78,12 @@ export default () => {
             key: 'time',
             //dataIndex: 'tags',
             render: (_, record) => {
-
-                //var renders = record.timeDatas?.map(x => {
-
-                //    return (
-                //        <div key={x.key}>
-                //            {x.weekday}- {x.section}
-                //        </div>
-                //    )
-                //})
-
-                const asd=lodash.groupBy(record.courseTimes, x => dayjs(x.dateDay).day())
-                var renders =lodash.map(asd, (value, key) => {
-                    const res = await api.TimeTable.apiTimeTableIdGet(value.at(0)?.timeTableId || -1)
+                const asd = lodash.groupBy(record.timeDatas, x => dayjs(x.weekday).day())
+                const renders = lodash.map(asd, (value, key) => {
+                    const v2 = value.sort((a, b) => a.startWeek < b.startWeek ? -1 : 1)
                     return (
                         <div key={CreateUUID()}>
-                            {key}- {res.data?.data?.name}
+                            {lodash.first(v2)?.weekday}({lodash.first(v2)?.startWeek.year()}年{lodash.first(v2)?.startWeek.week()}-{lodash.last(v2)?.endWeek.year()}年{lodash.last(v2)?.endWeek.week()}周)-{lodash.first(v2)?.section}
                         </div>)
                 })
                 return (<>
@@ -181,9 +175,11 @@ export default () => {
         const tmp = dto.map(async v => {
             const res = await api.TimeTable.apiTimeTableIdGet(v.timeTableId || -1)
             return {
-                weekday: WeekdayToString(new Date(v.dateDay || '').getDay()),
+                weekday: WeekdayToString(dayjs(v.dateDay || '').day()),
                 section: res.data.data?.name,
-                key: CreateUUID()
+                key: CreateUUID(),
+                startWeek: dayjs(v.dateDay || ''),
+                endWeek: dayjs(v.dateDay || ''),
             } as CourseTimeData
         }) ?? []
 

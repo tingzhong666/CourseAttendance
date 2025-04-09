@@ -42,7 +42,6 @@ export default (prop: Props) => {
                     gradId: res.data.data?.getStudentExt?.gradeId || -1
                 },
                 createTeacherExt: {},
-
             }
 
             form.setFieldsValue(toReq)

@@ -1,9 +1,11 @@
-import { Modal, Form, Input, Button, Select, SelectProps } from 'antd'
+import { Modal, Form, Input, Select, SelectProps } from 'antd'
 import { useEffect, useState } from 'react'
 import * as api from '../services/http/httpInstance'
-import { CourseRequestDto, CourseTimeReqDto, TimeTableResDto, UserRole } from '../services/api'
+import { CourseRequestDto, CourseTimeReqDto, UserRole } from '../services/api'
 import dayjs from 'dayjs'
 import TimeQuantumForm, { TimeQuantum } from './TimeQuantumForm'
+import lodash from 'lodash'
+import { CreateUUID } from '../Utils/Utils'
 
 interface Props {
     show: boolean,
@@ -29,6 +31,29 @@ export default (prop: Props) => {
     const init = async () => {
         if (prop.model == 'put' || prop.model == 'get') {
             onSearchTeacher('')
+
+            var res = await api.Course.apiCourseIdGet(prop.putId || -1)
+            const group = lodash.groupBy(res.data.data?.courseTimes, x => dayjs(x.dateDay).day())
+            const timeQuantum = lodash.map(group, x => {
+                const sort = x.sort(v => dayjs(v.dateDay).week())
+                const res2: TimeQuantum = {
+                    day: dayjs(lodash.first(sort)?.dateDay).day(),
+                    timeTable: lodash.first(sort)?.timeTableId || -1,
+                    start: dayjs(lodash.first(sort)?.dateDay),
+                    end: dayjs(lodash.last(sort)?.dateDay),
+                    id: CreateUUID()
+                }
+                return res2
+            })
+            const toReq: CourseReqData = {
+                name: res.data.data?.name || '',
+                courseTimes: res.data.data?.courseTimes || [],
+                location: res.data.data?.location || '',
+                teacherId: res.data.data?.teacherId || '',
+                timeQuantum
+            }
+
+            form.setFieldsValue(toReq)
         }
         else if (prop.model == 'add') {
             form.resetFields()
@@ -43,8 +68,8 @@ export default (prop: Props) => {
         else if (prop.model == 'get')
             setTitle('课程详情')
 
-        const res = await api.TimeTable.apiTimeTableGet()
-        setTimeTables(res.data.data || [])
+        //const res = await api.TimeTable.apiTimeTableGet()
+        //setTimeTables(res.data.data || [])
     }
 
     useEffect(() => {
@@ -68,7 +93,7 @@ export default (prop: Props) => {
     };
 
     // 课时
-    const [timeTables, setTimeTables] = useState<Array<TimeTableResDto>>([])
+    //const [timeTables, setTimeTables] = useState<Array<TimeTableResDto>>([])
 
 
     const onFinish = async (values: CourseReqData) => {
