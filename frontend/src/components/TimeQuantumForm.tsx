@@ -24,6 +24,7 @@ export interface TimeQuantum {
 interface Props {
     value?: Array<TimeQuantum>
     onChange?: (value: Array<TimeQuantum>) => void
+    disabled?: boolean
 }
 
 export default (props: Props) => {
@@ -96,31 +97,52 @@ export default (props: Props) => {
         <Space direction='vertical' style={{ width: '100%' }}>
             {
                 datas.map(x => (<Flex key={x.id} gap='small'>
-                    <DatePicker.RangePicker onChange={date => onChangeRangePicker(date, x)} picker="week" style={{ flex: 1 }} />
+                    <DatePicker.RangePicker
+                        onChange={date => onChangeRangePicker(date, x)}
+                        value={[x.start,x.end]}
+                        picker="week" style={{ flex: 1 }}
+                        disabled={props.disabled} 
+                    />
 
                     <Select
                         placeholder="周几"
                         options={weekDay}
                         onChange={v => onChangeWeekDay(v, x)}
+                        value={x.day}
                         showSearch
                         optionFilterProp="label"
                         style={{ width: 100 }}
+                        disabled={props.disabled} 
                     />
 
                     <Select
                         placeholder="第几节"
                         options={timeTables}
                         onChange={v => onChangeTimeTable(v, x)}
+                        value={x.timeTable}
                         showSearch
                         optionFilterProp="label"
                         style={{ width: 100 }}
+                        disabled={props.disabled} 
                     />
 
-                    <Button variant="outlined" color="cyan" block icon={<CloseOutlined />} onClick={() => onDel(x)} style={{ width: 50 }} />
+                    <Button
+                        variant="outlined"
+                        color="cyan"
+                        block icon={<CloseOutlined />}
+                        onClick={() => onDel(x)}
+                        style={{ width: 50 }}
+                        disabled={props.disabled} 
+                    />
 
                 </Flex>))
             }
-            <Button type="default" block icon={<PlusOutlined />} onClick={onAdd} />
+            <Button
+                type="default"
+                block
+                icon={<PlusOutlined />}
+                onClick={onAdd}
+                disabled={props.disabled} />
         </Space>
     </>)
 }

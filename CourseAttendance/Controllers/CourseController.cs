@@ -122,13 +122,13 @@ namespace CourseAttendance.Controllers
 
 
 			// 上课时间更新
-			var courseTimeModels = dto.CourseTimes.Select(x => x.ToModel()).ToList();
+			var courseTimeModels = model.CourseTimes;
 			// 缺少的删除
 			model = await _courseRepository.GetByIdAsync(model.Id);
 			var delCourseTimeModels = model.CourseTimes
 											.Where(x =>
 												courseTimeModels.FirstOrDefault(v =>
-													v.TimeTableId == x.TimeTableId && v.CourseId == x.CourseId) == null
+													v.Id != x.Id && v.CourseId == x.CourseId) == null
 											).ToList();
 			foreach (var courseTimeModel in delCourseTimeModels)
 			{

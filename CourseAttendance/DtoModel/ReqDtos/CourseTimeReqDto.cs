@@ -17,5 +17,10 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		/// 日期 哪一天
 		/// </summary>
 		public DateTime DateDay { get; set; }
+
+		/// <summary>
+		/// 修改时要传
+		/// </summary>
+		public int? Id { get; set; }
 	}
 }

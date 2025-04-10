@@ -159,8 +159,8 @@ export default () => {
             // 课程时间
             cd.timeDatas = await timeDataConvert(cd.courseTimes || [])
 
-            const asd = lodash.groupBy(cd.courseTimes, x => dayjs(x.dateDay).day())
-            console.log(asd)
+            //const asd = lodash.groupBy(cd.courseTimes, x => dayjs(x.dateDay).day())
+            //console.log(asd)
 
             return cd
         }) ?? []
@@ -211,7 +211,7 @@ export default () => {
     }
     const del = async (v: CourseData) => {
         await api.Course.apiCourseIdDelete(v.id || -1)
-
+        await getData()
     }
     const put = async (id: number) => {
         setAddModel('put')
@@ -241,6 +241,7 @@ export default () => {
             columns={columns}
             pagination={{ position: ['bottomCenter'], total, showSizeChanger: true, current, pageSize: limit, onChange: onPageChange }}
             dataSource={data}
+            rowKey="id"
         />
 
         <CourseAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />

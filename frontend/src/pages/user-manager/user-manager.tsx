@@ -110,6 +110,7 @@ export default () => {
     }
     const del = async (v: GetUserResDto) => {
         await api.Account.apiAccountIdDelete(v.id)
+        await getData()
 
     }
     const put = async (id: string) => {

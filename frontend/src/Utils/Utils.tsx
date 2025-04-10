@@ -1,7 +1,7 @@
 import { v4 } from "uuid"
 import { WeekDay } from "../Models/WeekDay"
 
-export const WeekdayToString = (weekday: WeekDay | null | number): WeekDay | string => {
+export const WeekdayToString = (weekday: WeekDay): WeekDay => {
     switch (weekday) {
         case 0:
             return '周一'
@@ -18,7 +18,7 @@ export const WeekdayToString = (weekday: WeekDay | null | number): WeekDay | str
         case 6:
             return '周日'
         default:
-            return weekday + ''
+            return weekday
     }
 }
 
