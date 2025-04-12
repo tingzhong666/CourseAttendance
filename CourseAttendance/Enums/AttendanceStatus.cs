@@ -8,14 +8,18 @@ namespace CourseAttendance.Enums
 	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum AttendanceStatus
 	{
-		///// <summary>
-		///// 迟到
-		///// </summary>
-		//Late,
-		///// <summary>
-		///// 早退
-		///// </summary>
-		//Early,
+		/// <summary>
+		/// 未处理
+		/// </summary>
+		None,
+		/// <summary>
+		/// 正常签到
+		/// </summary>
+		Ok,
+		/// <summary>
+		/// 老师手动修改签到
+		/// </summary>
+		OkTearcher,
 		/// <summary>
 		/// 请假
 		/// </summary>
@@ -24,9 +28,5 @@ namespace CourseAttendance.Enums
 		/// 缺席
 		/// </summary>
 		Absent,
-		/// <summary>
-		/// 正常
-		/// </summary>
-		None
 	}
 }

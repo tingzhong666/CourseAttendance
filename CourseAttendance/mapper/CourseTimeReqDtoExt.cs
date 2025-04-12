@@ -15,7 +15,7 @@ namespace CourseAttendance.mapper
 				//StartTime = dto.StartTime,
 				//Weekday = dto.Weekday,
 				DateDay = dto.DateDay,
-				Id = dto.Id
+				//Id = dto?.Id ?? default
 			};
 		}
 	}

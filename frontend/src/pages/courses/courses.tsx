@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import * as api from '../../services/http/httpInstance'
 import { Button, PaginationProps, Popconfirm, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { CourseResponseDto, CourseTimeResDto } from '../../services/api';
+import { CourseResponseDto, CourseTimeResDto, UserRole } from '../../services/api';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import { useAuth } from '../../Contexts/auth';
 import { CreateUUID, WeekdayToString, } from '../../Utils/Utils';
@@ -10,6 +10,7 @@ import CourseAdd, { CourseAddProps } from '../../components/courseAdd';
 import { WeekDay } from '../../Models/WeekDay';
 import lodash from 'lodash'
 import dayjs from 'dayjs';
+import { useLocation } from 'react-router';
 
 interface CourseTimeData {
     // 周几
@@ -48,6 +49,9 @@ export default () => {
 
     const [addShow, setAddShow] = useState(false)
 
+    const location = useLocation()
+
+
     useEffect(() => {
         init()
     }, []);
@@ -78,8 +82,8 @@ export default () => {
             key: 'time',
             //dataIndex: 'tags',
             render: (_, record) => {
-                const asd = lodash.groupBy(record.timeDatas, x => dayjs(x.weekday).day())
-                const renders = lodash.map(asd, (value, key) => {
+                const grp = lodash.groupBy(record.timeDatas, x => x.weekday)
+                const renders = lodash.map(grp, value => {
                     const v2 = value.sort((a, b) => a.startWeek < b.startWeek ? -1 : 1)
                     return (
                         <div key={CreateUUID()}>
@@ -134,18 +138,22 @@ export default () => {
 
     // 选课
     const selectCourse = async (courseId: number | undefined) => {
-        const res = await api.CourseSelection.apiCourseSelectionAddSelfGet(courseId)
+        await api.CourseSelection.apiCourseSelectionAddSelfGet(courseId)
         await getData()
     }
     // 退课
     const dropCourse = async (courseId: number | undefined) => {
-        const res = await api.CourseSelection.apiCourseSelectionDelSelfGet(courseId)
+        await api.CourseSelection.apiCourseSelectionDelSelfGet(courseId)
         await getData()
     }
 
     // 获取课程列表
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
-        const res = await api.Course.apiCourseGet(current_ - 1, limit_, queryStr_)
+        let studentIds: string[] = []
+        // console.log(location.pathname)
+        if (location.pathname == '/my-courses')
+            studentIds = auth.user?.roles.includes(UserRole.Student) ? [auth.user.id] : []
+        const res = await api.Course.apiCourseGet([...studentIds], current_ - 1, limit_, queryStr_)
 
         const tmp = res.data.data?.dataList?.map(async x => {
             const cd = x as CourseData
@@ -159,8 +167,12 @@ export default () => {
             // 课程时间
             cd.timeDatas = await timeDataConvert(cd.courseTimes || [])
 
-            //const asd = lodash.groupBy(cd.courseTimes, x => dayjs(x.dateDay).day())
-            //console.log(asd)
+            // const asd = lodash.groupBy(cd.courseTimes, x => dayjs(x.dateDay).day())
+            // // console.log(lodash.keys(x))
+
+            // lodash.map(lodash.keys(asd), x => {
+            //     console.log(x)
+            // })
 
             return cd
         }) ?? []

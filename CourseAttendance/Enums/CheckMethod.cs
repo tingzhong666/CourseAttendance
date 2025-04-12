@@ -13,12 +13,20 @@ namespace CourseAttendance.Enums
 		/// </summary>
 		Normal,
 		/// <summary>
+		/// 密码打卡
+		/// </summary>
+		Password,
+		/// <summary>
+		/// 二维码打卡
+		/// </summary>
+		TowCode,
+		/// <summary>
+		/// 拍照打卡
+		/// </summary>
+		//Photos,
+		/// <summary>
 		/// 位置打卡
 		/// </summary>
 		//Location,
-		/// <summary>
-		/// 密码打卡
-		/// </summary>
-		Password
 	}
 }

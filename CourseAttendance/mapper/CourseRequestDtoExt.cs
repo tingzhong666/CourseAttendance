@@ -15,7 +15,6 @@ namespace CourseAttendance.mapper
 				//EndTime = dto.EndTime,
 				Location = dto.Location,
 				TeacherUserId = dto.TeacherId,
-				CourseTimes = dto.CourseTimes.Select(x => x.ToModel()).ToList()
 			};
 		}
 	}

@@ -30,15 +30,7 @@ namespace CourseAttendance.Controllers
 		[Authorize]
 		public async Task<ActionResult<ApiResponse<CourseResponseListDto>>> GetCourses([FromQuery] CourseReqQueryDto query)
 		{
-			var courses = await _courseRepository.GetAllAsync();
-			if (query.q != null && query.q != "")
-			{
-				courses = courses.Where(x => x.Name.Contains(query.q)).ToList();
-			}
-
-			var total = courses.Count();
-			// 分页
-			courses = courses.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
+			var (data, total) = await _courseRepository.GetAllAsync(query);
 
 			return Ok(new ApiResponse<CourseResponseListDto>
 			{
@@ -46,7 +38,7 @@ namespace CourseAttendance.Controllers
 				Msg = "",
 				Data = new CourseResponseListDto
 				{
-					DataList = courses.ToList().Select(x => x.ToResponseDto()).Where(x => x != null).Cast<CourseResponseDto>().ToList(),
+					DataList = data.ToList().Select(x => x.ToResponseDto()).Where(x => x != null).Cast<CourseResponseDto>().ToList(),
 					Total = total
 				}
 			});
@@ -116,45 +108,31 @@ namespace CourseAttendance.Controllers
 			var model = dto.ToModel();
 			model.Id = id;
 
+			// 课程更新
 			var res = await _courseRepository.UpdateAsync(model);
 			if (res == 0)
 				return Ok(new ApiResponse<object> { Code = 2, Msg = "更新失败", Data = null });
 
 
+			model = await _courseRepository.GetByIdAsync(id);
 			// 上课时间更新
-			var courseTimeModels = model.CourseTimes;
-			// 缺少的删除
-			model = await _courseRepository.GetByIdAsync(model.Id);
-			var delCourseTimeModels = model.CourseTimes
-											.Where(x =>
-												courseTimeModels.FirstOrDefault(v =>
-													v.Id != x.Id && v.CourseId == x.CourseId) == null
-											).ToList();
+			var courseTimesDto = dto.CourseTimes;
+			// 删除
+			var delCourseTimeModels = model.CourseTimes.Where(x => !courseTimesDto.Any(v => x.CourseId == v.CourseId && x.TimeTableId == v.TimeTableId && x.DateDay.Date == v.DateDay.Date)).ToList();
+			// 新增
+			var addCourseTimesDto = courseTimesDto.Where(x => !model.CourseTimes.Any(v => x.CourseId == v.CourseId && x.TimeTableId == v.TimeTableId && x.DateDay.Date == v.DateDay.Date)).ToList();
+
 			foreach (var courseTimeModel in delCourseTimeModels)
 			{
-				res = await _courseTimeRepository.DeleteAsync(courseTimeModel.CourseId, courseTimeModel.TimeTableId);
+				res = await _courseTimeRepository.DeleteAsync(courseTimeModel.Id);
 				if (res == 0)
-					return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间删除失败", Data = null });
+					return Ok(new ApiResponse<object> { Code = 2, Msg = "上课时间删除失败", Data = null });
 			}
-
-			// 更新与创建
-			foreach (var courseTimeModel in courseTimeModels)
+			foreach (var courseTimeDto in courseTimesDto)
 			{
-				var courseTimeModel2 = await _courseTimeRepository.GetByIdAsync(courseTimeModel.CourseId, courseTimeModel.TimeTableId);
-				// 没有就创建
-				if (courseTimeModel2 == null)
-				{
-					res = await _courseTimeRepository.AddAsync(courseTimeModel);
-					if (res == 0)
-						return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间创建失败", Data = null });
-				}
-				// 有就更新
-				else
-				{
-					res = await _courseTimeRepository.UpdateAsync(courseTimeModel);
-					if (res == 0)
-						return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间更新失败", Data = null });
-				}
+				res = await _courseTimeRepository.AddAsync(courseTimeDto.ToModel());
+				if (res == 0)
+					return Ok(new ApiResponse<object> { Code = 2, Msg = "上课时间创建失败", Data = null });
 			}
 
 			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
@@ -173,7 +151,7 @@ namespace CourseAttendance.Controllers
 			var courseTimeModels = model.CourseTimes;
 			foreach (var courseTimeModel in courseTimeModels)
 			{
-				var ress = await _courseTimeRepository.DeleteAsync(courseTimeModel.CourseId, courseTimeModel.TimeTableId);
+				var ress = await _courseTimeRepository.DeleteAsync(courseTimeModel.Id);
 				if (ress == 0)
 					return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间删除失败", Data = null });
 			}

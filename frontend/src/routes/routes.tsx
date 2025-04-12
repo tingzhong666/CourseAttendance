@@ -15,6 +15,7 @@ import ClassesManager from "../pages/classes-manager/classes-manager";
 import MajorsSubcategoryManager from "../pages/majors-subcategory-manager/majors-subcategory-manager";
 import MajorsCategoryManager from "../pages/majors-category-manager/majors-category-manager";
 import { Navigate } from "react-router";
+import { CreateUUID } from "../Utils/Utils";
 
 export const router = createBrowserRouter([
     {
@@ -25,8 +26,9 @@ export const router = createBrowserRouter([
                 path: "", element: <HomeLayout />, children: [
                     { path: "", element: <Navigate to="/home"></Navigate> },
                     { path: "home", element: <Home /> },
-                    { path: "courses", element: <Courses /> },
-                    { path: "my-courses", element: <MyCourses /> },
+                    { path: "courses", element: <Courses key={CreateUUID()}/> },
+                    // { path: "my-courses", element: <MyCourses /> },
+                    { path: "my-courses", element: <Courses key={CreateUUID()} /> },
                     { path: "attendance", element: <Attendance /> },
                     { path: "user-manager", element: <UserManager /> },
                     { path: "student-manager", element: <StudentManager /> },

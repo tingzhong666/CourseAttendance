@@ -145,7 +145,7 @@ export default (prop: Props) => {
                     })
                     return allDays2
                 })
-                var res = await api.Course.apiCoursePost(values)
+                await api.Course.apiCoursePost(values)
             }
             else if (prop.model == 'put') {
 
@@ -188,12 +188,11 @@ export default (prop: Props) => {
                             dateDay: v.toString(),
                             timeTableId: x.timeTable,
                             courseId: prop.putId,
-                            // id
                         }
                     })
                     return allDays2
                 })
-                var res = await api.Course.apiCourseIdPut(prop.putId || -1, values)
+                await api.Course.apiCourseIdPut(prop.putId || -1, values)
             }
             prop.onFinish()
             setIsModalOpen(false);

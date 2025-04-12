@@ -18,9 +18,9 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		/// </summary>
 		public DateTime DateDay { get; set; }
 
-		/// <summary>
-		/// 修改时要传
-		/// </summary>
-		public int? Id { get; set; }
+		///// <summary>
+		///// 修改时要传
+		///// </summary>
+		//public int? Id { get; set; }
 	}
 }

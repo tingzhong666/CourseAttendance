@@ -13,13 +13,14 @@ namespace CourseAttendance.Repositories
 			_context = context;
 		}
 
-		public async Task<CourseTime?> GetByIdAsync(int courseId, int timeTableId)
+		public async Task<CourseTime?> GetByIdAsync(int id)
 		{
 			return await _context.CourseTimes
 				.Include(cs => cs.Course)
 				.Include(cs => cs.TimeTable)
-				.FirstOrDefaultAsync(cs => cs.CourseId == courseId && cs.TimeTableId == timeTableId);
+				.FirstOrDefaultAsync(cs => cs.Id == id);
 		}
+
 
 		public async Task<List<CourseTime>> GetAllAsync(int courseId)
 		{
@@ -35,9 +36,9 @@ namespace CourseAttendance.Repositories
 			return await _context.SaveChangesAsync();
 		}
 
-		public async Task<int> DeleteAsync(int courseId, int timeTableId)
+		public async Task<int> DeleteAsync(int id)
 		{
-			var model = await GetByIdAsync(courseId, timeTableId);
+			var model = await GetByIdAsync(id);
 			if (model != null)
 			{
 				_context.CourseTimes.Remove(model);
@@ -50,7 +51,7 @@ namespace CourseAttendance.Repositories
 		// 修改
 		public async Task<int> UpdateAsync(CourseTime modelParam)
 		{
-			var model = await _context.CourseTimes.FirstOrDefaultAsync(x => x.CourseId == modelParam.CourseId && x.TimeTableId == modelParam.TimeTableId);
+			var model = await _context.CourseTimes.FirstOrDefaultAsync(x => x.Id == modelParam.Id);
 			if (model == null) return 0;
 			//model.StartTime = modelParam.StartTime;
 			//model.EndTime = modelParam.EndTime;

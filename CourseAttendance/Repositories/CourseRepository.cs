@@ -1,4 +1,5 @@
 ﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,14 +24,30 @@ namespace CourseAttendance.Repositories
 				.FirstOrDefaultAsync(c => c.Id == id);
 		}
 
-		public async Task<IEnumerable<Course>> GetAllAsync()
+		public async Task<(List<Course> data, int total)> GetAllAsync(CourseReqQueryDto query)
 		{
-			return await _context.Courses
+			var coursesQ = _context.Courses.AsQueryable();
+			if (query.q != null && query.q != "")
+			{
+				coursesQ = coursesQ.Where(x => x.Name.Contains(query.q));
+			}
+			if (query.studentIds.Count != 0 )
+			{
+				coursesQ = coursesQ.Where(x => query.studentIds.Any(v => x.CourseStudents.Any(y => y.StudentId == v)));
+			}
+
+			var courses = await coursesQ
 				.Include(c => c.Teacher)
 				.Include(c => c.CourseStudents)
 				.Include(c => c.Attendances)
 				.Include(c => c.CourseTimes)
 				.ToListAsync();
+
+			var total = courses.Count;
+			// 分页
+			courses = courses.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
+
+			return (data: courses, total);
 		}
 
 		public async Task<int> AddAsync(Course course)
