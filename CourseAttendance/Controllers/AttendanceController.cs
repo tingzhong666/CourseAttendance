@@ -1,4 +1,6 @@
-﻿using CourseAttendance.DtoModel.ReqDtos;
+﻿using CourseAttendance.AppDataContext;
+using CourseAttendance.DtoModel;
+using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.DtoModel.ResDtos;
 using CourseAttendance.Enums;
 using CourseAttendance.mapper;
@@ -16,13 +18,15 @@ namespace CourseAttendance.Controllers
 	[ApiController]
 	public class AttendanceController : ControllerBase
 	{
+		private readonly AppDBContext _context;
 		private readonly AttendanceRepository _attendanceRepository;
 		private readonly CourseRepository _courseRepository;
 
-		public AttendanceController(AttendanceRepository attendanceRepository, CourseRepository courseRepository)
+		public AttendanceController(AttendanceRepository attendanceRepository, CourseRepository courseRepository, AppDBContext context)
 		{
 			_attendanceRepository = attendanceRepository;
 			_courseRepository = courseRepository;
+			_context = context;
 		}
 
 		/// <summary>
@@ -32,42 +36,29 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpGet]
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		public async Task<ActionResult<ApiResponse<List<AttendanceResponseDto>>>> GetAttendances([FromQuery] AttendanceFilter filter)
+		public async Task<ActionResult<ApiResponse<ListDto<AttendanceResponseDto>>>> GetAttendances([FromQuery] AttendanceReqQueryDto query)
 		{
-			var models = await _attendanceRepository.GetAllAsync();
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (userId == null)
 				return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 2, Msg = "操作失败，Token为携带ID信息", Data = null });
 			// 老师与学生只返回与自身相关的
 			if (User.IsInRole("Teacher"))
-			{
-				models = models.Where(x => x.Course.TeacherUserId == userId).ToList();
-			}
+				query.TeacherId = [userId];
 			if (User.IsInRole("Student"))
-			{
-				models = models.Where(x => x.StudentId == userId).ToList();
-			}
+				query.StudentId = [userId];
 
-			// 筛选
-			if (filter.CourseId != null)
-			{
-				models = models.Where(x => x.Course.Id == filter.CourseId).ToList();
-			}
-			if (filter.StudentId != null)
-			{
-				models = models.Where(x => x.StudentId == filter.StudentId).ToList();
-			}
-			if (filter.StartDate != null)
-			{
-				models = models.Where(x => filter.StartDate <= x.CreatedAt).ToList();
-			}
-			if (filter.EndDate != null)
-			{
-				models = models.Where(x => x.CreatedAt <= filter.StartDate).ToList();
-			}
+			var (queryRes, total) = await _attendanceRepository.GetAllAsync(query);
 
-
-			return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 1, Msg = "", Data = models.Select(x => x.ToDto()).ToList() });
+			return Ok(new ApiResponse<ListDto<AttendanceResponseDto>>
+			{
+				Code = 1,
+				Msg = "",
+				Data = new ListDto<AttendanceResponseDto>
+				{
+					DataList = queryRes.Select(x => x.ToDto()).ToList(),
+					Total = total
+				}
+			});
 		}
 
 		/// <summary>
@@ -79,24 +70,28 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
 		public async Task<ActionResult<ApiResponse<AttendanceResponseDto>>> GetAttendance(int id)
 		{
-			var model = await _attendanceRepository.GetByIdAsync(id);
-			if (model == null)
+			try
 			{
-				return Ok(new ApiResponse<AttendanceResponseDto> { Code = 2, Msg = "操作失败，未找到此考勤信息", Data = null });
+				var model = await _attendanceRepository.GetByIdAsync(id);
+				if (model == null)
+					throw new Exception("操作失败，未找到此考勤信息");
+
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				if (userId == null)
+					throw new Exception("操作失败，Token为携带ID信息");
+
+				// 老师与学生只返回与自身相关的
+				if (User.IsInRole("Teacher") && model.Course.TeacherUserId != userId)
+					throw new Exception("操作失败，当前用户无权限查看");
+				if (User.IsInRole("Student") && model.StudentId != userId)
+					throw new Exception("操作失败，当前用户无权限查看");
+
+				return Ok(new ApiResponse<AttendanceResponseDto> { Code = 1, Msg = "", Data = model.ToDto() });
 			}
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userId == null)
-				return Ok(new ApiResponse<AttendanceResponseDto> { Code = 2, Msg = "操作失败，Token为携带ID信息", Data = null });
-			// 老师与学生只返回与自身相关的
-			if (User.IsInRole("Teacher") && model.Course.TeacherUserId != userId)
+			catch (Exception err)
 			{
-				return Ok(new ApiResponse<AttendanceResponseDto> { Code = 2, Msg = "操作失败，当前用户无权限查看", Data = null });
+				return Ok(new ApiResponse<AttendanceResponseDto> { Code = 2, Msg = err.Message, Data = null });
 			}
-			if (User.IsInRole("Student") && model.StudentId != userId)
-			{
-				return Ok(new ApiResponse<AttendanceResponseDto> { Code = 2, Msg = "操作失败，当前用户无权限查看", Data = null });
-			}
-			return Ok(new ApiResponse<AttendanceResponseDto> { Code = 1, Msg = "", Data = model.ToDto() });
 		}
 
 		/// <summary>
@@ -107,123 +102,136 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		[Authorize(Roles = "Admin,Academic,Teacher")]
-		public async Task<ActionResult<ApiResponse<List<AttendanceResponseDto>>>> CreateAttendance([FromBody] AttendanceCreateRequestDto dto)
+		public async Task<ActionResult<ApiResponse<AttendanceResponseDto>>> CreateAttendance([FromBody] AttendanceCreateRequestDto dto)
 		{
-			var courseModel = await _courseRepository.GetByIdAsync(dto.CourseId);
-			if (courseModel == null)
+			var transaction =  _context.Database.BeginTransaction();
+			try
 			{
-				return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 2, Msg = "操作失败，未找到此课程信息", Data = null });
+				var courseModel = await _courseRepository.GetByIdAsync(dto.CourseId);
+				if (courseModel == null)
+					throw new Exception("操作失败，未找到此课程信息");
+
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				if (userId == null)
+					throw new Exception("操作失败，Token为携带ID信息");
+				// 如果是老师，则验证当前课程是否有权限
+				if (User.IsInRole("Teacher") && courseModel.TeacherUserId != userId)
+					throw new Exception("操作失败，当前用户无权限发布此课程考勤");
+
+
+				var models = courseModel.CourseStudents.Select(x => dto.ToModel(x.StudentId)).ToList();
+				foreach (var item in models)
+				{
+					var res = await _attendanceRepository.AddAsync(item);
+					if (res == 0)
+						throw new Exception("操作失败，某个考勤创建失败");
+				}
+
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 1, Msg = "", Data = null });
 			}
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userId == null)
-				return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 2, Msg = "操作失败，Token为携带ID信息", Data = null });
-			// 如果是老师，则验证当前课程是否有权限
-			if (User.IsInRole("Teacher") && courseModel.TeacherUserId != userId)
+			catch (Exception err)
 			{
-				return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 2, Msg = "操作失败，当前用户无权限发布此课程考勤", Data = null });
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<AttendanceResponseDto> { Code = 2, Msg = err.Message, Data = null });
 			}
-
-
-			var models = courseModel.CourseStudents.Select(x => dto.ToModel(x.StudentId)).ToList();
-			foreach (var item in models)
-			{
-				var res = await _attendanceRepository.AddAsync(item);
-				if (res == 0)
-					return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 2, Msg = "操作失败，某个考勤创建失败", Data = null });
-			}
-
-			models = await _attendanceRepository.GetAllAsync();
-
-
-			return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 1, Msg = "", Data = models.Select(x => x.ToDto()).ToList() });
 		}
 
 		/// <summary>
-		/// 修改考勤状态
+		/// 修改
 		/// </summary>
 		/// <param name="id"></param>
 		/// <param name="status"></param>
 		/// <returns></returns>
 		[HttpPut]
 		[Authorize(Roles = "Admin,Academic,Teacher")]
-		public async Task<ActionResult<ApiResponse<object>>> UpdateAttendanceStatus([FromQuery] int id, [FromQuery] AttendanceStatus status)
+		public async Task<ActionResult<ApiResponse<object>>> Update([FromQuery] int id, [FromBody] AttendanceUpdateRequestDto dto)
 		{
-			var model = await _attendanceRepository.GetByIdAsync(id);
-			if (model == null)
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，未找到此考勤信息", Data = null });
+				var model = await _attendanceRepository.GetByIdAsync(id);
+				if (model == null)
+					throw new Exception("操作失败，未找到此考勤信息");
+
+				// 老师身份 验证是否有权限
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				if (userId == null)
+					throw new Exception("操作失败，Token为携带ID信息");
+
+				// 如果是老师，则验证当前课程是否有权限
+				if (User.IsInRole("Teacher") && model.Course.TeacherUserId != userId)
+					throw new Exception("操作失败，当前用户无权限修改此课程考勤");
+
+				model.Status = dto.Status;
+				model.Remark = dto.Remark;
+				var res = await _attendanceRepository.UpdateAsync(model);
+				if (res == 0)
+					throw new Exception("操作失败，更新失败");
+
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
-			// 老师身份 验证是否有权限
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userId == null)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，Token为携带ID信息", Data = null });
-			// 如果是老师，则验证当前课程是否有权限
-			if (User.IsInRole("Teacher") && model.Course.TeacherUserId != userId)
+			catch (Exception err)
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，当前用户无权限修改此课程考勤", Data = null });
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
-
-			model.Status = status;
-			var res = await _attendanceRepository.UpdateAsync(model);
-			if (res == 0)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，更新失败", Data = null });
-
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 		}
 
-		/// <summary>
-		/// 学生打卡
-		/// </summary>
-		/// <param name="dto"></param>
-		/// <returns></returns>
-		[HttpPut("sign-in")]
-		[Authorize(Roles = "Student")]
-		public async Task<ActionResult<ApiResponse<object>>> SignIn([FromBody] AttendanceRequestDto dto)
-		{
-			var model = await _attendanceRepository.GetByIdAsync(dto.Id);
-			if (model == null)
-			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，未找到此考勤信息", Data = null });
-			}
-			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (userId == null)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，Token为携带ID信息", Data = null });
-			// 如果是老师，则验证当前课程是否有权限
-			if (model.StudentId != userId)
-			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，当前用户无权限执行此操作", Data = null });
-			}
+		///// <summary>
+		///// 学生打卡
+		///// </summary>
+		///// <param name="dto"></param>
+		///// <returns></returns>
+		//[HttpPut("sign-in")]
+		//[Authorize(Roles = "Student")]
+		//public async Task<ActionResult<ApiResponse<object>>> SignIn([FromBody] AttendanceRequestDto dto)
+		//{
+		//	var model = await _attendanceRepository.GetByIdAsync(dto.Id);
+		//	if (model == null)
+		//	{
+		//		return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，未找到此考勤信息", Data = null });
+		//	}
+		//	var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		//	if (userId == null)
+		//		return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，Token为携带ID信息", Data = null });
+		//	// 如果是老师，则验证当前课程是否有权限
+		//	if (model.StudentId != userId)
+		//	{
+		//		return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，当前用户无权限执行此操作", Data = null });
+		//	}
 
-			//model = dto.ToModel();
-			// 打卡逻辑
-			var isTimeRange = model.CreatedAt <= DateTime.Now && DateTime.Now <= model.EndTime;
-			// 时间在范围内为正常，否则缺席，请假只能老师手动改
-			if (!isTimeRange)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，超出时间", Data = null });
-			if (model.CreatedAt != model.UpdatedAt)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，已经执行过操作", Data = null });
-			switch (model.CheckMethod)
-			{
-				case CheckMethod.Normal:
-					break;
-				//case CheckMethod.Location:
-				//break;
-				case CheckMethod.Password:
-					if (dto.PassWord != model.PassWord)
-						return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，密码不对", Data = null });
-					break;
-				default:
-					return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，未知打卡方式", Data = null });
-			}
+		//	//model = dto.ToModel();
+		//	// 打卡逻辑
+		//	var isTimeRange = model.CreatedAt <= DateTime.Now && DateTime.Now <= model.EndTime;
+		//	// 时间在范围内为正常，否则缺席，请假只能老师手动改
+		//	if (!isTimeRange)
+		//		return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，超出时间", Data = null });
+		//	if (model.CreatedAt != model.UpdatedAt)
+		//		return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，已经执行过操作", Data = null });
+		//	switch (model.CheckMethod)
+		//	{
+		//		case CheckMethod.Normal:
+		//			break;
+		//		//case CheckMethod.Location:
+		//		//break;
+		//		case CheckMethod.Password:
+		//			if (dto.PassWord != model.PassWord)
+		//				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，密码不对", Data = null });
+		//			break;
+		//		default:
+		//			return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，未知打卡方式", Data = null });
+		//	}
 
-			model.Status = AttendanceStatus.None;
+		//	model.Status = AttendanceStatus.None;
 
-			var res = await _attendanceRepository.UpdateAsync(model);
-			if (res == 0)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，打卡失败", Data = null });
+		//	var res = await _attendanceRepository.UpdateAsync(model);
+		//	if (res == 0)
+		//		return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，打卡失败", Data = null });
 
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
-		}
+		//	return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+		//}
 
 		/// <summary>
 		/// 删除
@@ -231,28 +239,38 @@ namespace CourseAttendance.Controllers
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpDelete("{id}")]
-		[Authorize(Roles = "Admin,Academic")]
+		[Authorize(Roles = "Admin,Academic,Teacher")]
 		public async Task<ActionResult<ApiResponse<object>>> DeleteAttendance(int id)
 		{
-			var attendance = await _attendanceRepository.GetByIdAsync(id);
-			if (attendance == null)
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，未找到此考勤信息", Data = null });
+				var attendance = await _attendanceRepository.GetByIdAsync(id);
+				if (attendance == null)
+					throw new Exception("操作失败，未找到此考勤信息");
+
+				// 老师身份 验证是否有权限
+				var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				if (userId == null)
+					throw new Exception("操作失败，Token为携带ID信息");
+
+				// 如果是老师，则验证当前课程是否有权限
+				if (User.IsInRole("Teacher") && attendance.Course.TeacherUserId != userId)
+					throw new Exception("操作失败，当前用户无权限修改此课程考勤");
+
+
+				var res = await _attendanceRepository.DeleteAsync(id);
+				if (res == 0)
+					throw new Exception("操作失败，删除失败");
+
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
-
-			var res = await _attendanceRepository.DeleteAsync(id);
-			if (res == 0)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "操作失败，删除失败", Data = null });
-
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
-
-		//[HttpGet("filter")]
-		//[Authorize(Roles = "Admin,Academic,Teacher,Student")]
-		//public async Task<ActionResult<IEnumerable<Attendance>>> FilterAttendances([FromQuery] AttendanceFilter filter)
-		//{
-		//	var filteredAttendances = await _attendanceRepository.FilterAttendancesAsync(filter);
-		//	return Ok(filteredAttendances);
-		//}
 	}
 }

@@ -11,15 +11,17 @@ namespace CourseAttendance.mapper
 			var now = DateTime.Now;
 			return new Attendance
 			{
-				CheckMethod = dto.CheckMethod,
-				CourseId = dto.CourseId,
 				CreatedAt = now,
-				Status = AttendanceStatus.Absent,
 				UpdatedAt = now,
-				StudentId = studentId,
+				CheckMethod = dto.CheckMethod,
+				StartTime = dto.StartTime,
 				EndTime = dto.EndTime,
-				PassWord = dto.PassWord,
+				Status = AttendanceStatus.None,
+				//SignInTime = dto.SignInTime,
 				Remark = "",
+				PassWord = dto.PassWord,
+				CourseId = dto.CourseId,
+				StudentId = studentId,
 			};
 		}
 	}

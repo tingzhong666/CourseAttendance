@@ -43,21 +43,14 @@ namespace CourseAttendance.Model
 		/// </summary>
 		public string? PassWord { get; set; } = "";
 
-		//public DateTime AttendanceDate { get; set; }
-		//public DateTime? SignOutTime { get; set; }
 		/// <summary>
 		/// 附件 计划拍照打卡用
 		/// </summary>
 		//public List<string> AttachmentUrl { get; set; } = [];
-
-
 		/// <summary>
 		/// 地点 位置打卡用
 		/// </summary>
 		//public string Location { get; set; } = "";
-
-
-
 
 
 		[ForeignKey("Course")]

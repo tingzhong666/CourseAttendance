@@ -13,6 +13,11 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		/// </summary>
 		public string? PassWord { get; set; } = "";
 		/// <summary>
+		/// 开始时间
+		/// </summary>
+		[Required]
+		public DateTime StartTime { get; set; }
+		/// <summary>
 		/// 结束时间
 		/// </summary>
 		[Required]

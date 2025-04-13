@@ -530,7 +530,57 @@
         ],
         "parameters": [
           {
-            "name": "CourseId",
+            "name": "StudentId",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "StudentName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "TeacherId",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "TeacherName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "StartTime",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "EndTime",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "Page",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -538,26 +588,18 @@
             }
           },
           {
-            "name": "StudentId",
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "q",
             "in": "query",
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "StartDate",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "EndDate",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
             }
           }
         ],
@@ -567,17 +609,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/AttendanceResponseDtoListDtoApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/AttendanceResponseDtoListDtoApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/AttendanceResponseDtoListDtoApiResponse"
                 }
               }
             }
@@ -618,17 +660,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/AttendanceResponseDtoApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/AttendanceResponseDtoApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AttendanceResponseDtoListApiResponse"
+                  "$ref": "#/components/schemas/AttendanceResponseDtoApiResponse"
                 }
               }
             }
@@ -647,15 +689,32 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/AttendanceStatus"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendanceUpdateRequestDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendanceUpdateRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendanceUpdateRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendanceUpdateRequestDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -734,59 +793,6 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ObjectApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ObjectApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ObjectApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/attendance/sign-in": {
-      "put": {
-        "tags": [
-          "Attendance"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AttendanceRequestDto"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AttendanceRequestDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AttendanceRequestDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AttendanceRequestDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2231,13 +2237,18 @@
         "required": [
           "checkMethod",
           "courseId",
-          "endTime"
+          "endTime",
+          "startTime"
         ],
         "type": "object",
         "properties": {
           "passWord": {
             "type": "string",
             "nullable": true
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
           },
           "endTime": {
             "type": "string",
@@ -2253,41 +2264,19 @@
         },
         "additionalProperties": false
       },
-      "AttendanceRequestDto": {
+      "AttendanceResponseDto": {
         "required": [
-          "id"
+          "checkMethod",
+          "courseId",
+          "endTime",
+          "id",
+          "remark",
+          "startTime",
+          "status",
+          "studentId"
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "passWord": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "AttendanceResponseDto": {
-        "type": "object",
-        "properties": {
-          "signInTime": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "status": {
-            "$ref": "#/components/schemas/AttendanceStatus"
-          },
-          "remark": {
-            "type": "string",
-            "nullable": true
-          },
-          "checkMethod": {
-            "$ref": "#/components/schemas/CheckMethod"
-          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -2296,17 +2285,40 @@
             "type": "string",
             "format": "date-time"
           },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "checkMethod": {
+            "$ref": "#/components/schemas/CheckMethod"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
           "endTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AttendanceStatus"
+          },
+          "signInTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "remark": {
+            "minLength": 1,
+            "type": "string"
           },
           "courseId": {
             "type": "integer",
             "format": "int32"
           },
           "studentId": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2328,7 +2340,24 @@
         },
         "additionalProperties": false
       },
-      "AttendanceResponseDtoListApiResponse": {
+      "AttendanceResponseDtoListDto": {
+        "type": "object",
+        "properties": {
+          "dataList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttendanceResponseDto"
+            },
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AttendanceResponseDtoListDtoApiResponse": {
         "type": "object",
         "properties": {
           "code": {
@@ -2340,22 +2369,36 @@
             "nullable": true
           },
           "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AttendanceResponseDto"
-            },
-            "nullable": true
+            "$ref": "#/components/schemas/AttendanceResponseDtoListDto"
           }
         },
         "additionalProperties": false
       },
       "AttendanceStatus": {
         "enum": [
+          "None",
+          "Ok",
+          "OkTearcher",
           "Leave",
-          "Absent",
-          "None"
+          "Absent"
         ],
         "type": "string"
+      },
+      "AttendanceUpdateRequestDto": {
+        "required": [
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AttendanceStatus"
+          },
+          "remark": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "ChangePasswordSelfReqDto": {
         "required": [
@@ -2383,7 +2426,8 @@
       "CheckMethod": {
         "enum": [
           "Normal",
-          "Password"
+          "Password",
+          "TowCode"
         ],
         "type": "string"
       },

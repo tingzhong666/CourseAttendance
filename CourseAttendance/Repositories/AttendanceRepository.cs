@@ -3,6 +3,7 @@ using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.Model;
 using CourseAttendance.Model.Users;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CourseAttendance.Repositories
 {
@@ -23,12 +24,41 @@ namespace CourseAttendance.Repositories
 				.FirstOrDefaultAsync(a => a.Id == id);
 		}
 
-		public async Task<List<Attendance>> GetAllAsync()
+		public async Task<(List<Attendance> queryRes, int total)> GetAllAsync(AttendanceReqQueryDto query)
 		{
-			return await _context.Attendances
+			var queryable = _context.Attendances.AsQueryable();
+			// 课程名
+			if (query.q != null && query.q != "")
+				queryable = queryable.Where(x => x.Course.Name.Contains(query.q));
+
+			// 学生id 与 学生名 优先id
+			if (query.StudentId != null && query.StudentId.Count != 0)
+				queryable = queryable.Where(x => query.StudentId.Contains(x.StudentId));
+			if (query.StudentName != null && query.StudentName != "" && query.StudentId == null)
+				queryable = queryable.Where(x => x.Student.User.Name.Contains(query.StudentName));
+
+			// 老师id 与 学生名 优先id
+			if (query.TeacherId != null && query.TeacherId.Count != 0)
+				queryable = queryable.Where(x => query.TeacherId.Contains(x.Course.Teacher.UserId));
+			if (query.TeacherName != null && query.TeacherName != "" && query.TeacherId == null)
+				queryable = queryable.Where(x => x.Course.Teacher.User.Name.Contains(query.TeacherName));
+
+			// 时间范围
+			if (query.StartTime != null)
+				queryable = queryable.Where(x => query.StartTime < x.StartTime);
+			if (query.EndTime != null)
+				queryable = queryable.Where(x => x.EndTime < query.EndTime);
+
+
+			// 执行查询
+			var queryRes = await queryable
 				.Include(a => a.Course)
 				.Include(a => a.Student)
 				.ToListAsync();
+			var total = queryRes.Count;
+			// 分页
+			queryRes = queryRes.Skip(query.Limit * (query.Page - 1)).Take(query.Limit).ToList();
+			return (queryRes, total);
 		}
 
 		public async Task<int> AddAsync(Attendance attendance)
@@ -39,25 +69,19 @@ namespace CourseAttendance.Repositories
 
 		public async Task<int> UpdateAsync(Attendance attendance)
 		{
-			var model = await _context.Attendances
-				.Include(a => a.Course)
-				.Include(a => a.Student)
-				.FirstOrDefaultAsync(a => a.Id == attendance.Id);
+			var model = await GetByIdAsync(attendance.Id);
 			if (model == null) return 0;
 
-			model.SignInTime = attendance.SignInTime;
-			//model.SignOutTime = attendance.SignOutTime;
-			model.Status = attendance.Status;
-			//model.Performance = attendance.Performance;
-			model.Remark = attendance.Remark;
-			model.CheckMethod = attendance.CheckMethod;
-			//model.Location = attendance.Location;
 			model.UpdatedAt = DateTime.Now;
-			//model.AttachmentUrl = attendance.AttachmentUrl;
-			model.PassWord = attendance.PassWord;
-			model.EndTime = attendance.EndTime;
 
-			//_context.Attendances.Update(model);
+			model.CheckMethod = attendance.CheckMethod;
+			model.StartTime = attendance.StartTime;
+			model.EndTime = attendance.EndTime;
+			model.Status = attendance.Status;
+			model.SignInTime = attendance.SignInTime;
+			model.Remark = attendance.Remark;
+			model.PassWord = attendance.PassWord;
+
 			return await _context.SaveChangesAsync();
 		}
 
@@ -71,33 +95,5 @@ namespace CourseAttendance.Repositories
 			}
 			return 0;
 		}
-
-
-		//public async Task<IEnumerable<Attendance>> FilterAttendancesAsync(AttendanceFilter filter)
-		//{
-		//	var query = _context.Attendances.AsQueryable();
-
-		//	if (filter.CourseId.HasValue)
-		//	{
-		//		query = query.Where(a => a.CourseId == filter.CourseId.Value);
-		//	}
-
-		//	if (!string.IsNullOrEmpty(filter.StudentId))
-		//	{
-		//		query = query.Where(a => a.StudentId == filter.StudentId);
-		//	}
-
-		//	if (filter.StartDate.HasValue)
-		//	{
-		//		query = query.Where(a => a.CreatedAt >= filter.StartDate.Value);
-		//	}
-
-		//	if (filter.EndDate.HasValue)
-		//	{
-		//		query = query.Where(a => a.CreatedAt <= filter.EndDate.Value);
-		//	}
-
-		//	return await query.ToListAsync();
-		//}
 	}
 }

@@ -9,19 +9,19 @@ namespace CourseAttendance.mapper
 		{
 			return new AttendanceResponseDto
 			{
-				//AttendanceDate = attendance.AttendanceDate,
-				SignInTime = attendance.SignInTime,
-				//SignOutTime = attendance.SignOutTime,
-				Status = attendance.Status,
-				Remark = attendance.Remark,
-				CheckMethod = attendance.CheckMethod,
-				//Location = attendance.Location,
 				CreatedAt = attendance.CreatedAt,
 				UpdatedAt = attendance.UpdatedAt,
-				//AttachmentUrl = attendance.AttachmentUrl,
+
+				Id = attendance.Id,
+				CheckMethod = attendance.CheckMethod,
+				EndTime = attendance.EndTime,
+				StartTime = attendance.StartTime,
+				Status = attendance.Status,
+				SignInTime = attendance.SignInTime,
+				Remark = attendance.Remark,
+
 				CourseId = attendance.CourseId,
 				StudentId = attendance.StudentId,
-				EndTime = attendance.EndTime,
 			};
 		}
 	}
