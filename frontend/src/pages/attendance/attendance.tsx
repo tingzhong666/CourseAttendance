@@ -57,9 +57,7 @@ export default () => {
         await getData()
     }
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr, studentName_ = studentName, teacherName_ = teacherName, startTime_ = startTime, endTime_ = endTime) => {
-
-        var res = await api.Attendance.apiAttendanceGet([], studentName_, [], teacherName_, startTime_?.format('YYYY-MM-DD hh-mm-ss') ?? undefined, endTime_?.format('YYYY-MM-DD hh-mm-ss') ?? undefined, current_, limit_, queryStr_)
-
+        var res = await api.Attendance.apiAttendanceGet([], studentName_, [], teacherName_, startTime_?.format() ?? undefined, endTime_?.format() ?? undefined, current_, limit_, queryStr_)
         const tmp = res.data.data?.dataList?.map(async x => {
             const course = await api.Course.apiCourseIdGet(x.courseId)
             const student = await api.Account.apiAccountIdGet(x.studentId)
@@ -85,13 +83,13 @@ export default () => {
             title: '开始时间',
             dataIndex: 'startTime',
             key: 'startTime',
-            render: (_, data) => dayjs(data.startTime).format('YYYY-MM-DD hh:mm:ss')
+            render: (_, data) => dayjs(data.startTime).format('YYYY-MM-DD HH:mm:ss')
         },
         {
             title: '结束时间',
             dataIndex: 'endTime',
             key: 'endTime',
-            render: (_, data) => dayjs(data.endTime).format('YYYY-MM-DD hh:mm:ss')
+            render: (_, data) => dayjs(data.endTime).format('YYYY-MM-DD HH:mm:ss')
         },
         {
             title: '类型',
@@ -211,6 +209,10 @@ export default () => {
         await getData(1, undefined, undefined, value);
     }
     const onChangeStartDate: (date: Dayjs, dateString: string | string[]) => void = (date) => {
+        if (!date) {
+            setStartTime(null)
+            return
+        }
         let tmp = startTime?.clone() ?? dayjs()
         tmp = tmp?.year(date.year())
         tmp = tmp?.month(date.month())
@@ -218,6 +220,10 @@ export default () => {
         setStartTime(tmp || null)
     }
     const onChangeStartTime: (date: Dayjs, dateString: string | string[]) => void = (date) => {
+        if (!date) {
+            setStartTime(null)
+            return
+        }
         let tmp = startTime?.clone() ?? dayjs()
         tmp = tmp?.hour(date.hour())
         tmp = tmp?.minute(date.minute())
@@ -225,6 +231,10 @@ export default () => {
         setStartTime(tmp || null)
     }
     const onChangeEndDate: (date: Dayjs, dateString: string | string[]) => void = (date) => {
+        if (!date) {
+            setEndTime(null)
+            return
+        }
         let tmp = endTime?.clone() ?? dayjs()
         tmp = tmp?.year(date.year())
         tmp = tmp?.month(date.month())
@@ -232,6 +242,10 @@ export default () => {
         setEndTime(tmp || null)
     }
     const onChangeEndTime: (date: Dayjs, dateString: string | string[]) => void = (date) => {
+        if (!date) {
+            setEndTime(null)
+            return
+        }
         let tmp = endTime?.clone() ?? dayjs()
         tmp = tmp?.hour(date.hour())
         tmp = tmp?.minute(date.minute())

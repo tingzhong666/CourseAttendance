@@ -75,8 +75,10 @@ export default (props: Props) => {
         setFormData({ ...form.getFieldsValue() })
     }
     useEffect(() => {
+        if (!props.show) return
+
         form.setFieldsValue({ ...formData })
-    }, [formData])
+    }, [formData, props.show])
 
 
     const [optionsStatus, setOptionsStatus] = useState<SelectProps['options']>()

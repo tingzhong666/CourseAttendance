@@ -38,6 +38,10 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin,Academic,Teacher,Student")]
 		public async Task<ActionResult<ApiResponse<ListDto<AttendanceResponseDto>>>> GetAttendances([FromQuery] AttendanceReqQueryDto query)
 		{
+			if (query.StartTime != null)
+				query.StartTime = query.StartTime?.ToLocalTime();
+			if (query.EndTime != null)
+				query.EndTime = query.EndTime?.ToLocalTime();
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			if (userId == null)
 				return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 2, Msg = "操作失败，Token为携带ID信息", Data = null });

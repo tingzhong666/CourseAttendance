@@ -68,8 +68,8 @@ export default (prop: Props) => {
             await form.validateFields();
             setConfirmLoading(true)
 
-            values.startTime = values.startTime_.toString()
-            values.endTime = values.endTime_.toString()
+            values.startTime = values.startTime_.format()
+            values.endTime = values.endTime_.format()
             await api.Attendance.apiAttendancePost(values)
 
             prop.onFinish()
@@ -83,8 +83,9 @@ export default (prop: Props) => {
         setFormData({ ...form.getFieldsValue() })
     }
     useEffect(() => {
+        if (!prop.show) return
         form.setFieldsValue({ ...formData })
-    }, [formData])
+    }, [formData, prop.show])
 
     // 课程选择控件
     const [optionsCourse, setOptionsCourse] = useState<SelectProps['options']>()
