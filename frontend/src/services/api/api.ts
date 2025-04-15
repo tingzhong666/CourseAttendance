@@ -3526,13 +3526,14 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @param {Array<string>} [studentIds] 
+         * @param {Array<string>} [teacherIds] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet: async (studentIds?: Array<string>, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiCourseGet: async (studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/course`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3551,6 +3552,10 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
 
             if (studentIds) {
                 localVarQueryParameter['studentIds'] = studentIds;
+            }
+
+            if (teacherIds) {
+                localVarQueryParameter['TeacherIds'] = teacherIds;
             }
 
             if (page !== undefined) {
@@ -3741,14 +3746,15 @@ export const CourseApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {Array<string>} [studentIds] 
+         * @param {Array<string>} [teacherIds] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseGet(studentIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(studentIds, page, limit, q, options);
+        async apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(studentIds, teacherIds, page, limit, q, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCourseGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3815,14 +3821,15 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @param {Array<string>} [studentIds] 
+         * @param {Array<string>} [teacherIds] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet(studentIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseListDtoApiResponse> {
-            return localVarFp.apiCourseGet(studentIds, page, limit, q, options).then((request) => request(axios, basePath));
+        apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseListDtoApiResponse> {
+            return localVarFp.apiCourseGet(studentIds, teacherIds, page, limit, q, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3874,6 +3881,7 @@ export class CourseApi extends BaseAPI {
     /**
      * 
      * @param {Array<string>} [studentIds] 
+     * @param {Array<string>} [teacherIds] 
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
@@ -3881,8 +3889,8 @@ export class CourseApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CourseApi
      */
-    public apiCourseGet(studentIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return CourseApiFp(this.configuration).apiCourseGet(studentIds, page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
+        return CourseApiFp(this.configuration).apiCourseGet(studentIds, teacherIds, page, limit, q, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -150,10 +150,14 @@ export default () => {
     // 获取课程列表
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
         let studentIds: string[] = []
-        // console.log(location.pathname)
-        if (location.pathname == '/my-courses')
+        let teacherIds: string[] = []
+        if (location.pathname == '/my-courses') {
             studentIds = auth.user?.roles.includes(UserRole.Student) ? [auth.user.id] : []
-        const res = await api.Course.apiCourseGet([...studentIds], current_ - 1, limit_, queryStr_)
+            teacherIds = auth.user?.roles.includes(UserRole.Teacher) ? [auth.user.id] : []
+        }
+        const res = await api.Course.apiCourseGet([...studentIds], teacherIds, current_ - 1, limit_, queryStr_)
+
+
 
         const tmp = res.data.data?.dataList?.map(async x => {
             const cd = x as CourseData

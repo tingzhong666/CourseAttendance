@@ -2,6 +2,7 @@
 using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CourseAttendance.Repositories
 {
@@ -31,9 +32,13 @@ namespace CourseAttendance.Repositories
 			{
 				coursesQ = coursesQ.Where(x => x.Name.Contains(query.q));
 			}
-			if (query.studentIds.Count != 0 )
+			if (query.studentIds.Count != 0)
 			{
 				coursesQ = coursesQ.Where(x => query.studentIds.Any(v => x.CourseStudents.Any(y => y.StudentId == v)));
+			}
+			if (query.TeacherIds.Count != 0)
+			{
+				coursesQ = coursesQ.Where(x => query.TeacherIds.Contains(x.TeacherUserId));
 			}
 
 			var courses = await coursesQ

@@ -1167,6 +1167,16 @@
             }
           },
           {
+            "name": "TeacherIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
             "name": "Page",
             "in": "query",
             "schema": {

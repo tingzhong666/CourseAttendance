@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { useAuth } from '../../../Contexts/auth'
 import { useLocation } from 'react-router'
 import { MenuItemGroupType } from 'antd/es/menu/interface'
+import { UserRole } from '../../../services/api'
 
 
 export default () => {
@@ -13,12 +14,57 @@ export default () => {
     const routeLocation = useLocation()
 
     useEffect(() => {
+        setItems([
+            { key: '/home', label: '首页' },
+            {
+                key: 'sub1',
+                label: '课堂与考勤',
+                children: [
+                    { key: '/courses', label: '课程列表' },
+                    ...(
+                        auth.user?.roles.includes(UserRole.Student) ||
+                            auth.user?.roles.includes(UserRole.Teacher)
+                            ? [{ key: '/my-courses', label: '我的课程' }] : []),
+                    { key: '/attendance', label: '考勤' },
+                ],
+            },
+            {
+                key: 'sub2',
+                label: '设置',
+                children: [
+                    ...(
+                        auth.user?.roles.includes(UserRole.Academic) ||
+                            auth.user?.roles.includes(UserRole.Admin)
+                            ? [{ key: '/user-manager', label: '用户管理' }] : []),
+                    // { key: '/student-manager', label: '学生管理' },
+                    { key: '/modify-pw', label: '修改密码' },
+                    { key: '/modify-userinfo', label: '个人信息修改' },
+                ],
+            },
+
+            ...(
+                auth.user?.roles.includes(UserRole.Academic) ||
+                    auth.user?.roles.includes(UserRole.Admin)
+                    ? [
+                        {
+                            key: 'grades-manager',
+                            label: '班级管理',
+                            children: [
+                                { key: '/majors-category-manager', label: '大专业管理', },
+                                { key: '/majors-subcategory-manager', label: '专业管理' },
+                                { key: '/classes-manager', label: '班级管理' },
+                            ],
+                        }
+                    ] : []),
+            { key: '/logout', label: '退出登录' },
+        ])
+
         findParent()
     }, [])
 
 
     type MenuItem = Required<MenuProps>['items'];
-    const items: MenuItem = [
+    const [items, setItems] = useState<MenuItem>([
         { key: '/home', label: '首页' },
         {
             key: 'sub1',
@@ -43,13 +89,13 @@ export default () => {
             key: 'grades-manager',
             label: '班级管理',
             children: [
-                { key: '/majors-category-manager', label: '大专业管理' },
+                { key: '/majors-category-manager', label: '大专业管理', },
                 { key: '/majors-subcategory-manager', label: '专业管理' },
                 { key: '/classes-manager', label: '班级管理' },
             ],
         },
         { key: '/logout', label: '退出登录' },
-    ]
+    ])
 
 
     const selecetChange = (x: SelectInfo): void => {

@@ -90,7 +90,7 @@ export default (prop: Props) => {
     // 课程选择控件
     const [optionsCourse, setOptionsCourse] = useState<SelectProps['options']>()
     const onSearchCourse: (value: string) => void = async (value) => {
-        const res = await api.Course.apiCourseGet([], 1, 9999, value)
+        const res = await api.Course.apiCourseGet([],[], 1, 9999, value)
 
         const tmp = res.data.data?.dataList?.map(x => {
             return {
