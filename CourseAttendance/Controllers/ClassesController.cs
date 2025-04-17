@@ -22,12 +22,14 @@ namespace CourseAttendance.Controllers
 		private readonly GradeRepository _gradeRepository;
 		private readonly StudentRepository _studentRepository;
 		private readonly UserService _userService;
+		private readonly AppDBContext _context;
 
-		public ClassesController(GradeRepository gradeRepository, StudentRepository studentRepository, UserService userService)
+		public ClassesController(GradeRepository gradeRepository, StudentRepository studentRepository, UserService userService, AppDBContext context)
 		{
 			_gradeRepository = gradeRepository;
 			_studentRepository = studentRepository;
 			_userService = userService;
+			_context = context;
 		}
 
 		/// <summary>
@@ -84,12 +86,24 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<GradeResponseDto>>> CreateClass([FromBody] GradeRequestDto gradeRequest)
 		{
-			var grade = gradeRequest.ToModel();
-			var res = await _gradeRepository.AddAsync(grade);
-			if (res == 0)
-				return Ok(new ApiResponse<GradeResponseDto> { Code = 2, Msg = "创建失败", Data = null });
-			var dto = grade.ToResponseDto();
-			return Ok(new ApiResponse<GradeResponseDto> { Code = 1, Msg = "", Data = dto });
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
+			{
+				var grade = gradeRequest.ToModel();
+				var res = await _gradeRepository.AddAsync(grade);
+				if (res == 0)
+					throw new Exception("创建失败");
+				var dto = grade.ToResponseDto();
+
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<GradeResponseDto> { Code = 1, Msg = "", Data = dto });
+			}
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<GradeResponseDto> { Code = 2, Msg = err.Message, Data = null });
+			}
+
 		}
 
 		/// <summary>
@@ -102,13 +116,23 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> UpdateClass(int id, [FromBody] GradeRequestDto gradeRequest)
 		{
-			var grade = gradeRequest.ToModel();
-			grade.Id = id; // 确保 ID 正确
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
+			{
+				var grade = gradeRequest.ToModel();
+				grade.Id = id; // 确保 ID 正确
 
-			var res = await _gradeRepository.UpdateAsync(grade);
-			if (res == 0)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "更新失败", Data = null });
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+				var res = await _gradeRepository.UpdateAsync(grade);
+				if (res == 0)
+					throw new Exception("更新失败");
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			}
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 		/// <summary>
@@ -120,10 +144,20 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> DeleteClass(int id)
 		{
-			var res = await _gradeRepository.DeleteAsync(id);
-			if (res == 0)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败", Data = null });
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
+			{
+				var res = await _gradeRepository.DeleteAsync(id);
+				if (res == 0)
+					throw new Exception("删除失败");
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			}
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 		/// <summary>
@@ -160,6 +194,7 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> UpdateStudentToClass(int id, string studentId)
 		{
+			var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				var grade = await _gradeRepository.GetByIdAsync(id);
@@ -168,18 +203,20 @@ namespace CourseAttendance.Controllers
 
 				var studentModel = await _studentRepository.GetByIdAsync(studentId);
 				if (studentModel == null)
-					return Ok(new ApiResponse<object> { Code = 2, Msg = "未查到此学生", Data = null });
+					throw new Exception("未查到此学生");
 
 				studentModel.GradeId = id;
 				var res = await _studentRepository.UpdateAsync(studentModel);
 				if (res == 0)
-					return Ok(new ApiResponse<object> { Code = 2, Msg = "更换失败", Data = null });
+					throw new Exception("更换失败");
 
+				await transaction.CommitAsync();
 				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
 			catch (Exception err)
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "更换失败", Data = null });
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
 

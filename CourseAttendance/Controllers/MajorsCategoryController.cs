@@ -6,6 +6,7 @@ using CourseAttendance.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using CourseAttendance.AppDataContext;
 
 namespace CourseAttendance.Controllers
 {
@@ -14,10 +15,12 @@ namespace CourseAttendance.Controllers
 	public class MajorsCategoryController : ControllerBase
 	{
 		public readonly MajorsCategoryRepository _majorsCategoryRepository;
+		private readonly AppDBContext _context;
 
-		public MajorsCategoryController(MajorsCategoryRepository majorsCategoryRepository)
+		public MajorsCategoryController(MajorsCategoryRepository majorsCategoryRepository, AppDBContext context)
 		{
 			_majorsCategoryRepository = majorsCategoryRepository;
+			_context = context;
 		}
 
 
@@ -60,14 +63,17 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> Del([FromQuery] int id)
 		{
+			var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				var res = await _majorsCategoryRepository.DelAsync(id);
 				if (res == 0) throw new Exception("删除失败");
+				await transaction.CommitAsync();
 				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
 			catch (Exception err)
 			{
+				await transaction.RollbackAsync();
 				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
@@ -76,16 +82,19 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> Update([FromBody] MajorsCategoryReqDto dto, [FromQuery] int id)
 		{
+			var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				var model = dto.ToModel();
 				model.Id = id;
 				var res = await _majorsCategoryRepository.UpdateAsync(model);
 				if (res == 0) throw new Exception("更新失败");
+				await transaction.CommitAsync();
 				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
 			catch (Exception err)
 			{
+				await transaction.RollbackAsync();
 				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
@@ -95,15 +104,18 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> Create([FromBody] MajorsCategoryReqDto dto)
 		{
+			var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				var model = dto.ToModel();
 				var res = await _majorsCategoryRepository.AddAsync(model);
 				if (res == 0) throw new Exception("创建失败");
+				await transaction.CommitAsync();
 				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
 			catch (Exception err)
 			{
+				await transaction.RollbackAsync();
 				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}

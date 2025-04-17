@@ -27,14 +27,16 @@ namespace CourseAttendance.Controllers
 		private readonly TokenService _tokenService;
 		private readonly SignInManager<User> _signInManager;
 		private readonly UserService _userService;
+		private readonly AppDBContext _context;
 
-		public AccountController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager, UserRepository userRepository, UserService userService)
+		public AccountController(UserManager<User> userManager, TokenService tokenService, SignInManager<User> signInManager, UserRepository userRepository, UserService userService, AppDBContext context)
 		{
 			_userManager = userManager;
 			_tokenService = tokenService;
 			_signInManager = signInManager;
 			_userRepository = userRepository;
 			_userService = userService;
+			_context = context;
 		}
 
 		#region 通用
@@ -177,24 +179,32 @@ namespace CourseAttendance.Controllers
 		[Authorize]
 		public async Task<ActionResult<ApiResponse<object>>> ChangePasswordSelf(ChangePasswordSelfReqDto reqDto)
 		{
-			var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
-			if (userName == null)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "未携带用户名信息", Data = null });
-
-			var user = await _userRepository._userManager.FindByNameAsync(userName);
-			if (user == null)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "未找到此用户", Data = null });
-
-			if (reqDto.NewPassword != reqDto.ConfirmPassword)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "新密码和确认密码不匹配。", Data = null });
-
-			var result = await _userManager.ChangePasswordAsync(user, reqDto.CurrentPassword, reqDto.NewPassword);
-			if (!result.Succeeded)
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
 			{
-				return Ok(new ApiResponse<object> { Code = 2, Msg = result.Errors.ToString(), Data = null });
-			}
+				var userName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+				if (userName == null)
+					throw new Exception("未携带用户名信息");
 
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+				var user = await _userRepository._userManager.FindByNameAsync(userName);
+				if (user == null)
+					throw new Exception("未找到此用户");
+
+				if (reqDto.NewPassword != reqDto.ConfirmPassword)
+					throw new Exception("新密码和确认密码不匹配");
+
+				var result = await _userManager.ChangePasswordAsync(user, reqDto.CurrentPassword, reqDto.NewPassword);
+				if (!result.Succeeded)
+					throw new Exception(result.Errors.ToString());
+
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			}
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 
@@ -206,7 +216,7 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpPut("update-user-self")]
 		[Authorize]
-		public async Task<OkObjectResult> UpdateSelf([FromBody] UpdateProfileSelfReqDto dto)
+		public async Task<ActionResult<ApiResponse<object>>> UpdateSelf([FromBody] UpdateProfileSelfReqDto dto)
 		{
 			try
 			{
@@ -274,6 +284,7 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> DeleteUser(string id)
 		{
+			var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				var user = await _userRepository.GetByIdAsync(id);
@@ -288,10 +299,12 @@ namespace CourseAttendance.Controllers
 				if (!res.Succeeded)
 					throw new Exception("删除失败");
 
+				await transaction.CommitAsync();
 				return Ok(new ApiResponse<object> { Code = 1, Msg = "删除成功", Data = null });
 			}
 			catch (Exception err)
 			{
+				await transaction.RollbackAsync();
 				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
@@ -306,6 +319,7 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin,Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> ChangePassword(ResetPasswordReqDto reqDto)
 		{
+			var transaction = await _context.Database.BeginTransactionAsync();
 			try
 			{
 				var user = await _userRepository.GetByIdAsync(reqDto.UserId);
@@ -325,10 +339,12 @@ namespace CourseAttendance.Controllers
 				if (!result.Succeeded)
 					throw new Exception(result.Errors.ToString());
 
+				await transaction.CommitAsync();
 				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
 			catch (Exception err)
 			{
+				await transaction.RollbackAsync();
 				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
@@ -341,7 +357,7 @@ namespace CourseAttendance.Controllers
 		/// <returns></returns>
 		[HttpPut("update-user")]
 		[Authorize(Roles = "Admin")]
-		public async Task<OkObjectResult> Update([FromBody] UpdateProfileReqDto dto, string id)
+		public async Task<ActionResult<ApiResponse<object>>> Update([FromBody] UpdateProfileReqDto dto, string id)
 		{
 			try
 			{

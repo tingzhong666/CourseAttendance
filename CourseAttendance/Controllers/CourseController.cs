@@ -96,6 +96,7 @@ namespace CourseAttendance.Controllers
 			}
 			catch (Exception err)
 			{
+				await transaction.RollbackAsync();
 				return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
@@ -105,37 +106,47 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> UpdateCourse(int id, [FromBody] CourseRequestDto dto)
 		{
-			var model = dto.ToModel();
-			model.Id = id;
-
-			// 课程更新
-			var res = await _courseRepository.UpdateAsync(model);
-			if (res == 0)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "更新失败", Data = null });
-
-
-			model = await _courseRepository.GetByIdAsync(id);
-			// 上课时间更新
-			var courseTimesDto = dto.CourseTimes;
-			// 删除
-			var delCourseTimeModels = model.CourseTimes.Where(x => !courseTimesDto.Any(v => x.CourseId == v.CourseId && x.TimeTableId == v.TimeTableId && x.DateDay.Date == v.DateDay.Date)).ToList();
-			// 新增
-			var addCourseTimesDto = courseTimesDto.Where(x => !model.CourseTimes.Any(v => x.CourseId == v.CourseId && x.TimeTableId == v.TimeTableId && x.DateDay.Date == v.DateDay.Date)).ToList();
-
-			foreach (var courseTimeModel in delCourseTimeModels)
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
 			{
-				res = await _courseTimeRepository.DeleteAsync(courseTimeModel.Id);
-				if (res == 0)
-					return Ok(new ApiResponse<object> { Code = 2, Msg = "上课时间删除失败", Data = null });
-			}
-			foreach (var courseTimeDto in courseTimesDto)
-			{
-				res = await _courseTimeRepository.AddAsync(courseTimeDto.ToModel());
-				if (res == 0)
-					return Ok(new ApiResponse<object> { Code = 2, Msg = "上课时间创建失败", Data = null });
-			}
+				var model = dto.ToModel();
+				model.Id = id;
 
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+				// 课程更新
+				var res = await _courseRepository.UpdateAsync(model);
+				if (res == 0)
+						throw new Exception("更新失败");
+
+
+				model = await _courseRepository.GetByIdAsync(id);
+				// 上课时间更新
+				var courseTimesDto = dto.CourseTimes;
+				// 删除
+				var delCourseTimeModels = model.CourseTimes.Where(x => !courseTimesDto.Any(v => x.CourseId == v.CourseId && x.TimeTableId == v.TimeTableId && x.DateDay.Date == v.DateDay.Date)).ToList();
+				// 新增
+				var addCourseTimesDto = courseTimesDto.Where(x => !model.CourseTimes.Any(v => x.CourseId == v.CourseId && x.TimeTableId == v.TimeTableId && x.DateDay.Date == v.DateDay.Date)).ToList();
+
+				foreach (var courseTimeModel in delCourseTimeModels)
+				{
+					res = await _courseTimeRepository.DeleteAsync(courseTimeModel.Id);
+					if (res == 0)
+						throw new Exception("上课时间删除失败");
+				}
+				foreach (var courseTimeDto in courseTimesDto)
+				{
+					res = await _courseTimeRepository.AddAsync(courseTimeDto.ToModel());
+					if (res == 0)
+						throw new Exception("上课时间创建失败");
+				}
+
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			}
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 
 		// 删除
@@ -143,26 +154,36 @@ namespace CourseAttendance.Controllers
 		[Authorize(Roles = "Admin, Academic")]
 		public async Task<ActionResult<ApiResponse<object>>> DeleteCourse(int id)
 		{
-			var model = await _courseRepository.GetByIdAsync(id);
-			if (model == null)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败，不存在", Data = null });
-
-			// 上课时间删除
-			var courseTimeModels = model.CourseTimes;
-			foreach (var courseTimeModel in courseTimeModels)
+			var transaction = await _context.Database.BeginTransactionAsync();
+			try
 			{
-				var ress = await _courseTimeRepository.DeleteAsync(courseTimeModel.Id);
-				if (ress == 0)
-					return Ok(new ApiResponse<CourseResponseDto?> { Code = 2, Msg = "上课时间删除失败", Data = null });
+				var model = await _courseRepository.GetByIdAsync(id);
+				if (model == null)
+					throw new Exception("删除失败，不存在");
+
+				// 上课时间删除
+				var courseTimeModels = model.CourseTimes;
+				foreach (var courseTimeModel in courseTimeModels)
+				{
+					var ress = await _courseTimeRepository.DeleteAsync(courseTimeModel.Id);
+					if (ress == 0)
+					throw new Exception("上课时间删除失败");
+				}
+
+				// 课程删除
+				var res = await _courseRepository.DeleteAsync(id);
+				if (res == 0)
+					throw new Exception("删除失败");
+
+
+				await transaction.CommitAsync();
+				return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
 			}
-
-			// 课程删除
-			var res = await _courseRepository.DeleteAsync(id);
-			if (res == 0)
-				return Ok(new ApiResponse<object> { Code = 2, Msg = "删除失败", Data = null });
-
-
-			return Ok(new ApiResponse<object> { Code = 1, Msg = "", Data = null });
+			catch (Exception err)
+			{
+				await transaction.RollbackAsync();
+				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
+			}
 		}
 	}
 }
