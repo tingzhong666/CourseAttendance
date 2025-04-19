@@ -1,5 +1,5 @@
 import { v4 } from "uuid"
-import { WeekDay } from "../Models/WeekDay"
+import { WeekDay } from "../models/WeekDay"
 
 export const WeekdayToString = (weekday: WeekDay): WeekDay => {
     switch (weekday) {
