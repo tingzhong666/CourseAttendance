@@ -32,6 +32,16 @@ namespace CourseAttendance.Repositories
 					x.MajorsSubcategory.MajorsCategory.Name.Contains(query.q)
 				);
 
+			// 创建时间排序
+			if (query.SortCreateTime != null && query.SortCreateTime == 1) // 降
+			{
+				queryable = queryable.OrderByDescending(x => x.CreatedAt);
+			}
+			if (query.SortCreateTime != null && query.SortCreateTime == 0) // 升
+			{
+				queryable = queryable.OrderBy(x => x.CreatedAt);
+			}
+
 			// 执行查询
 			var queryRes = await queryable
 				.Include(g => g.Students)

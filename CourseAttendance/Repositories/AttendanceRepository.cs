@@ -19,7 +19,7 @@ namespace CourseAttendance.Repositories
 		public async Task<Attendance?> GetByIdAsync(int id)
 		{
 			return await _context.Attendances
-				.Include(a => a.Course)
+				.Include(a => a.AttendanceBatch)
 				.Include(a => a.Student)
 				.FirstOrDefaultAsync(a => a.Id == id);
 		}
@@ -29,7 +29,7 @@ namespace CourseAttendance.Repositories
 			var queryable = _context.Attendances.AsQueryable();
 			// 课程名
 			if (query.q != null && query.q != "")
-				queryable = queryable.Where(x => x.Course.Name.Contains(query.q));
+				queryable = queryable.Where(x => x.AttendanceBatch.Course.Name.Contains(query.q));
 
 			// 学生id 与 学生名 优先id
 			if (query.StudentId != null && query.StudentId.Count != 0)
@@ -39,20 +39,54 @@ namespace CourseAttendance.Repositories
 
 			// 老师id 与 学生名 优先id
 			if (query.TeacherId != null && query.TeacherId.Count != 0)
-				queryable = queryable.Where(x => query.TeacherId.Contains(x.Course.Teacher.UserId));
+				queryable = queryable.Where(x => query.TeacherId.Contains(x.AttendanceBatch.Course.Teacher.UserId));
 			if (query.TeacherName != null && query.TeacherName != "" && query.TeacherId == null)
-				queryable = queryable.Where(x => x.Course.Teacher.User.Name.Contains(query.TeacherName));
+				queryable = queryable.Where(x => x.AttendanceBatch.Course.Teacher.User.Name.Contains(query.TeacherName));
 
 			// 时间范围
 			if (query.StartTime != null)
-				queryable = queryable.Where(x => query.StartTime < x.StartTime);
+				queryable = queryable.Where(x => query.StartTime < x.AttendanceBatch.StartTime);
 			if (query.EndTime != null)
-				queryable = queryable.Where(x => x.EndTime < query.EndTime);
+				queryable = queryable.Where(x => x.AttendanceBatch.EndTime < query.EndTime);
 
+
+			// 大专业
+			if (query.MajorsCategoryId != null)
+			{
+				queryable = queryable.Where(x => x.AttendanceBatch.Course.MajorsSubcategory.MajorsCategoriesId == query.MajorsCategoryId);
+			}
+			// 小专业
+			if (query.MajorsSubcategoriesId != null)
+			{
+				queryable = queryable.Where(x => x.AttendanceBatch.Course.MajorsSubcategoryId == query.MajorsSubcategoriesId);
+			}
+
+			// 考勤状态
+			if (query.AttendanceStatus != null)
+			{
+				queryable = queryable.Where(x => x.Status == query.AttendanceStatus);
+			}
+
+			// 考勤批次
+			if (query.BatchId != null)
+			{
+				queryable = queryable.Where(x => x.AttendanceBatchId == query.BatchId);
+			}
+
+
+			// 创建时间排序
+			if (query.SortCreateTime != null && query.SortCreateTime == 1) // 降
+			{
+				queryable = queryable.OrderByDescending(x => x.CreatedAt);
+			}
+			if (query.SortCreateTime != null && query.SortCreateTime == 0) // 升
+			{
+				queryable = queryable.OrderBy(x => x.CreatedAt);
+			}
 
 			// 执行查询
 			var queryRes = await queryable
-				.Include(a => a.Course)
+				.Include(a => a.AttendanceBatch)
 				.Include(a => a.Student)
 				.ToListAsync();
 			var total = queryRes.Count;
@@ -74,13 +108,11 @@ namespace CourseAttendance.Repositories
 
 			model.UpdatedAt = DateTime.Now;
 
-			model.CheckMethod = attendance.CheckMethod;
-			model.StartTime = attendance.StartTime;
-			model.EndTime = attendance.EndTime;
 			model.Status = attendance.Status;
 			model.SignInTime = attendance.SignInTime;
 			model.Remark = attendance.Remark;
-			model.PassWord = attendance.PassWord;
+			model.StudentId = attendance.StudentId;
+			model.AttendanceBatchId = attendance.AttendanceBatchId;
 
 			return await _context.SaveChangesAsync();
 		}

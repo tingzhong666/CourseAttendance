@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CourseAttendance.DtoModel.ResDtos
 {
-	public class AttendanceResponseDto
+	public class AttendanceBatchResDto
 	{
+		[Required]
 		public DateTime CreatedAt { get; set; }
+		[Required]
 		public DateTime UpdatedAt { get; set; }
 
 		[Required]
@@ -16,18 +18,14 @@ namespace CourseAttendance.DtoModel.ResDtos
 		public DateTime StartTime { get; set; }
 		[Required]
 		public DateTime EndTime { get; set; }
-		[Required]
-		public AttendanceStatus Status { get; set; }
-		public DateTime? SignInTime { get; set; }
-		[Required]
-		public string Remark { get; set; }
+
+		public string? PassWord { get; set; }
+		public string? QRCode { get; set; }
 
 
-		[Required]
-		public int AttendanceBatchId { get; set; }
-		[Required]
-		public string StudentId { get; set; }
 		[Required]
 		public int CourseId { get; set; }
+		[Required]
+		public List<int> AttendanceIds { get; set; }
 	}
 }

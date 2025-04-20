@@ -18,10 +18,16 @@ namespace CourseAttendance.Model
 
 		[ForeignKey(nameof(Teacher))]
 		public string TeacherUserId { get; set; }
-
 		public virtual Teacher Teacher { get; set; }
+
+		// 小专业
+		[ForeignKey(nameof(MajorsSubcategory))]
+		public int MajorsSubcategoryId { get; set; }
+		public virtual MajorsSubcategory MajorsSubcategory { get; set; }
+
+
 		public virtual List<CourseStudent> CourseStudents { get; set; } // 选课
-		public virtual List<Attendance> Attendances { get; set; } // 考勤
+		public virtual List<AttendanceBatch> AttendanceBatchs { get; set; } // 考勤
 
 		/// <summary>
 		/// 上课时间

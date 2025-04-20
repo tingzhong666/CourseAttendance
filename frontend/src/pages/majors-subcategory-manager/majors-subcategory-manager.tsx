@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useAuth } from "../../Contexts/auth"
-import { MajorsSubcategoryResDto } from "../../services/api"
+import { MajorsSubcategoryResDto, UserRole } from "../../services/api"
 import * as api from '../../services/http/httpInstance'
 import Table, { ColumnsType } from "antd/es/table"
 import { Button, PaginationProps, Popconfirm, Space } from "antd"
@@ -21,11 +21,11 @@ export default () => {
     const major = useMajor()
     // 是否有增改删操作
     const [isChange, setIsChange] = useState(false)
-        const isChangeRef = useRef(isChange);
-    
-        useEffect(() => {
-            isChangeRef.current = isChange;
-        }, [isChange]);
+    const isChangeRef = useRef(isChange);
+
+    useEffect(() => {
+        isChangeRef.current = isChange;
+    }, [isChange]);
 
     useEffect(() => {
         init()
@@ -40,7 +40,7 @@ export default () => {
         await getData()
     }
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
-        var res = await api.MajorsSubcategory.apiMajorsSubcategoryGet(undefined,current_, limit_, queryStr_)
+        var res = await api.MajorsSubcategory.apiMajorsSubcategoryGet(undefined, current_, limit_, queryStr_)
         const tmp2 = res.data.data?.dataList?.map(x => {
             const tmp = x as MajorsSubcategoryData
             return tmp
@@ -68,7 +68,7 @@ export default () => {
             key: 'parentName',
             render: (_, record) => {
                 const majorsCategory = major.majorsCategories.find(v => v.id == record.majorsCategoriesId)
-                return  majorsCategory?.name || ''
+                return majorsCategory?.name || ''
             }
         },
         {
@@ -126,8 +126,9 @@ export default () => {
         <Space>
             <Search placeholder="输入查询的专业名" onSearch={onSearch} enterButton />
 
-            {/* 管理员  可以新增 */}
-            {auth.user?.roles.includes('Admin') ?
+            {auth.user?.roles.includes(UserRole.Admin) ||
+                auth.user?.roles.includes(UserRole.Academic)
+                ?
                 <Button type='primary' onClick={add}>新增</Button>
                 : <></>
             }

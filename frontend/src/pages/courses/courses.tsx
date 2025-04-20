@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import * as api from '../../services/http/httpInstance'
-import { Button, PaginationProps, Popconfirm, Space, Table } from 'antd';
+import { Button, PaginationProps, Popconfirm, Select, SelectProps, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { CourseResponseDto, CourseTimeResDto, UserRole } from '../../services/api';
 import Search, { SearchProps } from 'antd/es/input/Search';
 import { useAuth } from '../../Contexts/auth';
 import { CreateUUID, WeekdayToString, } from '../../Utils/Utils';
 import CourseAdd, { CourseAddProps } from '../../components/courseAdd';
-import { WeekDay } from '../../Models/WeekDay';
+import { WeekDay } from '../../models/WeekDay';
 import lodash from 'lodash'
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router';
+import { useMajor } from '../../Contexts/major';
 
 interface CourseTimeData {
     // 周几
@@ -46,10 +47,14 @@ export default () => {
     const [current, setCurrent] = useState(1)
     const [limit, setLimit] = useState(20)
     const [queryStr, setQueryStr] = useState('')
+    const [majorsCategoryId, setMajorsCategoryId] = useState<undefined | number>(undefined)
+    const [majorsSubcategoriesId, setMajorsSubcategoriesId] = useState<undefined | number>(undefined)
 
     const [addShow, setAddShow] = useState(false)
 
     const location = useLocation()
+
+    const major = useMajor()
 
 
     useEffect(() => {
@@ -57,7 +62,10 @@ export default () => {
     }, []);
 
     const init = async () => {
-        await getData();
+        await getData()
+
+        onSearchMajorsCategory('')
+        onSearchMajorsCategorySub('')
     }
 
     // 名 老师 地点 时间(每周哪几节节课上) 操作：选课 退课 删除
@@ -82,12 +90,18 @@ export default () => {
             key: 'time',
             //dataIndex: 'tags',
             render: (_, record) => {
-                const grp = lodash.groupBy(record.timeDatas, x => x.weekday)
-                const renders = lodash.map(grp, value => {
-                    const v2 = value.sort((a, b) => a.startWeek < b.startWeek ? -1 : 1)
+                // const grp = lodash.groupBy(record.timeDatas, x => x.weekday)
+                // const renders = lodash.map(grp, value => {
+                //     const v2 = value.sort((a, b) => a.startWeek < b.startWeek ? -1 : 1)
+                //     return (
+                //         <div key={CreateUUID()}>
+                //             {lodash.first(v2)?.weekday}({lodash.first(v2)?.startWeek.year()}年{lodash.first(v2)?.startWeek.week()}-{lodash.last(v2)?.endWeek.year()}年{lodash.last(v2)?.endWeek.week()}周)-{lodash.first(v2)?.section}
+                //         </div>)
+                // })
+                const renders = record.timeDatas.map(x => {
                     return (
-                        <div key={CreateUUID()}>
-                            {lodash.first(v2)?.weekday}({lodash.first(v2)?.startWeek.year()}年{lodash.first(v2)?.startWeek.week()}-{lodash.last(v2)?.endWeek.year()}年{lodash.last(v2)?.endWeek.week()}周)-{lodash.first(v2)?.section}
+                        <div key={x.key}>
+                            {x.weekday}({x.startWeek.year()}年{x.startWeek.week()}-{x.endWeek.year()}年{x.endWeek.week()}周)-{x.section}
                         </div>)
                 })
                 return (<>
@@ -100,14 +114,14 @@ export default () => {
             key: 'action',
             render: (_, record) => {
 
-                // 删除        是授此课的老师 ;教务处 ;管理员     显示
+                // 删改
                 const isDel = () => {
                     if (auth.user?.roles.includes('Admin'))
                         return true
                     if (auth.user?.roles.includes('Academic'))
                         return true
-                    if (auth.user?.roles.includes('Teacher') && record.isTeach)
-                        return true
+                    // if (auth.user?.roles.includes('Teacher') && record.isTeach)
+                    //     return true
                     return false
                 }
 
@@ -148,14 +162,14 @@ export default () => {
     }
 
     // 获取课程列表
-    const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
+    const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr, majorsCategoryId_ = majorsCategoryId, majorsSubcategoriesId_ = majorsSubcategoriesId) => {
         let studentIds: string[] = []
         let teacherIds: string[] = []
         if (location.pathname == '/my-courses') {
             studentIds = auth.user?.roles.includes(UserRole.Student) ? [auth.user.id] : []
             teacherIds = auth.user?.roles.includes(UserRole.Teacher) ? [auth.user.id] : []
         }
-        const res = await api.Course.apiCourseGet([...studentIds], teacherIds, current_ - 1, limit_, queryStr_)
+        const res = await api.Course.apiCourseGet([...studentIds], teacherIds, majorsCategoryId_, majorsSubcategoriesId_, current_ - 1, limit_, queryStr_)
 
 
 
@@ -187,19 +201,40 @@ export default () => {
     }
 
     // 课程时间转换
-    const timeDataConvert = async (dto: CourseTimeResDto[]) => {
+    const timeDataConvert = async (dto: CourseTimeResDto[]): Promise<CourseTimeData[]> => {
+        // const tmp = dto.map(async v => {
+        //     const res = await api.TimeTable.apiTimeTableIdGet(v.timeTableId || -1)
+        //     return {
+        //         weekday: WeekdayToString(dayjs(v.dateDay || '').day()),
+        //         section: res.data.data?.name,
+        //         key: CreateUUID(),
+        //         startWeek: dayjs(v.dateDay || ''),
+        //         endWeek: dayjs(v.dateDay || ''),
+        //     } as CourseTimeData
+        // }) ?? []
         const tmp = dto.map(async v => {
             const res = await api.TimeTable.apiTimeTableIdGet(v.timeTableId || -1)
             return {
-                weekday: WeekdayToString(dayjs(v.dateDay || '').day()),
-                section: res.data.data?.name,
-                key: CreateUUID(),
-                startWeek: dayjs(v.dateDay || ''),
-                endWeek: dayjs(v.dateDay || ''),
-            } as CourseTimeData
+                section: res.data.data?.name || '',
+                ...v
+            }
         }) ?? []
 
-        return await Promise.all(tmp)
+        const tmp2 = await Promise.all(tmp)
+
+        const tmp3 = lodash.groupBy(tmp2, x => dayjs(x.dateDay || '').day() + x.section)
+        const tmp4: Array<CourseTimeData> = lodash.map(tmp3, x => {
+            const x2 = x.sort((a, b) => dayjs(a.dateDay || '').week() < dayjs(b.dateDay || '').week() ? -1 : 1)
+            return {
+                weekday: WeekdayToString(dayjs(x[0].dateDay || '').day()),
+                section: x[0].section,
+                key: CreateUUID(),
+                startWeek: dayjs(x2[0].dateDay || ''),
+                endWeek: dayjs(lodash.last(x2)?.dateDay || ''),
+            } as CourseTimeData
+        })
+
+        return tmp4
     }
 
     // 查询
@@ -240,14 +275,66 @@ export default () => {
         setPutId(id)
     }
 
+
+    // 大专业选择
+    const [majorsCategories, setMajorsCategories] = useState<SelectProps['options']>([])
+    const [majorsCategoriesSearchValue, setMajorsCategoriesSearchValue] = useState('')
+    const onSearchMajorsCategory = async (value: string) => {
+        setMajorsCategoriesSearchValue(value)
+        const tmp = major.majorsCategories.map(x => ({ label: x.name, value: x.id }))
+        setMajorsCategories(tmp || [])
+
+    }
+    const onMajorsChange: SelectProps['onChange'] = (v) => {
+        setMajorsCategoryId(v)
+        setMajorsCategoriesSearchValue(majorsCategories?.find(x => x.value == v)?.label + '')
+        onSearchMajorsCategorySub('', v)
+    }
+
+    // 细分专业选择
+    const [majorsCategoriesSub, setMajorsCategoriesSub] = useState<SelectProps['options']>([])
+    const [majorsCategoriesSubSearchValue, setMajorsCategoriesSubSearchValue] = useState('')
+    const onSearchMajorsCategorySub = async (value: string, majorsCategoryId_ = majorsCategoryId) => {
+        setMajorsCategoriesSubSearchValue(value)
+        if (!majorsCategoryId_) return
+        const tmp = major.majorsSubcategories.filter(x => x.majorsCategoriesId == majorsCategoryId_).map(x => ({ label: x.name, value: x.id }))
+        setMajorsCategoriesSub(tmp || [])
+    }
+    const onMajorsSubChange: SelectProps['onChange'] = (v) => {
+        setMajorsSubcategoriesId(v)
+        setMajorsCategoriesSubSearchValue(majorsCategories?.find(x => x.value == v)?.label + '')
+    }
+
     return (<Space direction='vertical' style={{ width: '100%' }}>
         <Space>
             <Search placeholder="输入查询的课程名" onSearch={onSearch} enterButton />
 
+            <Select
+                showSearch
+                placeholder="输入搜索大专业名称"
+                options={majorsCategories}
+                value={majorsCategoryId}
+                onChange={onMajorsChange}
+
+                onSearch={onSearchMajorsCategory}
+                searchValue={majorsCategoriesSearchValue}
+                optionFilterProp="label"
+            />
+            <Select
+                showSearch
+                placeholder="输入搜索细分专业名称"
+                options={majorsCategoriesSub}
+                value={majorsSubcategoriesId}
+                onChange={onMajorsSubChange}
+
+                optionFilterProp="label"
+                onSearch={onSearchMajorsCategorySub}
+                searchValue={majorsCategoriesSubSearchValue}
+            />
+
             {/* 管理员 教务处 老师 可以新增课程 */}
             {auth.user?.roles.includes('Admin') ||
-                auth.user?.roles.includes('Academic') ||
-                auth.user?.roles.includes('Teacher') ?
+                auth.user?.roles.includes('Academic') ?
                 <Button type='primary' onClick={() => add()}>新增</Button>
                 : <></>
             }

@@ -111,10 +111,16 @@ builder.Services.AddScoped<TimeTableRepository>();
 builder.Services.AddScoped<CourseTimeRepository>();
 builder.Services.AddScoped<MajorsCategoryRepository>();
 builder.Services.AddScoped<MajorsSubcategoryRepository>();
+builder.Services.AddScoped<AttendanceBatchRepository>();
 
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<InitService>();
+builder.Services.AddScoped<AttendanceService>();
+
+
+
+builder.Services.AddHostedService<AttendanceCheckService>();
 
 
 // 配置文件上传限制

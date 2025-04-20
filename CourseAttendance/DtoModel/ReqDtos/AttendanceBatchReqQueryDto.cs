@@ -1,17 +1,7 @@
-﻿using CourseAttendance.Enums;
-
-namespace CourseAttendance.DtoModel.ReqDtos
+﻿namespace CourseAttendance.DtoModel.ReqDtos
 {
-	public class AttendanceReqQueryDto : ReqQueryDto
+	public class AttendanceBatchReqQueryDto : ReqQueryDto
 	{
-		/// <summary>
-		/// 学生id
-		/// </summary>
-		public List<string>? StudentId { get; set; }
-		/// <summary>
-		/// 学生名 如果有学生id 优先学生id
-		/// </summary>
-		public string? StudentName { get; set; }
 		/// <summary>
 		/// 老师id
 		/// </summary>
@@ -34,11 +24,5 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		public int? MajorsCategoryId { get; set; }
 		// 小专业
 		public int? MajorsSubcategoriesId { get; set; }
-
-		// 考勤状态
-		public AttendanceStatus? AttendanceStatus { get; set; }
-
-		// 考勤批次id
-		public int? BatchId { get; set; }
 	}
 }

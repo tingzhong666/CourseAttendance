@@ -25,5 +25,9 @@ namespace CourseAttendance.DtoModel.ResDtos
 		//public UserResponseDto Teacher { get; set; } // 如果需要提供教师信息
 		[Required]
 		public List<string> StudentIds { get; set; } = [];
+
+		// 小专业
+		[Required]
+		public int MajorsSubcategoryId { get; set; }
 	}
 }

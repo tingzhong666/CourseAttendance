@@ -5,7 +5,6 @@ import Login from "../pages/login/login";
 import HomeLayout from "../pages/homeLayout/homeLayout";
 import NotFount from "../pages/notfount404/notfount404";
 import Courses from "../pages/courses/courses";
-import MyCourses from "../pages/my-courses/my-courses";
 import Attendance from "../pages/attendance/attendance";
 import UserManager from "../pages/user-manager/user-manager";
 import ModifyPw from "../pages/modify-pw/modify-pw";
@@ -15,6 +14,7 @@ import MajorsSubcategoryManager from "../pages/majors-subcategory-manager/majors
 import MajorsCategoryManager from "../pages/majors-category-manager/majors-category-manager";
 import { Navigate } from "react-router";
 import { CreateUUID } from "../Utils/Utils";
+import AttendanceBatch from "../pages/attendanceBatch/attendanceBatch";
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +29,7 @@ export const router = createBrowserRouter([
                     // { path: "my-courses", element: <MyCourses /> },
                     { path: "my-courses", element: <Courses key={CreateUUID()} /> },
                     { path: "attendance", element: <Attendance /> },
+                    { path: "attendance-batch", element: <AttendanceBatch /> },
                     { path: "user-manager", element: <UserManager  key={CreateUUID()}/> },
                     { path: "student-manager", element: <UserManager  key={CreateUUID()}/> },
                     // { path: "student-manager", element: <StudentManager /> },

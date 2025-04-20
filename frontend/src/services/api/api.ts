@@ -26,42 +26,232 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
- * @interface AttendanceCreateRequestDto
+ * @interface AttendanceBatchCreateDto
  */
-export interface AttendanceCreateRequestDto {
+export interface AttendanceBatchCreateDto {
     /**
      * 
      * @type {string}
-     * @memberof AttendanceCreateRequestDto
+     * @memberof AttendanceBatchCreateDto
      */
     'passWord'?: string | null;
     /**
      * 
      * @type {string}
-     * @memberof AttendanceCreateRequestDto
+     * @memberof AttendanceBatchCreateDto
      */
     'startTime': string;
     /**
      * 
      * @type {string}
-     * @memberof AttendanceCreateRequestDto
+     * @memberof AttendanceBatchCreateDto
      */
     'endTime': string;
     /**
      * 
      * @type {number}
-     * @memberof AttendanceCreateRequestDto
+     * @memberof AttendanceBatchCreateDto
      */
     'courseId': number;
     /**
      * 
      * @type {CheckMethod}
-     * @memberof AttendanceCreateRequestDto
+     * @memberof AttendanceBatchCreateDto
      */
     'checkMethod': CheckMethod;
 }
 
 
+/**
+ * 
+ * @export
+ * @interface AttendanceBatchResDto
+ */
+export interface AttendanceBatchResDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDto
+     */
+    'createdAt': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDto
+     */
+    'updatedAt': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceBatchResDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {CheckMethod}
+     * @memberof AttendanceBatchResDto
+     */
+    'checkMethod': CheckMethod;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDto
+     */
+    'startTime': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDto
+     */
+    'endTime': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDto
+     */
+    'passWord'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDto
+     */
+    'qrCode'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceBatchResDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof AttendanceBatchResDto
+     */
+    'attendanceIds': Array<number>;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface AttendanceBatchResDtoApiResponse
+ */
+export interface AttendanceBatchResDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceBatchResDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {AttendanceBatchResDto}
+     * @memberof AttendanceBatchResDtoApiResponse
+     */
+    'data'?: AttendanceBatchResDto;
+}
+/**
+ * 
+ * @export
+ * @interface AttendanceBatchResDtoListDto
+ */
+export interface AttendanceBatchResDtoListDto {
+    /**
+     * 
+     * @type {Array<AttendanceBatchResDto>}
+     * @memberof AttendanceBatchResDtoListDto
+     */
+    'dataList'?: Array<AttendanceBatchResDto> | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceBatchResDtoListDto
+     */
+    'total'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface AttendanceBatchResDtoListDtoApiResponse
+ */
+export interface AttendanceBatchResDtoListDtoApiResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceBatchResDtoListDtoApiResponse
+     */
+    'code'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchResDtoListDtoApiResponse
+     */
+    'msg'?: string | null;
+    /**
+     * 
+     * @type {AttendanceBatchResDtoListDto}
+     * @memberof AttendanceBatchResDtoListDtoApiResponse
+     */
+    'data'?: AttendanceBatchResDtoListDto;
+}
+/**
+ * 
+ * @export
+ * @interface AttendanceBatchUpdateDto
+ */
+export interface AttendanceBatchUpdateDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceBatchUpdateDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {CheckMethod}
+     * @memberof AttendanceBatchUpdateDto
+     */
+    'checkMethod'?: CheckMethod;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchUpdateDto
+     */
+    'startTime'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchUpdateDto
+     */
+    'endTime'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceBatchUpdateDto
+     */
+    'passWord'?: string | null;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface AttendanceQRCodeReqDto
+ */
+export interface AttendanceQRCodeReqDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AttendanceQRCodeReqDto
+     */
+    'code': string;
+}
 /**
  * 
  * @export
@@ -127,13 +317,19 @@ export interface AttendanceResponseDto {
      * @type {number}
      * @memberof AttendanceResponseDto
      */
-    'courseId': number;
+    'attendanceBatchId': number;
     /**
      * 
      * @type {string}
      * @memberof AttendanceResponseDto
      */
     'studentId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof AttendanceResponseDto
+     */
+    'courseId': number;
 }
 
 
@@ -314,6 +510,12 @@ export interface CourseRequestDto {
      * @memberof CourseRequestDto
      */
     'teacherId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseRequestDto
+     */
+    'majorsSubcategoryId': number;
 }
 /**
  * 
@@ -369,6 +571,12 @@ export interface CourseResponseDto {
      * @memberof CourseResponseDto
      */
     'studentIds': Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseResponseDto
+     */
+    'majorsSubcategoryId': number;
 }
 /**
  * 
@@ -1274,6 +1482,19 @@ export interface ObjectApiResponse {
 /**
  * 
  * @export
+ * @interface PasswordAttendanceRequest
+ */
+export interface PasswordAttendanceRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof PasswordAttendanceRequest
+     */
+    'password': string;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 
@@ -1743,10 +1964,11 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountGet: async (roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiAccountGet: async (roles?: Array<UserRole>, page?: number, limit?: number, q?: string, sortCreateTime?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/account`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1777,6 +1999,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
+            }
+
+            if (sortCreateTime !== undefined) {
+                localVarQueryParameter['SortCreateTime'] = sortCreateTime;
             }
 
 
@@ -2134,11 +2360,12 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountGet(roles, page, limit, q, options);
+        async apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountGet(roles, page, limit, q, sortCreateTime, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2220,7 +2447,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountUpdateUserPut(id, updateProfileReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountUpdateUserPut']?.[localVarOperationServerIndex]?.url;
@@ -2232,7 +2459,7 @@ export const AccountApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAccountUpdateUserSelfPut(updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAccountUpdateUserSelfPut(updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountUpdateUserSelfPut(updateProfileSelfReqDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountApi.apiAccountUpdateUserSelfPut']?.[localVarOperationServerIndex]?.url;
@@ -2280,11 +2507,12 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListDtoApiResponse> {
-            return localVarFp.apiAccountGet(roles, page, limit, q, options).then((request) => request(axios, basePath));
+        apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): AxiosPromise<GetUserResDtoListDtoApiResponse> {
+            return localVarFp.apiAccountGet(roles, page, limit, q, sortCreateTime, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2345,7 +2573,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountUpdateUserPut(id?: string, updateProfileReqDto?: UpdateProfileReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountUpdateUserPut(id, updateProfileReqDto, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2354,7 +2582,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAccountUpdateUserSelfPut(updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        apiAccountUpdateUserSelfPut(updateProfileSelfReqDto?: UpdateProfileSelfReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAccountUpdateUserSelfPut(updateProfileSelfReqDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -2405,12 +2633,13 @@ export class AccountApi extends BaseAPI {
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
+     * @param {number} [sortCreateTime] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApi
      */
-    public apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return AccountApiFp(this.configuration).apiAccountGet(roles, page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiAccountGet(roles?: Array<UserRole>, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig) {
+        return AccountApiFp(this.configuration).apiAccountGet(roles, page, limit, q, sortCreateTime, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2517,13 +2746,18 @@ export const AttendanceApiAxiosParamCreator = function (configuration?: Configur
          * @param {string} [teacherName] 
          * @param {string} [startTime] 
          * @param {string} [endTime] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
+         * @param {AttendanceStatus} [attendanceStatus] 
+         * @param {number} [batchId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendanceGet: async (studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiAttendanceGet: async (studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, attendanceStatus?: AttendanceStatus, batchId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/attendance`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2568,6 +2802,22 @@ export const AttendanceApiAxiosParamCreator = function (configuration?: Configur
                     endTime;
             }
 
+            if (majorsCategoryId !== undefined) {
+                localVarQueryParameter['MajorsCategoryId'] = majorsCategoryId;
+            }
+
+            if (majorsSubcategoriesId !== undefined) {
+                localVarQueryParameter['MajorsSubcategoriesId'] = majorsSubcategoriesId;
+            }
+
+            if (attendanceStatus !== undefined) {
+                localVarQueryParameter['AttendanceStatus'] = attendanceStatus;
+            }
+
+            if (batchId !== undefined) {
+                localVarQueryParameter['BatchId'] = batchId;
+            }
+
             if (page !== undefined) {
                 localVarQueryParameter['Page'] = page;
             }
@@ -2578,6 +2828,10 @@ export const AttendanceApiAxiosParamCreator = function (configuration?: Configur
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
+            }
+
+            if (sortCreateTime !== undefined) {
+                localVarQueryParameter['SortCreateTime'] = sortCreateTime;
             }
 
 
@@ -2667,43 +2921,6 @@ export const AttendanceApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
-         * @param {AttendanceCreateRequestDto} [attendanceCreateRequestDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAttendancePost: async (attendanceCreateRequestDto?: AttendanceCreateRequestDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/attendance`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(attendanceCreateRequestDto, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {number} [id] 
          * @param {AttendanceUpdateRequestDto} [attendanceUpdateRequestDto] 
          * @param {*} [options] Override http request option.
@@ -2744,6 +2961,128 @@ export const AttendanceApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkingInPost: async (id?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/checking-in`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {PasswordAttendanceRequest} [passwordAttendanceRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkingInPwPost: async (id?: number, passwordAttendanceRequest?: PasswordAttendanceRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/checking-in-pw`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(passwordAttendanceRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {AttendanceQRCodeReqDto} [attendanceQRCodeReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkingInQrPost: async (id?: number, attendanceQRCodeReqDto?: AttendanceQRCodeReqDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/checking-in-qr`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(attendanceQRCodeReqDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -2762,14 +3101,19 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
          * @param {string} [teacherName] 
          * @param {string} [startTime] 
          * @param {string} [endTime] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
+         * @param {AttendanceStatus} [attendanceStatus] 
+         * @param {number} [batchId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAttendanceGet(studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceResponseDtoListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceGet(studentId, studentName, teacherId, teacherName, startTime, endTime, page, limit, q, options);
+        async apiAttendanceGet(studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, attendanceStatus?: AttendanceStatus, batchId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceResponseDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceGet(studentId, studentName, teacherId, teacherName, startTime, endTime, majorsCategoryId, majorsSubcategoriesId, attendanceStatus, batchId, page, limit, q, sortCreateTime, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendanceGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2800,18 +3144,6 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {AttendanceCreateRequestDto} [attendanceCreateRequestDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiAttendancePost(attendanceCreateRequestDto?: AttendanceCreateRequestDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceResponseDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendancePost(attendanceCreateRequestDto, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendancePost']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @param {number} [id] 
          * @param {AttendanceUpdateRequestDto} [attendanceUpdateRequestDto] 
          * @param {*} [options] Override http request option.
@@ -2821,6 +3153,44 @@ export const AttendanceApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendancePut(id, attendanceUpdateRequestDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AttendanceApi.apiAttendancePut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async checkingInPost(id?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkingInPost(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceApi.checkingInPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {PasswordAttendanceRequest} [passwordAttendanceRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async checkingInPwPost(id?: number, passwordAttendanceRequest?: PasswordAttendanceRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkingInPwPost(id, passwordAttendanceRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceApi.checkingInPwPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {AttendanceQRCodeReqDto} [attendanceQRCodeReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async checkingInQrPost(id?: number, attendanceQRCodeReqDto?: AttendanceQRCodeReqDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkingInQrPost(id, attendanceQRCodeReqDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceApi.checkingInQrPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2841,14 +3211,19 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          * @param {string} [teacherName] 
          * @param {string} [startTime] 
          * @param {string} [endTime] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
+         * @param {AttendanceStatus} [attendanceStatus] 
+         * @param {number} [batchId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAttendanceGet(studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceResponseDtoListDtoApiResponse> {
-            return localVarFp.apiAttendanceGet(studentId, studentName, teacherId, teacherName, startTime, endTime, page, limit, q, options).then((request) => request(axios, basePath));
+        apiAttendanceGet(studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, attendanceStatus?: AttendanceStatus, batchId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceResponseDtoListDtoApiResponse> {
+            return localVarFp.apiAttendanceGet(studentId, studentName, teacherId, teacherName, startTime, endTime, majorsCategoryId, majorsSubcategoriesId, attendanceStatus, batchId, page, limit, q, sortCreateTime, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2870,15 +3245,6 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
-         * @param {AttendanceCreateRequestDto} [attendanceCreateRequestDto] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiAttendancePost(attendanceCreateRequestDto?: AttendanceCreateRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceResponseDtoApiResponse> {
-            return localVarFp.apiAttendancePost(attendanceCreateRequestDto, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {number} [id] 
          * @param {AttendanceUpdateRequestDto} [attendanceUpdateRequestDto] 
          * @param {*} [options] Override http request option.
@@ -2886,6 +3252,35 @@ export const AttendanceApiFactory = function (configuration?: Configuration, bas
          */
         apiAttendancePut(id?: number, attendanceUpdateRequestDto?: AttendanceUpdateRequestDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
             return localVarFp.apiAttendancePut(id, attendanceUpdateRequestDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkingInPost(id?: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.checkingInPost(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {PasswordAttendanceRequest} [passwordAttendanceRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkingInPwPost(id?: number, passwordAttendanceRequest?: PasswordAttendanceRequest, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.checkingInPwPost(id, passwordAttendanceRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} [id] 
+         * @param {AttendanceQRCodeReqDto} [attendanceQRCodeReqDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkingInQrPost(id?: number, attendanceQRCodeReqDto?: AttendanceQRCodeReqDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.checkingInQrPost(id, attendanceQRCodeReqDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2905,15 +3300,20 @@ export class AttendanceApi extends BaseAPI {
      * @param {string} [teacherName] 
      * @param {string} [startTime] 
      * @param {string} [endTime] 
+     * @param {number} [majorsCategoryId] 
+     * @param {number} [majorsSubcategoriesId] 
+     * @param {AttendanceStatus} [attendanceStatus] 
+     * @param {number} [batchId] 
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
+     * @param {number} [sortCreateTime] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AttendanceApi
      */
-    public apiAttendanceGet(studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return AttendanceApiFp(this.configuration).apiAttendanceGet(studentId, studentName, teacherId, teacherName, startTime, endTime, page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiAttendanceGet(studentId?: Array<string>, studentName?: string, teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, attendanceStatus?: AttendanceStatus, batchId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig) {
+        return AttendanceApiFp(this.configuration).apiAttendanceGet(studentId, studentName, teacherId, teacherName, startTime, endTime, majorsCategoryId, majorsSubcategoriesId, attendanceStatus, batchId, page, limit, q, sortCreateTime, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2940,17 +3340,6 @@ export class AttendanceApi extends BaseAPI {
 
     /**
      * 
-     * @param {AttendanceCreateRequestDto} [attendanceCreateRequestDto] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AttendanceApi
-     */
-    public apiAttendancePost(attendanceCreateRequestDto?: AttendanceCreateRequestDto, options?: RawAxiosRequestConfig) {
-        return AttendanceApiFp(this.configuration).apiAttendancePost(attendanceCreateRequestDto, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {number} [id] 
      * @param {AttendanceUpdateRequestDto} [attendanceUpdateRequestDto] 
      * @param {*} [options] Override http request option.
@@ -2959,6 +3348,502 @@ export class AttendanceApi extends BaseAPI {
      */
     public apiAttendancePut(id?: number, attendanceUpdateRequestDto?: AttendanceUpdateRequestDto, options?: RawAxiosRequestConfig) {
         return AttendanceApiFp(this.configuration).apiAttendancePut(id, attendanceUpdateRequestDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} [id] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceApi
+     */
+    public checkingInPost(id?: number, options?: RawAxiosRequestConfig) {
+        return AttendanceApiFp(this.configuration).checkingInPost(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} [id] 
+     * @param {PasswordAttendanceRequest} [passwordAttendanceRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceApi
+     */
+    public checkingInPwPost(id?: number, passwordAttendanceRequest?: PasswordAttendanceRequest, options?: RawAxiosRequestConfig) {
+        return AttendanceApiFp(this.configuration).checkingInPwPost(id, passwordAttendanceRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} [id] 
+     * @param {AttendanceQRCodeReqDto} [attendanceQRCodeReqDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceApi
+     */
+    public checkingInQrPost(id?: number, attendanceQRCodeReqDto?: AttendanceQRCodeReqDto, options?: RawAxiosRequestConfig) {
+        return AttendanceApiFp(this.configuration).checkingInQrPost(id, attendanceQRCodeReqDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * AttendanceBatchApi - axios parameter creator
+ * @export
+ */
+export const AttendanceBatchApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {Array<string>} [teacherId] 
+         * @param {string} [teacherName] 
+         * @param {string} [startTime] 
+         * @param {string} [endTime] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchGet: async (teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/attendance-batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (teacherId) {
+                localVarQueryParameter['TeacherId'] = teacherId;
+            }
+
+            if (teacherName !== undefined) {
+                localVarQueryParameter['TeacherName'] = teacherName;
+            }
+
+            if (startTime !== undefined) {
+                localVarQueryParameter['StartTime'] = (startTime as any instanceof Date) ?
+                    (startTime as any).toISOString() :
+                    startTime;
+            }
+
+            if (endTime !== undefined) {
+                localVarQueryParameter['EndTime'] = (endTime as any instanceof Date) ?
+                    (endTime as any).toISOString() :
+                    endTime;
+            }
+
+            if (majorsCategoryId !== undefined) {
+                localVarQueryParameter['MajorsCategoryId'] = majorsCategoryId;
+            }
+
+            if (majorsSubcategoriesId !== undefined) {
+                localVarQueryParameter['MajorsSubcategoriesId'] = majorsSubcategoriesId;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['Page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['Limit'] = limit;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (sortCreateTime !== undefined) {
+                localVarQueryParameter['SortCreateTime'] = sortCreateTime;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchIdDelete: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiAttendanceBatchIdDelete', 'id', id)
+            const localVarPath = `/api/attendance-batch/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchIdGet: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiAttendanceBatchIdGet', 'id', id)
+            const localVarPath = `/api/attendance-batch/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AttendanceBatchCreateDto} [attendanceBatchCreateDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchPost: async (attendanceBatchCreateDto?: AttendanceBatchCreateDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/attendance-batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(attendanceBatchCreateDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {AttendanceBatchUpdateDto} [attendanceBatchUpdateDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchPut: async (attendanceBatchUpdateDto?: AttendanceBatchUpdateDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/attendance-batch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json-patch+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(attendanceBatchUpdateDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AttendanceBatchApi - functional programming interface
+ * @export
+ */
+export const AttendanceBatchApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AttendanceBatchApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {Array<string>} [teacherId] 
+         * @param {string} [teacherName] 
+         * @param {string} [startTime] 
+         * @param {string} [endTime] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAttendanceBatchGet(teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceBatchResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceBatchGet(teacherId, teacherName, startTime, endTime, majorsCategoryId, majorsSubcategoriesId, page, limit, q, sortCreateTime, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceBatchApi.apiAttendanceBatchGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAttendanceBatchIdDelete(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceBatchIdDelete(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceBatchApi.apiAttendanceBatchIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAttendanceBatchIdGet(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceBatchResDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceBatchIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceBatchApi.apiAttendanceBatchIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AttendanceBatchCreateDto} [attendanceBatchCreateDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAttendanceBatchPost(attendanceBatchCreateDto?: AttendanceBatchCreateDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttendanceBatchResDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceBatchPost(attendanceBatchCreateDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceBatchApi.apiAttendanceBatchPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {AttendanceBatchUpdateDto} [attendanceBatchUpdateDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAttendanceBatchPut(attendanceBatchUpdateDto?: AttendanceBatchUpdateDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ObjectApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAttendanceBatchPut(attendanceBatchUpdateDto, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AttendanceBatchApi.apiAttendanceBatchPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AttendanceBatchApi - factory interface
+ * @export
+ */
+export const AttendanceBatchApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AttendanceBatchApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {Array<string>} [teacherId] 
+         * @param {string} [teacherName] 
+         * @param {string} [startTime] 
+         * @param {string} [endTime] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
+         * @param {number} [page] 
+         * @param {number} [limit] 
+         * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchGet(teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceBatchResDtoListDtoApiResponse> {
+            return localVarFp.apiAttendanceBatchGet(teacherId, teacherName, startTime, endTime, majorsCategoryId, majorsSubcategoriesId, page, limit, q, sortCreateTime, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchIdDelete(id: number, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiAttendanceBatchIdDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchIdGet(id: number, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceBatchResDtoApiResponse> {
+            return localVarFp.apiAttendanceBatchIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AttendanceBatchCreateDto} [attendanceBatchCreateDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchPost(attendanceBatchCreateDto?: AttendanceBatchCreateDto, options?: RawAxiosRequestConfig): AxiosPromise<AttendanceBatchResDtoApiResponse> {
+            return localVarFp.apiAttendanceBatchPost(attendanceBatchCreateDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {AttendanceBatchUpdateDto} [attendanceBatchUpdateDto] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAttendanceBatchPut(attendanceBatchUpdateDto?: AttendanceBatchUpdateDto, options?: RawAxiosRequestConfig): AxiosPromise<ObjectApiResponse> {
+            return localVarFp.apiAttendanceBatchPut(attendanceBatchUpdateDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AttendanceBatchApi - object-oriented interface
+ * @export
+ * @class AttendanceBatchApi
+ * @extends {BaseAPI}
+ */
+export class AttendanceBatchApi extends BaseAPI {
+    /**
+     * 
+     * @param {Array<string>} [teacherId] 
+     * @param {string} [teacherName] 
+     * @param {string} [startTime] 
+     * @param {string} [endTime] 
+     * @param {number} [majorsCategoryId] 
+     * @param {number} [majorsSubcategoriesId] 
+     * @param {number} [page] 
+     * @param {number} [limit] 
+     * @param {string} [q] 
+     * @param {number} [sortCreateTime] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceBatchApi
+     */
+    public apiAttendanceBatchGet(teacherId?: Array<string>, teacherName?: string, startTime?: string, endTime?: string, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig) {
+        return AttendanceBatchApiFp(this.configuration).apiAttendanceBatchGet(teacherId, teacherName, startTime, endTime, majorsCategoryId, majorsSubcategoriesId, page, limit, q, sortCreateTime, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceBatchApi
+     */
+    public apiAttendanceBatchIdDelete(id: number, options?: RawAxiosRequestConfig) {
+        return AttendanceBatchApiFp(this.configuration).apiAttendanceBatchIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceBatchApi
+     */
+    public apiAttendanceBatchIdGet(id: number, options?: RawAxiosRequestConfig) {
+        return AttendanceBatchApiFp(this.configuration).apiAttendanceBatchIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AttendanceBatchCreateDto} [attendanceBatchCreateDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceBatchApi
+     */
+    public apiAttendanceBatchPost(attendanceBatchCreateDto?: AttendanceBatchCreateDto, options?: RawAxiosRequestConfig) {
+        return AttendanceBatchApiFp(this.configuration).apiAttendanceBatchPost(attendanceBatchCreateDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {AttendanceBatchUpdateDto} [attendanceBatchUpdateDto] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AttendanceBatchApi
+     */
+    public apiAttendanceBatchPut(attendanceBatchUpdateDto?: AttendanceBatchUpdateDto, options?: RawAxiosRequestConfig) {
+        return AttendanceBatchApiFp(this.configuration).apiAttendanceBatchPut(attendanceBatchUpdateDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2975,10 +3860,11 @@ export const ClassesApiAxiosParamCreator = function (configuration?: Configurati
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiClassesGet: async (page?: number, limit?: number, q?: string, sortCreateTime?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/classes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3005,6 +3891,10 @@ export const ClassesApiAxiosParamCreator = function (configuration?: Configurati
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
+            }
+
+            if (sortCreateTime !== undefined) {
+                localVarQueryParameter['SortCreateTime'] = sortCreateTime;
             }
 
 
@@ -3263,11 +4153,12 @@ export const ClassesApiFp = function(configuration?: Configuration) {
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiClassesGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDtoListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesGet(page, limit, q, options);
+        async apiClassesGet(page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GradeResponseDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiClassesGet(page, limit, q, sortCreateTime, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.apiClassesGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3361,11 +4252,12 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiClassesGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDtoListDtoApiResponse> {
-            return localVarFp.apiClassesGet(page, limit, q, options).then((request) => request(axios, basePath));
+        apiClassesGet(page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): AxiosPromise<GradeResponseDtoListDtoApiResponse> {
+            return localVarFp.apiClassesGet(page, limit, q, sortCreateTime, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3438,12 +4330,13 @@ export class ClassesApi extends BaseAPI {
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
+     * @param {number} [sortCreateTime] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ClassesApi
      */
-    public apiClassesGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return ClassesApiFp(this.configuration).apiClassesGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiClassesGet(page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig) {
+        return ClassesApiFp(this.configuration).apiClassesGet(page, limit, q, sortCreateTime, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3527,13 +4420,16 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @param {Array<string>} [studentIds] 
          * @param {Array<string>} [teacherIds] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet: async (studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiCourseGet: async (studentIds?: Array<string>, teacherIds?: Array<string>, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/course`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3558,6 +4454,14 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['TeacherIds'] = teacherIds;
             }
 
+            if (majorsCategoryId !== undefined) {
+                localVarQueryParameter['MajorsCategoryId'] = majorsCategoryId;
+            }
+
+            if (majorsSubcategoriesId !== undefined) {
+                localVarQueryParameter['MajorsSubcategoriesId'] = majorsSubcategoriesId;
+            }
+
             if (page !== undefined) {
                 localVarQueryParameter['Page'] = page;
             }
@@ -3568,6 +4472,10 @@ export const CourseApiAxiosParamCreator = function (configuration?: Configuratio
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
+            }
+
+            if (sortCreateTime !== undefined) {
+                localVarQueryParameter['SortCreateTime'] = sortCreateTime;
             }
 
 
@@ -3747,14 +4655,17 @@ export const CourseApiFp = function(configuration?: Configuration) {
          * 
          * @param {Array<string>} [studentIds] 
          * @param {Array<string>} [teacherIds] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(studentIds, teacherIds, page, limit, q, options);
+        async apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseResponseListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCourseGet(studentIds, teacherIds, majorsCategoryId, majorsSubcategoriesId, page, limit, q, sortCreateTime, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CourseApi.apiCourseGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3822,14 +4733,17 @@ export const CourseApiFactory = function (configuration?: Configuration, basePat
          * 
          * @param {Array<string>} [studentIds] 
          * @param {Array<string>} [teacherIds] 
+         * @param {number} [majorsCategoryId] 
+         * @param {number} [majorsSubcategoriesId] 
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseListDtoApiResponse> {
-            return localVarFp.apiCourseGet(studentIds, teacherIds, page, limit, q, options).then((request) => request(axios, basePath));
+        apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): AxiosPromise<CourseResponseListDtoApiResponse> {
+            return localVarFp.apiCourseGet(studentIds, teacherIds, majorsCategoryId, majorsSubcategoriesId, page, limit, q, sortCreateTime, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3882,15 +4796,18 @@ export class CourseApi extends BaseAPI {
      * 
      * @param {Array<string>} [studentIds] 
      * @param {Array<string>} [teacherIds] 
+     * @param {number} [majorsCategoryId] 
+     * @param {number} [majorsSubcategoriesId] 
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
+     * @param {number} [sortCreateTime] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseApi
      */
-    public apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return CourseApiFp(this.configuration).apiCourseGet(studentIds, teacherIds, page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiCourseGet(studentIds?: Array<string>, teacherIds?: Array<string>, majorsCategoryId?: number, majorsSubcategoriesId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig) {
+        return CourseApiFp(this.configuration).apiCourseGet(studentIds, teacherIds, majorsCategoryId, majorsSubcategoriesId, page, limit, q, sortCreateTime, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4481,10 +5398,11 @@ export const MajorsCategoryApiAxiosParamCreator = function (configuration?: Conf
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiMajorsCategoryGet: async (page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiMajorsCategoryGet: async (page?: number, limit?: number, q?: string, sortCreateTime?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/majors-category`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4511,6 +5429,10 @@ export const MajorsCategoryApiAxiosParamCreator = function (configuration?: Conf
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
+            }
+
+            if (sortCreateTime !== undefined) {
+                localVarQueryParameter['SortCreateTime'] = sortCreateTime;
             }
 
 
@@ -4667,11 +5589,12 @@ export const MajorsCategoryApiFp = function(configuration?: Configuration) {
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiMajorsCategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsCategoryResDtoListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsCategoryGet(page, limit, q, options);
+        async apiMajorsCategoryGet(page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsCategoryResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsCategoryGet(page, limit, q, sortCreateTime, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MajorsCategoryApi.apiMajorsCategoryGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4737,11 +5660,12 @@ export const MajorsCategoryApiFactory = function (configuration?: Configuration,
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiMajorsCategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<MajorsCategoryResDtoListDtoApiResponse> {
-            return localVarFp.apiMajorsCategoryGet(page, limit, q, options).then((request) => request(axios, basePath));
+        apiMajorsCategoryGet(page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): AxiosPromise<MajorsCategoryResDtoListDtoApiResponse> {
+            return localVarFp.apiMajorsCategoryGet(page, limit, q, sortCreateTime, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4797,12 +5721,13 @@ export class MajorsCategoryApi extends BaseAPI {
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
+     * @param {number} [sortCreateTime] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MajorsCategoryApi
      */
-    public apiMajorsCategoryGet(page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return MajorsCategoryApiFp(this.configuration).apiMajorsCategoryGet(page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsCategoryGet(page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig) {
+        return MajorsCategoryApiFp(this.configuration).apiMajorsCategoryGet(page, limit, q, sortCreateTime, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4892,10 +5817,11 @@ export const MajorsSubcategoryApiAxiosParamCreator = function (configuration?: C
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiMajorsSubcategoryGet: async (majorId?: number, page?: number, limit?: number, q?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiMajorsSubcategoryGet: async (majorId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/majors-subcategory`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4926,6 +5852,10 @@ export const MajorsSubcategoryApiAxiosParamCreator = function (configuration?: C
 
             if (q !== undefined) {
                 localVarQueryParameter['q'] = q;
+            }
+
+            if (sortCreateTime !== undefined) {
+                localVarQueryParameter['SortCreateTime'] = sortCreateTime;
             }
 
 
@@ -5083,11 +6013,12 @@ export const MajorsSubcategoryApiFp = function(configuration?: Configuration) {
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryGet(majorId, page, limit, q, options);
+        async apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiMajorsSubcategoryGet(majorId, page, limit, q, sortCreateTime, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MajorsSubcategoryApi.apiMajorsSubcategoryGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5154,11 +6085,12 @@ export const MajorsSubcategoryApiFactory = function (configuration?: Configurati
          * @param {number} [page] 
          * @param {number} [limit] 
          * @param {string} [q] 
+         * @param {number} [sortCreateTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig): AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse> {
-            return localVarFp.apiMajorsSubcategoryGet(majorId, page, limit, q, options).then((request) => request(axios, basePath));
+        apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig): AxiosPromise<MajorsSubcategoryResDtoListDtoApiResponse> {
+            return localVarFp.apiMajorsSubcategoryGet(majorId, page, limit, q, sortCreateTime, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -5215,12 +6147,13 @@ export class MajorsSubcategoryApi extends BaseAPI {
      * @param {number} [page] 
      * @param {number} [limit] 
      * @param {string} [q] 
+     * @param {number} [sortCreateTime] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MajorsSubcategoryApi
      */
-    public apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, options?: RawAxiosRequestConfig) {
-        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryGet(majorId, page, limit, q, options).then((request) => request(this.axios, this.basePath));
+    public apiMajorsSubcategoryGet(majorId?: number, page?: number, limit?: number, q?: string, sortCreateTime?: number, options?: RawAxiosRequestConfig) {
+        return MajorsSubcategoryApiFp(this.configuration).apiMajorsSubcategoryGet(majorId, page, limit, q, sortCreateTime, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

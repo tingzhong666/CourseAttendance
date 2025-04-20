@@ -13,15 +13,16 @@ namespace CourseAttendance.mapper
 				UpdatedAt = attendance.UpdatedAt,
 
 				Id = attendance.Id,
-				CheckMethod = attendance.CheckMethod,
-				EndTime = attendance.EndTime,
-				StartTime = attendance.StartTime,
+				CheckMethod = attendance.AttendanceBatch.CheckMethod,
+				EndTime = attendance.AttendanceBatch.EndTime,
+				StartTime = attendance.AttendanceBatch.StartTime,
 				Status = attendance.Status,
 				SignInTime = attendance.SignInTime,
 				Remark = attendance.Remark,
 
-				CourseId = attendance.CourseId,
+				CourseId = attendance.AttendanceBatch.CourseId,
 				StudentId = attendance.StudentId,
+				AttendanceBatchId = attendance.AttendanceBatch.Id,
 			};
 		}
 	}

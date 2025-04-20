@@ -14,7 +14,7 @@ export default () => {
     const routeLocation = useLocation()
 
     useEffect(() => {
-        setItems([
+        const items_ = [
             { key: '/home', label: '首页' },
             {
                 key: 'sub1',
@@ -26,6 +26,11 @@ export default () => {
                             auth.user?.roles.includes(UserRole.Teacher)
                             ? [{ key: '/my-courses', label: '我的课程' }] : []),
                     { key: '/attendance', label: '考勤' },
+                    ...(
+                        auth.user?.roles.includes(UserRole.Teacher) ||
+                            auth.user?.roles.includes(UserRole.Academic) ||
+                            auth.user?.roles.includes(UserRole.Admin)
+                            ? [{ key: '/attendance-batch', label: '考勤批次' }] : []),
                 ],
             },
             {
@@ -57,45 +62,15 @@ export default () => {
                         }
                     ] : []),
             { key: '/logout', label: '退出登录' },
-        ])
+        ]
+        setItems(items_)
 
-        findParent()
+        findParent(items_)
     }, [])
 
 
     type MenuItem = Required<MenuProps>['items'];
-    const [items, setItems] = useState<MenuItem>([
-        { key: '/home', label: '首页' },
-        {
-            key: 'sub1',
-            label: '课堂与考勤',
-            children: [
-                { key: '/courses', label: '课程列表' },
-                { key: '/my-courses', label: '我的课程' },
-                { key: '/attendance', label: '考勤' },
-            ],
-        },
-        {
-            key: 'sub2',
-            label: '设置',
-            children: [
-                { key: '/user-manager', label: '用户管理' },
-                // { key: '/student-manager', label: '学生管理' },
-                { key: '/modify-pw', label: '修改密码' },
-                { key: '/modify-userinfo', label: '个人信息修改' },
-            ],
-        },
-        {
-            key: 'grades-manager',
-            label: '班级管理',
-            children: [
-                { key: '/majors-category-manager', label: '大专业管理', },
-                { key: '/majors-subcategory-manager', label: '专业管理' },
-                { key: '/classes-manager', label: '班级管理' },
-            ],
-        },
-        { key: '/logout', label: '退出登录' },
-    ])
+    const [items, setItems] = useState<MenuItem>([])
 
 
     const selecetChange = (x: SelectInfo): void => {
@@ -108,8 +83,8 @@ export default () => {
 
 
     const [openKeys, setOpenKeys] = useState<Array<string>>([])
-    const findParent = () => {
-        const tmp = items.map(x => x as MenuItemGroupType).find(x => x.children?.find(v => v?.key == routeLocation.pathname))
+    const findParent = (items_: MenuItem = items) => {
+        const tmp = items_.map(x => x as MenuItemGroupType).find(x => x.children?.find(v => v?.key == routeLocation.pathname))
         setOpenKeys([...openKeys, tmp?.key + ''])
     }
 

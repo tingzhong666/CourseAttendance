@@ -115,7 +115,7 @@ namespace CourseAttendance.Controllers
 				// 课程更新
 				var res = await _courseRepository.UpdateAsync(model);
 				if (res == 0)
-						throw new Exception("更新失败");
+					throw new Exception("更新失败");
 
 
 				model = await _courseRepository.GetByIdAsync(id);
@@ -132,7 +132,7 @@ namespace CourseAttendance.Controllers
 					if (res == 0)
 						throw new Exception("上课时间删除失败");
 				}
-				foreach (var courseTimeDto in courseTimesDto)
+				foreach (var courseTimeDto in addCourseTimesDto)
 				{
 					res = await _courseTimeRepository.AddAsync(courseTimeDto.ToModel());
 					if (res == 0)
@@ -162,12 +162,12 @@ namespace CourseAttendance.Controllers
 					throw new Exception("删除失败，不存在");
 
 				// 上课时间删除
-				var courseTimeModels = model.CourseTimes;
+				var courseTimeModels = model.CourseTimes.ToList();
 				foreach (var courseTimeModel in courseTimeModels)
 				{
 					var ress = await _courseTimeRepository.DeleteAsync(courseTimeModel.Id);
 					if (ress == 0)
-					throw new Exception("上课时间删除失败");
+						throw new Exception("上课时间删除失败");
 				}
 
 				// 课程删除

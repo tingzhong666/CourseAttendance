@@ -15,6 +15,7 @@ namespace CourseAttendance.mapper
 				//EndTime = dto.EndTime,
 				Location = dto.Location,
 				TeacherUserId = dto.TeacherId,
+				MajorsSubcategoryId	 = dto.MajorsSubcategoryId
 			};
 		}
 	}

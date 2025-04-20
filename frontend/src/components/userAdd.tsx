@@ -84,7 +84,6 @@ export default (prop: Props) => {
     }
 
     const handleOk = () => {
-        setIsModalOpen(false);
 
         form.submit()
     }
@@ -93,6 +92,9 @@ export default (prop: Props) => {
     const [form] = Form.useForm<CreateUserReqDto>();
     const onFinish = async (values: CreateUserReqDto) => {
         try {
+
+             await form.validateFields()
+
             setConfirmLoading(true)
             if (prop.model == 'add')
                 await api.Account.apiAccountPost(values)
@@ -100,6 +102,7 @@ export default (prop: Props) => {
                 await api.Account.apiAccountUpdateUserPut(prop.putId, values as UpdateProfileReqDto)
             }
 
+            setIsModalOpen(false);
             prop.onFinish()
         } catch {
         }

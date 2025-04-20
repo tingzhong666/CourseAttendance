@@ -12,5 +12,11 @@ namespace CourseAttendance.DtoModel.ReqDtos
 		/// 老师
 		/// </summary>
 		public List<string> TeacherIds { get; set; } = [];
+
+		// 大专业
+		public int? MajorsCategoryId { get; set; } 
+		// 小专业
+		public int? MajorsSubcategoriesId { get; set; }
+
 	}
 }

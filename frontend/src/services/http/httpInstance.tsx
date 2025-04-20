@@ -55,7 +55,7 @@ axios.interceptors.response.use(function (response) {
 
 
 
-import { AccountApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, TimeTableApi, MajorsCategoryApi, MajorsSubcategoryApi } from "../api"
+import { AccountApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, TimeTableApi, MajorsCategoryApi, MajorsSubcategoryApi,AttendanceBatchApi } from "../api"
 export const Account = new AccountApi(undefined, baseURL, axios)
 export const Attendance = new AttendanceApi(undefined, baseURL, axios)
 export const Classes = new ClassesApi(undefined, baseURL, axios)
@@ -64,3 +64,4 @@ export const CourseSelection = new CourseSelectionApi(undefined, baseURL, axios)
 export const TimeTable = new TimeTableApi(undefined, baseURL, axios)
 export const MajorsCategory = new MajorsCategoryApi(undefined, baseURL, axios)
 export const MajorsSubcategory = new MajorsSubcategoryApi(undefined, baseURL, axios)
+export const AttendanceBatch = new AttendanceBatchApi(undefined, baseURL, axios)

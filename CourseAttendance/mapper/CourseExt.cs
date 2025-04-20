@@ -39,6 +39,7 @@ namespace CourseAttendance.mapper
 				UpdatedAt = model.UpdatedAt,
 				TeacherId = model.TeacherUserId,
 				StudentIds = model.CourseStudents.Select(x => x.StudentId).ToList(),
+				MajorsSubcategoryId = model.MajorsSubcategoryId,
 			};
 		}
 	}

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../Contexts/auth";
 import { Form, FormProps, Input, Modal, Select, SelectProps } from "antd";
-import { AttendanceCreateRequestDto, CheckMethod } from "../services/api";
+import { AttendanceBatchCreateDto, AttendanceBatchUpdateDto, CheckMethod } from "../services/api";
 import * as api from '../services/http/httpInstance'
 import DateAndTimeForm from "./DateAndTimeForm";
 import dayjs, { Dayjs } from "dayjs";
@@ -10,9 +9,13 @@ interface Props {
     show: boolean
     showChange: (show: boolean) => void
     onFinish: () => void
+    id: number
+    model: 'add' | 'put'
 }
 
-interface ReqData extends AttendanceCreateRequestDto {
+export type AttendanceBatchAddProps = Props
+
+interface ReqData extends AttendanceBatchCreateDto {
     startTime_: Dayjs
     endTime_: Dayjs
 }
@@ -22,19 +25,34 @@ export default (prop: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
+    const [title, setTile] = useState('新增考勤')
 
 
     // 初始化
     const init = async () => {
-
-        onSearchCourse('')
-        form.setFieldsValue({ ...formData })
 
         setOptionsCheckMethod([
             { label: '普通', value: CheckMethod.Normal },
             { label: '密码', value: CheckMethod.Password },
             { label: '二维码', value: CheckMethod.TowCode },
         ])
+        onSearchCourse('')
+
+        if (prop.model == 'add') {
+            setTile('新增考勤批次')
+
+            form.setFieldsValue({ ...formData })
+        }
+        else if (prop.model == 'put') {
+            setTile('修改考勤批次')
+
+
+            const data_ = await api.AttendanceBatch.apiAttendanceBatchIdGet(prop.id)
+
+            setFormData({ ...formData, ...data_.data.data })
+            form.setFieldsValue({ ...data_.data.data })
+        }
+        onSearchCourse('')
     }
 
 
@@ -70,10 +88,19 @@ export default (prop: Props) => {
 
             values.startTime = values.startTime_.format()
             values.endTime = values.endTime_.format()
-            await api.Attendance.apiAttendancePost(values)
+
+
+            if (prop.model == 'add') {
+                await api.AttendanceBatch.apiAttendanceBatchPost(values)
+            }
+            else if (prop.model == 'put') {
+                const v2 = values as unknown as AttendanceBatchUpdateDto
+                v2.id = prop.id
+                await api.AttendanceBatch.apiAttendanceBatchPut(v2)
+            }
 
             prop.onFinish()
-            setIsModalOpen(false);
+            setIsModalOpen(false)
         } catch {
         }
         setConfirmLoading(false)
@@ -90,7 +117,7 @@ export default (prop: Props) => {
     // 课程选择控件
     const [optionsCourse, setOptionsCourse] = useState<SelectProps['options']>()
     const onSearchCourse: (value: string) => void = async (value) => {
-        const res = await api.Course.apiCourseGet([],[], 1, 9999, value)
+        const res = await api.Course.apiCourseGet([], [], undefined, undefined, 1, 9999, value)
 
         const tmp = res.data.data?.dataList?.map(x => {
             return {
@@ -104,7 +131,7 @@ export default (prop: Props) => {
 
     return (
         <Modal
-            title='新增考勤'
+            title={title}
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}

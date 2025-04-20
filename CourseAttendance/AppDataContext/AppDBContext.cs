@@ -29,7 +29,7 @@ namespace CourseAttendance.AppDataContext
 		public DbSet<CourseTime> CourseTimes { get; set; }
 		public DbSet<MajorsCategory> MajorsCategories { get; set; }
 		public DbSet<MajorsSubcategory> MajorsSubcategories { get; set; }
-
+		public DbSet<AttendanceBatch> AttendanceBatchs { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -39,17 +39,23 @@ namespace CourseAttendance.AppDataContext
 				//modelBuilder.Entity<Attendance>()
 				//	.HasKey(cs => new { cs.CourseId, cs.StudentId });
 
-				modelBuilder.Entity<Attendance>()
-					.HasOne(u => u.Student)
-					.WithMany(u => u.Attendances)
-					.HasForeignKey(p => p.StudentId)
-				.OnDelete(DeleteBehavior.Restrict);
+				//modelBuilder.Entity<Attendance>()
+				//	.HasOne(u => u.Student)
+				//	.WithMany(u => u.Attendances)
+				//	.HasForeignKey(p => p.StudentId)
+				//.OnDelete(DeleteBehavior.Restrict);
 
-				modelBuilder.Entity<Attendance>()
-					.HasOne(u => u.Course)
-					.WithMany(u => u.Attendances)
-					.HasForeignKey(p => p.CourseId)
-				.OnDelete(DeleteBehavior.Restrict);
+				//modelBuilder.Entity<Attendance>()
+				//	.HasOne(u => u.Course)
+				//	.WithMany(u => u.Attendances)
+				//	.HasForeignKey(p => p.CourseId)
+				//.OnDelete(DeleteBehavior.Restrict);
+
+				modelBuilder.Entity<Student>()
+					.HasMany(x => x.Attendances)
+					.WithOne(x => x.Student)
+					.HasForeignKey(x => x.StudentId)
+					.OnDelete(DeleteBehavior.ClientCascade);
 			}
 			// 多对多 选课  课程与学生
 			{
@@ -60,13 +66,13 @@ namespace CourseAttendance.AppDataContext
 					.HasOne(u => u.Student)
 					.WithMany(u => u.CourseStudents)
 					.HasForeignKey(p => p.StudentId)
-					.OnDelete(DeleteBehavior.Restrict);
+					.OnDelete(DeleteBehavior.ClientCascade);
 
 				modelBuilder.Entity<CourseStudent>()
 					.HasOne(u => u.Course)
 					.WithMany(u => u.CourseStudents)
 					.HasForeignKey(p => p.CourseId)
-					.OnDelete(DeleteBehavior.Restrict);
+					.OnDelete(DeleteBehavior.ClientCascade);
 			}
 
 			// 多对多 上课的时间 课程与作息表

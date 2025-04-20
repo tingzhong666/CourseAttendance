@@ -10,6 +10,10 @@ namespace CourseAttendance.Model
 
 		[Required]
 		public string Name { get; set; }
+
+		[Required]
+		public DateTime CreatedAt { get; set; } = DateTime.Now;
+
 		/// <summary>
 		/// 大专业系
 		/// </summary>

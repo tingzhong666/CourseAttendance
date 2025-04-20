@@ -92,11 +92,14 @@ export default (prop: Props) => {
     const [form] = Form.useForm<GradeRequestDto>()
     const onFinish = async (values: GradeRequestDto) => {
         try {
+            await form.validateFields()
             setConfirmLoading(true)
+
             if (prop.model == 'add')
                 await api.Classes.apiClassesPost(values)
             else if (prop.model == 'put')
                 await api.Classes.apiClassesIdPut(prop.putId || -1, values)
+            
             setIsModalOpen(false)
             prop.onFinish()
         } catch {
@@ -155,7 +158,7 @@ export default (prop: Props) => {
                 <Form.Item<GradeRequestDto> name='name'>
                     <Input placeholder="无独立名称可留空"></Input>
                 </Form.Item>
-                <Form.Item<GradeRequestDto> name='majorsCategoriesId'>
+                <Form.Item<GradeRequestDto> name='majorsCategoriesId'  rules={[{ required: true, message: '不能为空' }]} label='大专业'>
                     <Select
                         showSearch
                         placeholder="输入搜索大专业名称"
@@ -167,7 +170,7 @@ export default (prop: Props) => {
                         onChange={onMajorsChange}
                     />
                 </Form.Item>
-                <Form.Item<GradeRequestDto> name='majorsSubcategoriesId'>
+                <Form.Item<GradeRequestDto> name='majorsSubcategoriesId'  rules={[{ required: true, message: '不能为空' }]} label='小专业'>
                     <Select
                         showSearch
                         placeholder="输入搜索细分专业名称"
@@ -179,10 +182,10 @@ export default (prop: Props) => {
                         onChange={onMajorsSubChange}
                     />
                 </Form.Item>
-                <Form.Item<GradeRequestDto> name='year'>
+                <Form.Item<GradeRequestDto> name='year'  rules={[{ required: true, message: '不能为空' }]} label='年级'>
                     <YearPicker DatePickerProps={{ placeholder: "年级" }} />
                 </Form.Item>
-                <Form.Item<GradeRequestDto> name='num'>
+                <Form.Item<GradeRequestDto> name='num'  rules={[{ required: true, message: '不能为空' }]} label='班级序号'>
                     <InputNumber min={1} placeholder="班级序号" />
                 </Form.Item>
             </Form>

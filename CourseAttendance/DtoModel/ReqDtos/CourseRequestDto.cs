@@ -18,5 +18,10 @@ namespace CourseAttendance.DtoModel.ReqDtos
 
 		[Required]
 		public string TeacherId { get; set; }
+
+		// 小专业
+		[Required]
+		public int MajorsSubcategoryId { get; set; }
+
 	}
 }

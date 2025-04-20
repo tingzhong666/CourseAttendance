@@ -74,6 +74,16 @@ namespace CourseAttendance.Repositories
 			if (query.q != null && query.q != "")
 				queryable = queryable.Where(x => x.Name.Contains(query.q));
 
+			// 创建时间排序
+			if (query.SortCreateTime != null && query.SortCreateTime == 1) // 降
+			{
+				queryable = queryable.OrderByDescending(x => x.CreatedAt);
+			}
+			if (query.SortCreateTime != null && query.SortCreateTime == 0) // 升
+			{
+				queryable = queryable.OrderBy(x => x.CreatedAt);
+			}
+
 			// 执行查询
 			var queryRes = await queryable
 				.ToListAsync();

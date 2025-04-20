@@ -69,7 +69,6 @@ export default (prop: Props) => {
         setIsModalOpen(false);
     }
     const handleOk = () => {
-        setIsModalOpen(false)
 
         form.submit()
     }
@@ -77,14 +76,21 @@ export default (prop: Props) => {
     // 表单
     const [form] = Form.useForm()
     const onFinish = async (values: MajorsSubcategoryReqDto) => {
-        setConfirmLoading(true)
+        try {
+            await form.validateFields()
+            setConfirmLoading(true)
 
-        if (prop.model == 'add')
-            var res = await api.MajorsSubcategory.apiMajorsSubcategoryPost(values)
-        else if (prop.model == 'put')
-            var res = await api.MajorsSubcategory.apiMajorsSubcategoryPut(prop.putId, values)
+            if (prop.model == 'add')
+                var res = await api.MajorsSubcategory.apiMajorsSubcategoryPost(values)
+            else if (prop.model == 'put')
+                var res = await api.MajorsSubcategory.apiMajorsSubcategoryPut(prop.putId, values)
+
+            prop.onFinish()
+            setIsModalOpen(false)
+        } catch (error) {
+
+        }
         setConfirmLoading(false)
-        prop.onFinish()
     }
 
 
@@ -118,10 +124,10 @@ export default (prop: Props) => {
                 form={form}
                 onFinish={onFinish}
             >
-                <Form.Item<MajorsSubcategoryReqDto> name='name'>
+                <Form.Item<MajorsSubcategoryReqDto> name='name' rules={[{ required: true, message: '不能为空' }]} label='专业名'>
                     <Input placeholder="专业名"></Input>
                 </Form.Item>
-                <Form.Item<MajorsSubcategoryReqDto> name='majorsCategoryId'>
+                <Form.Item<MajorsSubcategoryReqDto> name='majorsCategoryId' rules={[{ required: true, message: '不能为空' }]} label='大专业'>
                     <Select
                         showSearch
                         placeholder="输入搜索"

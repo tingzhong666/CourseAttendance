@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Claims;
 
 namespace CourseAttendance.Controllers
@@ -102,6 +103,17 @@ namespace CourseAttendance.Controllers
 			if (query.q != null && query.q != "")
 				users = users.Where(x => x.Name.Contains(query.q) || x.UserName.Contains(query.q));
 
+
+			// 创建时间排序
+			if (query.SortCreateTime != null && query.SortCreateTime == 1) // 降
+			{
+				users = users.OrderByDescending(x => x.CreatedAt);
+			}
+			if (query.SortCreateTime != null && query.SortCreateTime == 0) // 升
+			{
+				users = users.OrderBy(x => x.CreatedAt);
+			}
+
 			// 执行查询
 			var queryRes = await users.ToListAsync();
 
@@ -117,6 +129,7 @@ namespace CourseAttendance.Controllers
 				}
 			}
 			else queryRes2 = queryRes;
+
 
 			var total = queryRes2.Count();
 			// 分页

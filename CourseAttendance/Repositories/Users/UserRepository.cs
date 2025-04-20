@@ -14,9 +14,9 @@ namespace CourseAttendance.Repositories.Users
 			return await _userManager.FindByIdAsync(id);
 		}
 
-		public List<User> GetAllAsync()
+		public async Task<List<User>> GetAllAsync()
 		{
-			return [.. _userManager.Users];
+			return [.. await _userManager.Users.ToListAsync()];
 		}
 
 		public async Task<IdentityResult> AddAsync(User user, string pwd)

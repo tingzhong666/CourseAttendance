@@ -13,14 +13,14 @@ namespace CourseAttendance.mapper
 			{
 				CreatedAt = now,
 				UpdatedAt = now,
-				CheckMethod = dto.CheckMethod,
-				StartTime = dto.StartTime,
-				EndTime = dto.EndTime,
+				//CheckMethod = dto.CheckMethod,
+				//StartTime = dto.StartTime,
+				//EndTime = dto.EndTime,
 				Status = AttendanceStatus.None,
 				//SignInTime = dto.SignInTime,
 				Remark = "",
-				PassWord = dto.PassWord,
-				CourseId = dto.CourseId,
+				//PassWord = dto.PassWord,
+				//CourseId = dto.CourseId,
 				StudentId = studentId,
 			};
 		}

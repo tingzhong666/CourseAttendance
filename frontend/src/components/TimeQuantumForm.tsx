@@ -6,7 +6,7 @@ import 'dayjs/plugin/weekOfYear'
 import { NoUndefinedRangeValueType } from "rc-picker/lib/PickerInput/RangePicker"
 import { CreateUUID } from "../Utils/Utils"
 import * as api from '../services/http/httpInstance'
-import { WeekDay } from "../Models/WeekDay"
+import { WeekDay } from "../models/WeekDay"
 
 export interface TimeQuantum {
     // 周几

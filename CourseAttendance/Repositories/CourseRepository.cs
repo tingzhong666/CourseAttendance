@@ -19,8 +19,9 @@ namespace CourseAttendance.Repositories
 		{
 			return await _context.Courses
 				.Include(c => c.Teacher)
+				.Include(c => c.MajorsSubcategory)
 				.Include(c => c.CourseStudents)
-				.Include(c => c.Attendances)
+				.Include(c => c.AttendanceBatchs)
 				.Include(c => c.CourseTimes)
 				.FirstOrDefaultAsync(c => c.Id == id);
 		}
@@ -41,10 +42,33 @@ namespace CourseAttendance.Repositories
 				coursesQ = coursesQ.Where(x => query.TeacherIds.Contains(x.TeacherUserId));
 			}
 
+			// 大专业
+			if (query.MajorsCategoryId != null)
+			{
+				coursesQ = coursesQ.Where(x => x.MajorsSubcategory.MajorsCategoriesId == query.MajorsCategoryId);
+			}
+			// 小专业
+			if (query.MajorsSubcategoriesId != null)
+			{
+				coursesQ = coursesQ.Where(x => x.MajorsSubcategoryId == query.MajorsSubcategoriesId);
+			}
+
+
+			// 创建时间排序
+			if (query.SortCreateTime != null && query.SortCreateTime == 1) // 降
+			{
+				coursesQ = coursesQ.OrderByDescending(x => x.CreatedAt);
+			}
+			if (query.SortCreateTime != null && query.SortCreateTime == 0) // 升
+			{
+				coursesQ = coursesQ.OrderBy(x => x.CreatedAt);
+			}
+
 			var courses = await coursesQ
 				.Include(c => c.Teacher)
+				.Include(c => c.MajorsSubcategory)
 				.Include(c => c.CourseStudents)
-				.Include(c => c.Attendances)
+				.Include(c => c.AttendanceBatchs)
 				.Include(c => c.CourseTimes)
 				.ToListAsync();
 
@@ -68,12 +92,10 @@ namespace CourseAttendance.Repositories
 			if (model == null) return 0;
 
 			model.Name = course.Name;
-			//model.Weekday = course.Weekday;
-			//model.StartTime = course.StartTime;
-			//model.EndTime = course.EndTime;
 			model.Location = course.Location;
 			model.UpdatedAt = DateTime.Now;
 			model.TeacherUserId = course.TeacherUserId;
+			model.MajorsSubcategoryId = course.MajorsSubcategoryId;
 
 			return await _context.SaveChangesAsync();
 		}

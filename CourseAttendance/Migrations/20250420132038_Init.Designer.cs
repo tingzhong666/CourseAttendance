@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAttendance.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250408112020_CourseTimeAddId")]
-    partial class CourseTimeAddId
+    [Migration("20250420132038_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,46 @@ namespace CourseAttendance.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("CourseAttendance.Model.Attendance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AttendanceBatchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("SignInTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendanceBatchId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Attendances");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.AttendanceBatch", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,19 +88,11 @@ namespace CourseAttendance.Migrations
                     b.Property<string>("PassWord")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Remark")
-                        .IsRequired()
+                    b.Property<string>("QRCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("SignInTime")
+                    b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -69,9 +101,7 @@ namespace CourseAttendance.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Attendances");
+                    b.ToTable("AttendanceBatchs");
                 });
 
             modelBuilder.Entity("CourseAttendance.Model.Course", b =>
@@ -89,6 +119,9 @@ namespace CourseAttendance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MajorsSubcategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -101,6 +134,8 @@ namespace CourseAttendance.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MajorsSubcategoryId");
 
                     b.HasIndex("TeacherUserId");
 
@@ -192,6 +227,9 @@ namespace CourseAttendance.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -208,6 +246,9 @@ namespace CourseAttendance.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("MajorsCategoriesId")
                         .HasColumnType("int");
@@ -230,6 +271,9 @@ namespace CourseAttendance.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<TimeSpan>("End")
                         .HasColumnType("time");
@@ -302,6 +346,9 @@ namespace CourseAttendance.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -539,30 +586,49 @@ namespace CourseAttendance.Migrations
 
             modelBuilder.Entity("CourseAttendance.Model.Attendance", b =>
                 {
-                    b.HasOne("CourseAttendance.Model.Course", "Course")
+                    b.HasOne("CourseAttendance.Model.AttendanceBatch", "AttendanceBatch")
                         .WithMany("Attendances")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("AttendanceBatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CourseAttendance.Model.Users.Student", "Student")
                         .WithMany("Attendances")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("AttendanceBatch");
 
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("CourseAttendance.Model.AttendanceBatch", b =>
+                {
+                    b.HasOne("CourseAttendance.Model.Course", "Course")
+                        .WithMany("AttendanceBatchs")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("CourseAttendance.Model.Course", b =>
                 {
+                    b.HasOne("CourseAttendance.Model.MajorsSubcategory", "MajorsSubcategory")
+                        .WithMany()
+                        .HasForeignKey("MajorsSubcategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CourseAttendance.Model.Users.Teacher", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MajorsSubcategory");
 
                     b.Navigation("Teacher");
                 });
@@ -572,13 +638,13 @@ namespace CourseAttendance.Migrations
                     b.HasOne("CourseAttendance.Model.Course", "Course")
                         .WithMany("CourseStudents")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("CourseAttendance.Model.Users.Student", "Student")
                         .WithMany("CourseStudents")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -730,9 +796,14 @@ namespace CourseAttendance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CourseAttendance.Model.Course", b =>
+            modelBuilder.Entity("CourseAttendance.Model.AttendanceBatch", b =>
                 {
                     b.Navigation("Attendances");
+                });
+
+            modelBuilder.Entity("CourseAttendance.Model.Course", b =>
+                {
+                    b.Navigation("AttendanceBatchs");
 
                     b.Navigation("CourseStudents");
 

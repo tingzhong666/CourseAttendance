@@ -3,7 +3,7 @@ import { useAuth } from "../../Contexts/auth"
 import { useMajor } from "../../Contexts/major"
 import { Button, PaginationProps, Popconfirm, Space, Table } from "antd"
 import Search, { SearchProps } from "antd/es/input/Search"
-import { GradeResponseDto } from "../../services/api"
+import { GradeResponseDto, UserRole } from "../../services/api"
 import { ColumnsType } from "antd/es/table"
 import * as api from '../../services/http/httpInstance'
 import ClassesManagerAdd, { ClassesManagerAddProps } from "../../components/ClassesManagerAdd"
@@ -27,11 +27,11 @@ export default () => {
     const major = useMajor()
     // 是否有增改删操作
     const [isChange, setIsChange] = useState(false)
-        const isChangeRef = useRef(isChange);
-    
-        useEffect(() => {
-            isChangeRef.current = isChange;
-        }, [isChange]);
+    const isChangeRef = useRef(isChange);
+
+    useEffect(() => {
+        isChangeRef.current = isChange;
+    }, [isChange]);
 
     useEffect(() => {
         init()
@@ -72,7 +72,7 @@ export default () => {
             render: (_, record) => {
                 const majorsSub = major.majorsSubcategories.find(v => v.id == record.majorsSubcategoriesId)
                 const majorsCategory = major.majorsCategories.find(v => v.id == majorsSub?.majorsCategoriesId)
-                return  majorsCategory?.name || ''
+                return majorsCategory?.name || ''
             }
         },
         {
@@ -81,7 +81,7 @@ export default () => {
             key: 'majorsSubName',
             render: (_, record) => {
                 const majorsSub = major.majorsSubcategories.find(v => v.id == record.majorsSubcategoriesId)
-                return  majorsSub?.name || ''
+                return majorsSub?.name || ''
             }
         },
         {
@@ -149,8 +149,8 @@ export default () => {
         <Space>
             <Search placeholder="输入查询的专业名/班级名" onSearch={onSearch} enterButton />
 
-            {/* 管理员  可以新增 */}
-            {auth.user?.roles.includes('Admin') ?
+            {auth.user?.roles.includes(UserRole.Admin) ||
+                auth.user?.roles.includes(UserRole.Academic) ?
                 <Button type='primary' onClick={add}>新增</Button>
                 : <></>
             }

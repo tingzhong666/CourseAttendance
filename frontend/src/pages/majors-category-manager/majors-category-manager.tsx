@@ -1,6 +1,6 @@
 import { Button, message, PaginationProps, Popconfirm, PopconfirmProps, Space, Table } from "antd"
 import Search, { SearchProps } from "antd/es/input/Search"
-import { MajorsCategoryResDto } from "../../services/api"
+import { MajorsCategoryResDto, UserRole } from "../../services/api"
 import { ColumnsType } from "antd/es/table"
 import { useAuth } from "../../Contexts/auth"
 import { useEffect, useRef, useState } from "react"
@@ -116,8 +116,9 @@ export default () => {
         <Space>
             <Search placeholder="输入查询的大专业名" onSearch={onSearch} enterButton />
 
-            {/* 管理员  可以新增 */}
-            {auth.user?.roles.includes('Admin') ?
+            {auth.user?.roles.includes(UserRole.Admin) ||
+            auth.user?.roles.includes(UserRole.Academic)
+            ?
                 <Button type='primary' onClick={add}>新增</Button>
                 : <></>
             }

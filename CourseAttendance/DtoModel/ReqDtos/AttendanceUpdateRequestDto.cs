@@ -6,7 +6,7 @@ namespace CourseAttendance.DtoModel.ReqDtos
 	public class AttendanceUpdateRequestDto
 	{
 		/// <summary>
-		/// 打卡类型
+		/// 打卡状态
 		/// </summary>
 		[Required]
 		public AttendanceStatus Status { get; set; }
