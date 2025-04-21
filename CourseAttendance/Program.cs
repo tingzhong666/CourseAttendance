@@ -148,12 +148,14 @@ if (app.Environment.IsDevelopment())
 		  //.WithOrigins("https://localhost:44351))
 		  .SetIsOriginAllowed(origin => true)); // 跨域配置
 }
+
 app.UseStaticFiles(); // 启用静态文件
 app.UseAuthentication();
 app.UseAuthorization();
 
 
 app.MapControllers();
+app.MapFallbackToFile("index.html"); // 映射剩余api
 
 // 某些数据初始化
 using (var scope = app.Services.CreateScope())

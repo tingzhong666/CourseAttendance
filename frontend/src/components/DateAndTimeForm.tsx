@@ -8,7 +8,7 @@ interface Props {
     disabled?: boolean
     placeholder?: string
 }
-export default (props: Props) => {
+const DateAndTimeForm= (props: Props) => {
     const [dateTime, setDateTime] = useState<dayjs.Dayjs | undefined>(dayjs())
 
     useEffect(() => {
@@ -45,3 +45,5 @@ export default (props: Props) => {
         </>
     )
 }
+
+export default DateAndTimeForm

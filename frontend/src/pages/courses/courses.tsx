@@ -8,7 +8,7 @@ import { useAuth } from '../../Contexts/auth';
 import { CreateUUID, WeekdayToString, } from '../../Utils/Utils';
 import CourseAdd, { CourseAddProps } from '../../components/courseAdd';
 import { WeekDay } from '../../models/WeekDay';
-import lodash from 'lodash'
+import { groupBy, last, map } from 'lodash'
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router';
 import { useMajor } from '../../Contexts/major';
@@ -36,7 +36,7 @@ interface CourseData extends CourseResponseDto {
     timeDatas: Array<CourseTimeData>,
 }
 
-export default () => {
+const Courses = () => {
     const auth = useAuth()
     const [putId, setPutId] = useState(-1)
     const [addModel, setAddModel] = useState<CourseAddProps['model']>('add')
@@ -60,6 +60,7 @@ export default () => {
     useEffect(() => {
         init()
     }, []);
+
 
     const init = async () => {
         await getData()
@@ -222,15 +223,15 @@ export default () => {
 
         const tmp2 = await Promise.all(tmp)
 
-        const tmp3 = lodash.groupBy(tmp2, x => dayjs(x.dateDay || '').day() + x.section)
-        const tmp4: Array<CourseTimeData> = lodash.map(tmp3, x => {
+        const tmp3 = groupBy(tmp2, x => dayjs(x.dateDay || '').day() + x.section)
+        const tmp4: Array<CourseTimeData> = map(tmp3, x => {
             const x2 = x.sort((a, b) => dayjs(a.dateDay || '').week() < dayjs(b.dateDay || '').week() ? -1 : 1)
             return {
                 weekday: WeekdayToString(dayjs(x[0].dateDay || '').day()),
                 section: x[0].section,
                 key: CreateUUID(),
                 startWeek: dayjs(x2[0].dateDay || ''),
-                endWeek: dayjs(lodash.last(x2)?.dateDay || ''),
+                endWeek: dayjs(last(x2)?.dateDay || ''),
             } as CourseTimeData
         })
 
@@ -350,3 +351,5 @@ export default () => {
         <CourseAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />
     </Space>)
 }
+
+export default Courses

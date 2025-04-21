@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 const NotFount = () => {
     const navigate = useNavigate();
 
-    const backHome = (x: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+    const backHome = (_: React.MouseEvent<HTMLElement, MouseEvent>): void => {
         navigate("/");
     }
 

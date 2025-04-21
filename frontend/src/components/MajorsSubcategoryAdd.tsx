@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import * as api from '../services/http/httpInstance'
 import { Form, Input, Modal, Select, SelectProps } from "antd"
-import { MajorsCategoryResDto, MajorsSubcategoryReqDto } from "../services/api"
+import { MajorsSubcategoryReqDto } from "../services/api"
 import { useMajor } from "../Contexts/major"
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 export type MajorsSubcategoryAddProps = Props;
 
 
-export default (prop: Props) => {
+const MajorsSubcategoryAdd= (prop: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -22,6 +22,19 @@ export default (prop: Props) => {
 
     // 专业数据
     const major = useMajor()
+
+
+    useEffect(() => {
+        setIsModalOpen(prop.show)
+
+        if (prop.show) {
+            init()
+        }
+
+    }, [prop.show])
+    useEffect(() => {
+        prop.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -51,17 +64,6 @@ export default (prop: Props) => {
 
     }
 
-    useEffect(() => {
-        setIsModalOpen(prop.show)
-
-        if (prop.show) {
-            init()
-        }
-
-    }, [prop.show])
-    useEffect(() => {
-        prop.showChange(isModalOpen)
-    }, [isModalOpen])
 
 
     // 弹框
@@ -81,9 +83,9 @@ export default (prop: Props) => {
             setConfirmLoading(true)
 
             if (prop.model == 'add')
-                var res = await api.MajorsSubcategory.apiMajorsSubcategoryPost(values)
+                await api.MajorsSubcategory.apiMajorsSubcategoryPost(values)
             else if (prop.model == 'put')
-                var res = await api.MajorsSubcategory.apiMajorsSubcategoryPut(prop.putId, values)
+                await api.MajorsSubcategory.apiMajorsSubcategoryPut(prop.putId, values)
 
             prop.onFinish()
             setIsModalOpen(false)
@@ -143,3 +145,5 @@ export default (prop: Props) => {
         </Modal>
     )
 }
+
+export default MajorsSubcategoryAdd

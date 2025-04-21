@@ -1,15 +1,16 @@
-import { Button, Form, FormProps, Input, Select, SelectProps } from "antd"
+import { Button, Form, Input, Select, SelectProps } from "antd"
 import * as api from '../../services/http/httpInstance'
 import { UpdateProfileReqDto, UpdateProfileSelfReqDto, UserRole } from "../../services/api";
 import { useEffect, useState } from "react";
 import { useMajor } from "../../Contexts/major";
 
-export default () => {
+const ModifyUserinfo = () => {
 
 
     useEffect(() => {
         init()
     }, [])
+
 
     // 初始化
     const init = async () => {
@@ -118,3 +119,5 @@ export default () => {
         </Form>
     </>)
 }
+
+export default ModifyUserinfo

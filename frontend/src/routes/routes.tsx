@@ -1,20 +1,22 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
-import Home from "../pages/home/home";
-import Login from "../pages/login/login";
-import HomeLayout from "../pages/homeLayout/homeLayout";
-import NotFount from "../pages/notfount404/notfount404";
-import Courses from "../pages/courses/courses";
-import Attendance from "../pages/attendance/attendance";
-import UserManager from "../pages/user-manager/user-manager";
-import ModifyPw from "../pages/modify-pw/modify-pw";
-import ModifyUserinfo from "../pages/modify-userinfo/modify-userinfo";
-import ClassesManager from "../pages/classes-manager/classes-manager";
-import MajorsSubcategoryManager from "../pages/majors-subcategory-manager/majors-subcategory-manager";
-import MajorsCategoryManager from "../pages/majors-category-manager/majors-category-manager";
-import { Navigate } from "react-router";
-import { CreateUUID } from "../Utils/Utils";
-import AttendanceBatch from "../pages/attendanceBatch/attendanceBatch";
+import { createBrowserRouter } from "react-router-dom"
+import { Navigate } from "react-router"
+import { CreateUUID } from "../Utils/Utils"
+import App from "../App"
+import { lazy } from "react"
+
+const Home  = lazy(() => import( "../pages/home/home"))
+const Login = lazy(() => import("../pages/login/login"))
+const HomeLayout = lazy(() => import("../pages/homeLayout/homeLayout"))
+const NotFount = lazy(() => import("../pages/notfount404/notfount404"))
+const Courses = lazy(() => import("../pages/courses/courses"))
+const Attendance = lazy(() => import("../pages/attendance/attendance"))
+const UserManager = lazy(() => import("../pages/user-manager/user-manager"))
+const ModifyPw = lazy(() => import("../pages/modify-pw/modify-pw"))
+const ModifyUserinfo = lazy(() => import("../pages/modify-userinfo/modify-userinfo"))
+const ClassesManager = lazy(() => import("../pages/classes-manager/classes-manager"))
+const MajorsSubcategoryManager = lazy(() => import("../pages/majors-subcategory-manager/majors-subcategory-manager"))
+const MajorsCategoryManager = lazy(() => import("../pages/majors-category-manager/majors-category-manager"))
+const AttendanceBatch = lazy(() => import("../pages/attendanceBatch/attendanceBatch"))
 
 export const router = createBrowserRouter([
     {
@@ -48,4 +50,4 @@ export const router = createBrowserRouter([
         path: "*",
         element: <NotFount />
     }
-]);
+])

@@ -23,7 +23,7 @@ interface Props {
 export const UserProvider = ({ children }: Props) => {
     const [token, setToken] = useState<string | null>(null)
     const [user, setUser] = useState<UserProfile | null>(null)
-    const [isReady, setIsReady] = useState(false)
+    const [isReady, setIsReady] = useState(false) // 是否显示子组件
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -38,12 +38,15 @@ export const UserProvider = ({ children }: Props) => {
         }
 
         // 验证是否有效
-        if (await check())
+        if (await check()) {
             // 获取信息
             await getUserInfo()
+            setIsReady(true)
+        }
 
-        setIsReady(true)
     }
+
+
 
     const getUserInfo = async () => {
         var res = await api.Account.apiAccountProfileSelfGet()

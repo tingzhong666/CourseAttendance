@@ -1,7 +1,12 @@
 import notification from "antd/es/notification";
 import axios from "axios";
 
-const baseURL = 'https://localhost:7019'
+let baseURL = ''
+if (import.meta.env.MODE === 'development') {
+     baseURL = 'https://localhost:7019'
+} else if (import.meta.env.MODE === 'production') {
+     baseURL = ''
+}
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
@@ -55,7 +60,7 @@ axios.interceptors.response.use(function (response) {
 
 
 
-import { AccountApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, TimeTableApi, MajorsCategoryApi, MajorsSubcategoryApi,AttendanceBatchApi } from "../api"
+import { AccountApi, AttendanceApi, ClassesApi, CourseApi, CourseSelectionApi, TimeTableApi, MajorsCategoryApi, MajorsSubcategoryApi, AttendanceBatchApi } from "../api"
 export const Account = new AccountApi(undefined, baseURL, axios)
 export const Attendance = new AttendanceApi(undefined, baseURL, axios)
 export const Classes = new ClassesApi(undefined, baseURL, axios)

@@ -9,10 +9,22 @@ interface Props {
     onFinish: () => void
     id: number
 }
-export default (props: Props) => {
+const AttendanceUpdate= (props: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false)
+
+
+
+    useEffect(() => {
+        setIsModalOpen(props.show)
+        if (props.show) {
+            init()
+        }
+    }, [props.show])
+    useEffect(() => {
+        props.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -36,16 +48,6 @@ export default (props: Props) => {
         ])
     }
 
-
-    useEffect(() => {
-        setIsModalOpen(props.show)
-        if (props.show) {
-            init()
-        }
-    }, [props.show])
-    useEffect(() => {
-        props.showChange(isModalOpen)
-    }, [isModalOpen])
 
 
     const handleCancel = () => {
@@ -71,7 +73,7 @@ export default (props: Props) => {
         }
         setConfirmLoading(false)
     }
-    const onChange: FormProps['onValuesChange'] = (values) => {
+    const onChange: FormProps['onValuesChange'] = (_values) => {
         setFormData({ ...form.getFieldsValue() })
     }
     useEffect(() => {
@@ -115,3 +117,5 @@ export default (props: Props) => {
         </Modal>
     )
 }
+
+export default AttendanceUpdate

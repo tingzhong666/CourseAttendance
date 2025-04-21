@@ -21,9 +21,21 @@ interface DataRes extends AttendanceResponseDto {
 
 }
 
-export default (props: Props) => {
+const AttendanceGet= (props: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false)
+
+
+
+    useEffect(() => {
+        setIsModalOpen(props.show)
+        if (props.show) {
+            init()
+        }
+    }, [props.show])
+    useEffect(() => {
+        props.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -43,16 +55,6 @@ export default (props: Props) => {
         setData(tmp)
     }
 
-
-    useEffect(() => {
-        setIsModalOpen(props.show)
-        if (props.show) {
-            init()
-        }
-    }, [props.show])
-    useEffect(() => {
-        props.showChange(isModalOpen)
-    }, [isModalOpen])
 
 
     const handleCancel = () => {
@@ -168,3 +170,5 @@ export default (props: Props) => {
         </Modal>
     )
 }
+
+export default AttendanceGet

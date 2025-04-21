@@ -15,7 +15,7 @@ interface Props {
 }
 export type UserAddProps = Props;
 
-export default (prop: Props) => {
+const UserAdd = (prop: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -24,6 +24,19 @@ export default (prop: Props) => {
 
     const auth = useAuth()
 
+
+
+
+
+    useEffect(() => {
+        setIsModalOpen(prop.show)
+        if (prop.show) {
+            init()
+        }
+    }, [prop.show])
+    useEffect(() => {
+        prop.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -68,17 +81,6 @@ export default (prop: Props) => {
 
 
 
-    useEffect(() => {
-        setIsModalOpen(prop.show)
-        if (prop.show) {
-            init()
-        }
-    }, [prop.show])
-    useEffect(() => {
-        prop.showChange(isModalOpen)
-    }, [isModalOpen])
-
-
     const handleCancel = () => {
         setIsModalOpen(false);
     }
@@ -93,7 +95,7 @@ export default (prop: Props) => {
     const onFinish = async (values: CreateUserReqDto) => {
         try {
 
-             await form.validateFields()
+            await form.validateFields()
 
             setConfirmLoading(true)
             if (prop.model == 'add')
@@ -128,7 +130,7 @@ export default (prop: Props) => {
     }
 
     const [roles, setRoles] = useState<Array<UserRole>>([])
-    const onChange: FormProps['onValuesChange'] = (cv, v) => {
+    const onChange: FormProps['onValuesChange'] = (_cv, v) => {
         setRoles(v.roles)
     }
     return (
@@ -174,7 +176,7 @@ export default (prop: Props) => {
                 </Form.Item>
                 <Form.List name="roles">
                     {
-                        (fields: FormListFieldData[], operation: FormListOperation) => (
+                        (fields: FormListFieldData[], _operation: FormListOperation) => (
                             <Form.Item {...fields[0]} key={CreateUUID()} label="身份"
                                 rules={[{ required: true, message: '不能为空' }]}
                             >
@@ -210,3 +212,5 @@ export default (prop: Props) => {
         </Modal>
     )
 }
+
+export default UserAdd 

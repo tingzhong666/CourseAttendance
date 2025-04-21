@@ -21,12 +21,24 @@ interface ReqData extends AttendanceBatchCreateDto {
 }
 export type UserAddProps = Props;
 
-export default (prop: Props) => {
+const AttendanceBatchAdd = (prop: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [title, setTile] = useState('新增考勤')
 
+
+
+
+    useEffect(() => {
+        setIsModalOpen(prop.show)
+        if (prop.show) {
+            init()
+        }
+    }, [prop.show])
+    useEffect(() => {
+        prop.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -55,16 +67,6 @@ export default (prop: Props) => {
         onSearchCourse('')
     }
 
-
-    useEffect(() => {
-        setIsModalOpen(prop.show)
-        if (prop.show) {
-            init()
-        }
-    }, [prop.show])
-    useEffect(() => {
-        prop.showChange(isModalOpen)
-    }, [isModalOpen])
 
 
     const handleCancel = () => {
@@ -106,7 +108,7 @@ export default (prop: Props) => {
         setConfirmLoading(false)
     }
 
-    const onChange: FormProps['onValuesChange'] = (values) => {
+    const onChange: FormProps['onValuesChange'] = (_values) => {
         setFormData({ ...form.getFieldsValue() })
     }
     useEffect(() => {
@@ -188,3 +190,5 @@ export default (prop: Props) => {
         </Modal>
     )
 }
+
+export default AttendanceBatchAdd

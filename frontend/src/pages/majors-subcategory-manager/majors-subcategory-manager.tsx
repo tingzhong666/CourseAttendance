@@ -9,14 +9,14 @@ import MajorsSubcategoryAdd, { MajorsSubcategoryAddProps } from "../../component
 import Search from "antd/es/input/Search"
 import { MajorsSubcategoryData, useMajor } from "../../Contexts/major"
 
-export default () => {
+const MajorsSubcategoryManager = () => {
     const auth = useAuth()
     // 查询参数
     const [data, setData] = useState([] as Array<MajorsSubcategoryData>)
     const [total, setTotal] = useState(0)
     const [current, setCurrent] = useState(1)
     const [limit, setLimit] = useState(20)
-    const [queryStr, setQueryStr] = useState('')
+    const [queryStr, _] = useState('')
 
     const major = useMajor()
     // 是否有增改删操作
@@ -35,10 +35,10 @@ export default () => {
         }
     }, [])
 
-
     const init = async () => {
         await getData()
     }
+
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
         var res = await api.MajorsSubcategory.apiMajorsSubcategoryGet(undefined, current_, limit_, queryStr_)
         const tmp2 = res.data.data?.dataList?.map(x => {
@@ -144,3 +144,5 @@ export default () => {
         <MajorsSubcategoryAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />
     </Space>)
 }
+
+export default MajorsSubcategoryManager

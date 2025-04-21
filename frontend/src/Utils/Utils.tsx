@@ -1,6 +1,6 @@
 import { v4 } from "uuid"
 import { WeekDay } from "../models/WeekDay"
-import jsQR, { QRCode } from "jsqr"
+import jsQR from "jsqr"
 
 export const WeekdayToString = (weekday: WeekDay): WeekDay => {
     switch (weekday) {

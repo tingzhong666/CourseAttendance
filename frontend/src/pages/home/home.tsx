@@ -1,10 +1,9 @@
 ﻿import React from 'react';
 import { useAuth } from '../../Contexts/auth';
-import { UserOutlined } from '@ant-design/icons';
 import userLogo from '../../assets/user_logo.jpg'
-import { Avatar, Card, Col, Image, Row, Space } from "antd"
-import { CreateUUID } from '../../Utils/Utils';
-export default () => {
+import { Avatar, Col, Row } from "antd"
+
+const Home = () => {
     const auth = useAuth()
 
     const textCenter: React.CSSProperties = {
@@ -50,3 +49,5 @@ export default () => {
         </>
     );
 }
+
+export default Home

@@ -5,7 +5,6 @@ import Table, { ColumnsType } from "antd/es/table"
 import { Button, PaginationProps, Popconfirm, Space, Tag } from "antd"
 import { useAuth } from "../Contexts/auth"
 import dayjs from "dayjs"
-import { useMajor } from "../Contexts/major"
 import AttendanceUpdate from "./AttendanceUpdate"
 import AttendanceGet from "./AttendanceGet"
 import AttendanceSimulation from "./AttendanceSimulation"
@@ -42,7 +41,7 @@ interface Props {
 
 export type AttendanceTableProps = Props
 
-export default (props: Props) => {
+const AttendanceTable= (props: Props) => {
     const [data, setData] = useState([] as Array<DataRes>)
 
     // 分页参数
@@ -68,6 +67,7 @@ export default (props: Props) => {
     useEffect(() => {
         init()
     }, [])
+
 
     const init = async () => {
         await getData()
@@ -263,3 +263,5 @@ export default (props: Props) => {
         </Space>
     )
 }
+
+export default AttendanceTable

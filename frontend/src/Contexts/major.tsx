@@ -34,6 +34,7 @@ export const MajorProvider = ({ children }: Props) => {
     useEffect(() => {
         init()
     }, [])
+
     const init = async () => {
         const majorsCategories_ = await getMajorsCategories()
         const majorsSubcategories_ = await getMajorsSubcategories(majorsCategories_)
@@ -50,6 +51,7 @@ export const MajorProvider = ({ children }: Props) => {
         })
 
         setClassesStr(tmp)
+
     }
     const getClasses = async () => {
         const res = await api.Classes.apiClassesGet()

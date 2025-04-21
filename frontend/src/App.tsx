@@ -1,12 +1,6 @@
-import { useEffect, useState } from 'react'
 import './App.css'
-import { Button, ConfigProvider } from 'antd';
-import Login from './pages/login/login';
-import HomeLayout from './pages/homeLayout/homeLayout';
-import { UserProvider, useAuth } from "./Contexts/auth"
+import { ConfigProvider } from 'antd';
 import { Outlet } from 'react-router';
-import { useNavigate } from 'react-router';
-import { Locale } from 'antd/es/locale';
 
 import zhCN from 'antd/locale/zh_CN';
 import dayjs from 'dayjs';

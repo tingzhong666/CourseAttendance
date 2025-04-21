@@ -1,4 +1,4 @@
-import { Button, message, Modal, PaginationProps, Popconfirm, PopconfirmProps, Space, Table } from "antd"
+import { Button, PaginationProps, Popconfirm, Space, Table } from "antd"
 import * as api from '../../services/http/httpInstance'
 import { GetUserResDto } from "../../services/api"
 import { ColumnsType } from "antd/es/table"
@@ -7,7 +7,8 @@ import { useAuth } from "../../Contexts/auth"
 import Search, { SearchProps } from "antd/es/input/Search"
 import UserAdd, { UserAddProps } from "../../components/userAdd"
 import PWUpdate from "../../components/PWUpdate"
-export default () => {
+
+const UserManager = () => {
     // 查询参数
     const [data, setData] = useState([] as Array<GetUserResDto>)
     const [total, setTotal] = useState(0)
@@ -32,9 +33,10 @@ export default () => {
     const init = async () => {
         await getData()
     }
+
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
 
-        var res = await api.Account.apiAccountGet([],current_, limit_, queryStr_)
+        const res = await api.Account.apiAccountGet([], current_, limit_, queryStr_)
 
         //res.data.data?.dataList
         setData(res.data.data?.dataList || [])
@@ -160,10 +162,12 @@ export default () => {
             model={addModel}
             putId={putId} />
 
-        <PWUpdate 
-        show={pwUpdateShow} 
-        showChange={x => setPWUpdateShow(x)}
-        putId={putId}
+        <PWUpdate
+            show={pwUpdateShow}
+            showChange={x => setPWUpdateShow(x)}
+            putId={putId}
         />
     </Space>)
 }
+
+export default UserManager

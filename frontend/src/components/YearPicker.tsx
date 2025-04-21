@@ -7,7 +7,7 @@ interface Props {
     onChange?: (value: number) => void,
     DatePickerProps?: DatePickerProps
 }
-export default (prop: Props) => {
+const YearPicker = (prop: Props) => {
 
     const [value, setValue] = useState<DatePickerProps['value']>()
 
@@ -16,7 +16,7 @@ export default (prop: Props) => {
         setValue(dayjs().year(prop.value))
     }, [prop.value])
 
-    const onChange: DatePickerProps['onChange'] = (date, dateStr) => {
+    const onChange: DatePickerProps['onChange'] = (_date, dateStr) => {
         if (!prop.onChange) return
         prop.onChange(Number(dateStr))
     }
@@ -29,3 +29,5 @@ export default (prop: Props) => {
         />
     </>)
 }
+
+export default YearPicker

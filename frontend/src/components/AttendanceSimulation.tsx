@@ -17,7 +17,7 @@ interface Props {
     onFinish: () => void
 }
 
-export default (props: Props) => {
+const AttendanceSimulation= (props: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const handleCancel = () => {
         setIsModalOpen(false)
@@ -118,3 +118,5 @@ export default (props: Props) => {
         </Modal>
     )
 }
+
+export default AttendanceSimulation

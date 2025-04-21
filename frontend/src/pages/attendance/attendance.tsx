@@ -1,30 +1,14 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import * as api from '../../services/http/httpInstance'
-import { AttendanceResponseDto, AttendanceStatus, CheckMethod, UserRole } from "../../services/api"
-import Table, { ColumnsType } from "antd/es/table"
-import { Button, DatePicker, Form, PaginationProps, Popconfirm, Select, SelectProps, Space, Tag, TimePicker } from "antd"
+import { UserRole } from "../../services/api"
+import { Button, DatePicker, Select, SelectProps, Space, TimePicker } from "antd"
 import { SearchProps } from "antd/es/input"
 import Search from "antd/es/input/Search"
 import { useAuth } from "../../Contexts/auth"
 import dayjs, { Dayjs } from "dayjs"
-import AttendanceAdd from "../../components/AttendanceBatchAdd"
-import AttendanceUpdate from "../../components/AttendanceUpdate"
-import AttendanceGet from "../../components/AttendanceGet"
 import { useMajor } from "../../Contexts/major"
 import AttendanceTable from "../../components/AttendanceTable"
 
-
-interface DataRes extends AttendanceResponseDto {
-
-    // 课程名
-    courseName: string
-    // 学生名
-    studentName: string
-    // 考勤类型
-    // 状态
-}
-
-export default () => {
+const Attendance = () => {
     // 查询参数
 
     const [current, setCurrent] = useState(1)
@@ -56,6 +40,8 @@ export default () => {
         onSearchMajorsCategory('')
         onSearchMajorsCategorySub('')
     }
+
+
 
     const getData = () => {
         setDataUpdate(true)
@@ -250,3 +236,5 @@ export default () => {
         </Space>
     )
 }
+
+export default Attendance

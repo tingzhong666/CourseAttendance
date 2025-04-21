@@ -1,24 +1,20 @@
 ﻿import React from 'react'
 import "./login.css"
-import { Button, Card, Flex, Form, Input, Image, Row, Col, notification } from "antd"
+import { Button, Card, Form, Input, Image, Row, Col, notification } from "antd"
 import loginPng from "../../assets/login.png"
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import * as api from "../../services/http/httpInstance"
-import { LoginModel } from '../../services/api';
+import { LoginModel } from '../../services/api'
 import { useAuth } from "../../Contexts/auth"
-import { UserProfile } from '../../Models/User';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router'
 
-interface Props {
-
-}
 
 interface formType {
     username: string
     password: string
 }
 
-export default (props: Props) => {
+const Login = () => {
     const auth = useAuth();
     const navigate = useNavigate();
 
@@ -41,19 +37,14 @@ export default (props: Props) => {
 
         var data = res.data.data
 
-        //auth.setToken(data?.token || null)
-        //let userProfile = { userName: data?.userName } as UserProfile
-        //auth.setUser(userProfile)
-
-        //const user = localStorage.setItem("user", JSON.stringify(userProfile));
-        const token = localStorage.setItem("token", data?.token || "");
+        localStorage.setItem("token", data?.token || "");
 
         navigate("/home")
     }
 
 
 
-    const onTest = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const onTest = async (_: React.MouseEvent<HTMLElement, MouseEvent>) => {
         console.log(auth.token + "qwe")
         //var res = await api.Account.apiAccountTestGet();
     }
@@ -106,3 +97,5 @@ export default (props: Props) => {
         </div>
     )
 }
+
+export default Login

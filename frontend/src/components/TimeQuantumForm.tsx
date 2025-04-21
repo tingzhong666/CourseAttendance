@@ -26,7 +26,7 @@ interface Props {
     disabled?: boolean
 }
 
-export default (props: Props) => {
+const TimeQuantumForm = (props: Props) => {
     const [datas, setDatas] = useState<Array<TimeQuantum>>([])
 
     //初始化
@@ -41,7 +41,9 @@ export default (props: Props) => {
             value: x.id
         }))
         setTimeTables(tmp)
+
     }
+
 
     // 同步
     useEffect(() => {
@@ -98,9 +100,9 @@ export default (props: Props) => {
                 datas.map(x => (<Flex key={x.id} gap='small'>
                     <DatePicker.RangePicker
                         onChange={date => onChangeRangePicker(date, x)}
-                        value={[x.start,x.end]}
+                        value={[x.start, x.end]}
                         picker="week" style={{ flex: 1 }}
-                        disabled={props.disabled} 
+                        disabled={props.disabled}
                     />
 
                     <Select
@@ -111,7 +113,7 @@ export default (props: Props) => {
                         showSearch
                         optionFilterProp="label"
                         style={{ width: 100 }}
-                        disabled={props.disabled} 
+                        disabled={props.disabled}
                     />
 
                     <Select
@@ -122,7 +124,7 @@ export default (props: Props) => {
                         showSearch
                         optionFilterProp="label"
                         style={{ width: 100 }}
-                        disabled={props.disabled} 
+                        disabled={props.disabled}
                     />
 
                     <Button
@@ -131,7 +133,7 @@ export default (props: Props) => {
                         block icon={<CloseOutlined />}
                         onClick={() => onDel(x)}
                         style={{ width: 50 }}
-                        disabled={props.disabled} 
+                        disabled={props.disabled}
                     />
 
                 </Flex>))
@@ -145,3 +147,5 @@ export default (props: Props) => {
         </Space>
     </>)
 }
+
+export default TimeQuantumForm

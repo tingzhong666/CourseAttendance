@@ -1,7 +1,7 @@
 import { ChangeEvent, ReactNode, useEffect, useState } from "react"
 import * as api from '../../services/http/httpInstance'
 import { AttendanceBatchResDto, CheckMethod, UserRole } from "../../services/api"
-import Table, { ColumnsType, TableProps, } from "antd/es/table"
+import Table, { ColumnsType, } from "antd/es/table"
 import { Button, DatePicker, PaginationProps, Popconfirm, Select, SelectProps, Space, TimePicker } from "antd"
 import { SearchProps } from "antd/es/input"
 import Search from "antd/es/input/Search"
@@ -19,7 +19,7 @@ interface DataRes extends AttendanceBatchResDto {
     courseName: string
 }
 
-export default () => {
+const AttendanceBatch = () => {
     // 查询参数
     const [data, setData] = useState([] as Array<DataRes>)
     const [total, setTotal] = useState(0)
@@ -27,7 +27,7 @@ export default () => {
     const [limit, setLimit] = useState(20)
     const [queryStr, setQueryStr] = useState('') // 课程名
     const [teacherName, setTeacherName] = useState('') // 老师名
-    const [teacherId, setTeacherId] = useState<Array<string>>([]) // 老师
+    const [teacherId, _] = useState<Array<string>>([]) // 老师 后端有识别当前老师进行筛选，这里不用设置了
     // const [studentName, setStudentName] = useState('') // 学生名
     const [startTime, setStartTime] = useState<dayjs.Dayjs | null>(null) // 时间段
     const [endTime, setEndTime] = useState<dayjs.Dayjs | null>(null) // 时间段
@@ -61,6 +61,7 @@ export default () => {
         onSearchMajorsCategory('')
         onSearchMajorsCategorySub('')
     }
+
     const getData = async (page_ = current, limit_ = limit, q_ = queryStr, teacherName_ = teacherName, startTime_ = startTime, endTime_ = endTime, majorsCategoryId_ = majorsCategoryId, majorsSubcategoriesId_ = majorsSubcategoriesId, teacherId_ = teacherId) => {
 
         var res = await api.AttendanceBatch.apiAttendanceBatchGet(teacherId_, teacherName_, startTime_?.format() ?? undefined, endTime_?.format() ?? undefined, majorsCategoryId_, majorsSubcategoriesId_, page_, limit_, q_)
@@ -276,8 +277,8 @@ export default () => {
         setMajorsCategoriesSubSearchValue(majorsCategories?.find(x => x.value == v)?.label + '')
     }
 
-    const expandedRowRender: (record: DataRes, index: number, indent: number, expanded: boolean) => ReactNode = (record, index, indent, expanded) => (
-        <AttendanceTable dataUpdate={expanded} batchId={record.id}/>
+    const expandedRowRender: (record: DataRes, index: number, indent: number, expanded: boolean) => ReactNode = (record, _, __, expanded) => (
+        <AttendanceTable dataUpdate={expanded} batchId={record.id} />
     )
 
     return (
@@ -366,3 +367,5 @@ export default () => {
         </Space>
     )
 }
+
+export default AttendanceBatch

@@ -5,7 +5,7 @@ import { UserProvider } from '../../Contexts/auth'
 import Sider from 'antd/es/layout/Sider'
 import { MajorProvider } from '../../Contexts/major'
 
-export default () => {
+const HomeLayout = () => {
     return (
         <UserProvider>
             <MajorProvider>
@@ -31,3 +31,5 @@ export default () => {
         </UserProvider>
     )
 }
+
+export default HomeLayout

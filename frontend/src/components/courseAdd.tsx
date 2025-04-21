@@ -4,10 +4,8 @@ import * as api from '../services/http/httpInstance'
 import { CourseRequestDto, CourseTimeReqDto, UserRole } from '../services/api'
 import dayjs from 'dayjs'
 import TimeQuantumForm, { TimeQuantum } from './TimeQuantumForm'
-import lodash from 'lodash'
+import { groupBy, map } from 'lodash'
 import { CreateUUID, WeekdayToString } from '../Utils/Utils'
-import { useLocation } from 'react-router'
-import { useAuth } from '../Contexts/auth'
 import { useMajor } from '../Contexts/major'
 
 interface Props {
@@ -29,13 +27,24 @@ interface CourseReqData extends CourseRequestDto {
 
 }
 
-export default (prop: Props) => {
+const CourseAdd = (prop: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false)
     const [form] = Form.useForm<CourseReqData>()
     const [title, setTitle] = useState('')
 
     const major = useMajor()
+
+
+    useEffect(() => {
+        setIsModalOpen(prop.show)
+        if (prop.show) {
+            init()
+        }
+    }, [prop.show])
+    useEffect(() => {
+        prop.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -68,8 +77,8 @@ export default (prop: Props) => {
 
             const tmp2 = await Promise.all(tmp)
 
-            const tmp3 = lodash.groupBy(tmp2, x => dayjs(x.dateDay || '').day() + x.section)
-            const timeQuantum: Array<TimeQuantum> = lodash.map(tmp3, x => {
+            const tmp3 = groupBy(tmp2, x => dayjs(x.dateDay || '').day() + x.section)
+            const timeQuantum: Array<TimeQuantum> = map(tmp3, x => {
                 const x2 = x.sort((a, b) => dayjs(a.dateDay || '').week() < dayjs(b.dateDay || '').week() ? -1 : 1)
                 return {
                     day: WeekdayToString(dayjs(x[0].dateDay || '').day()),
@@ -113,15 +122,6 @@ export default (prop: Props) => {
         //setTimeTables(res.data.data || [])
     }
 
-    useEffect(() => {
-        setIsModalOpen(prop.show)
-        if (prop.show) {
-            init()
-        }
-    }, [prop.show])
-    useEffect(() => {
-        prop.showChange(isModalOpen)
-    }, [isModalOpen])
 
 
     const handleCancel = () => {
@@ -369,3 +369,5 @@ export default (prop: Props) => {
         </Modal>
     )
 }
+
+export default CourseAdd

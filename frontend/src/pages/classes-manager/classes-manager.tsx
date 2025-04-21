@@ -15,14 +15,14 @@ export interface GradeData extends GradeResponseDto {
     majorsName: string
 }
 
-export default () => {
+const ClassesManager = () => {
     const auth = useAuth()
     // 查询参数
     const [data, setData] = useState([] as Array<GradeData>)
     const [total, setTotal] = useState(0)
     const [current, setCurrent] = useState(1)
     const [limit, setLimit] = useState(20)
-    const [queryStr, setQueryStr] = useState('')
+    const [queryStr, _] = useState('')
 
     const major = useMajor()
     // 是否有增改删操作
@@ -41,10 +41,12 @@ export default () => {
         }
     }, [])
 
-
     const init = async () => {
         await getData()
     }
+
+
+
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
         var res = await api.Classes.apiClassesGet(current_, limit_, queryStr_)
         const tmp2 = res.data.data?.dataList?.map(x => (x as GradeData))
@@ -166,3 +168,5 @@ export default () => {
         <ClassesManagerAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />
     </Space>)
 }
+
+export default ClassesManager

@@ -10,7 +10,7 @@ interface Props {
 }
 export type UserAddProps = Props;
 
-export default (prop: Props) => {
+const PWUpdate = (prop: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -79,3 +79,5 @@ export default (prop: Props) => {
         </Modal>
     )
 }
+
+export default PWUpdate

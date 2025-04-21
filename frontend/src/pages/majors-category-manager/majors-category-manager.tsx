@@ -1,4 +1,4 @@
-import { Button, message, PaginationProps, Popconfirm, PopconfirmProps, Space, Table } from "antd"
+import { Button, PaginationProps, Popconfirm, Space, Table } from "antd"
 import Search, { SearchProps } from "antd/es/input/Search"
 import { MajorsCategoryResDto, UserRole } from "../../services/api"
 import { ColumnsType } from "antd/es/table"
@@ -7,16 +7,15 @@ import { useEffect, useRef, useState } from "react"
 import * as api from '../../services/http/httpInstance'
 import MajorsCategoryAdd, { MajorsCategoryAddProps } from "../../components/MajorsCategoryAdd"
 import { useMajor } from "../../Contexts/major"
-import { useLocation } from "react-router"
 
-export default () => {
+const MajorsCategoryManager = () => {
     const auth = useAuth()
     // 查询参数
     const [data, setData] = useState([] as Array<MajorsCategoryResDto>)
     const [total, setTotal] = useState(0)
     const [current, setCurrent] = useState(1)
     const [limit, setLimit] = useState(20)
-    const [queryStr, setQueryStr] = useState('')
+    const [queryStr, _] = useState('')
 
     const major = useMajor()
     // 是否有增改删操作
@@ -40,6 +39,7 @@ export default () => {
     const init = async () => {
         await getData()
     }
+
     const getData = async (current_ = current, limit_ = limit, queryStr_ = queryStr) => {
 
         var res = await api.MajorsCategory.apiMajorsCategoryGet(current_, limit_, queryStr_)
@@ -117,8 +117,8 @@ export default () => {
             <Search placeholder="输入查询的大专业名" onSearch={onSearch} enterButton />
 
             {auth.user?.roles.includes(UserRole.Admin) ||
-            auth.user?.roles.includes(UserRole.Academic)
-            ?
+                auth.user?.roles.includes(UserRole.Academic)
+                ?
                 <Button type='primary' onClick={add}>新增</Button>
                 : <></>
             }
@@ -134,3 +134,5 @@ export default () => {
         <MajorsCategoryAdd show={addShow} showChange={x => setAddShow(x)} onFinish={getData} model={addModel} putId={putId} />
     </Space>)
 }
+
+export default MajorsCategoryManager

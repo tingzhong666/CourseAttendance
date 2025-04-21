@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import * as api from '../services/http/httpInstance'
-import { DatePicker, DatePickerProps, Form, Input, InputNumber, Modal, Select, SelectProps } from "antd"
+import { Form, Input, InputNumber, Modal, Select, SelectProps } from "antd"
 import { GradeRequestDto } from "../services/api"
 import { useMajor } from "../Contexts/major"
 import YearPicker from "./YearPicker"
@@ -15,13 +15,25 @@ interface Props {
 export type ClassesManagerAddProps = Props;
 
 
-export default (prop: Props) => {
+const ClassesManagerAdd= (prop: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [title, setTitle] = useState('');
 
     const major = useMajor()
+
+
+    useEffect(() => {
+        setIsModalOpen(prop.show)
+        if (prop.show) {
+            init()
+        }
+
+    }, [prop.show])
+    useEffect(() => {
+        prop.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -66,16 +78,6 @@ export default (prop: Props) => {
 
     }
 
-    useEffect(() => {
-        setIsModalOpen(prop.show)
-        if (prop.show) {
-            init()
-        }
-
-    }, [prop.show])
-    useEffect(() => {
-        prop.showChange(isModalOpen)
-    }, [isModalOpen])
 
 
     // 弹框
@@ -192,3 +194,5 @@ export default (prop: Props) => {
         </Modal>
     )
 }
+
+export default ClassesManagerAdd

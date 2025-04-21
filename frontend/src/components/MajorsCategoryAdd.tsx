@@ -1,6 +1,6 @@
 import { Form, Input, Modal } from "antd"
 import { useEffect, useState } from "react";
-import { MajorsCategoryReqDto, MajorsCategoryResDto } from "../services/api/api";
+import { MajorsCategoryReqDto } from "../services/api/api";
 import * as api from '../services/http/httpInstance'
 
 interface Props {
@@ -13,12 +13,24 @@ interface Props {
 
 export type MajorsCategoryAddProps = Props;
 
-export default (prop: Props) => {
+const MajorsCategoryAdd = (prop: Props) => {
     // 弹框数据
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [title, setTitle] = useState('');
 
+
+
+    useEffect(() => {
+        setIsModalOpen(prop.show)
+
+        if (prop.show) {
+            init()
+        }
+    }, [prop.show])
+    useEffect(() => {
+        prop.showChange(isModalOpen)
+    }, [isModalOpen])
 
     // 初始化
     const init = async () => {
@@ -37,16 +49,6 @@ export default (prop: Props) => {
 
     }
 
-    useEffect(() => {
-        setIsModalOpen(prop.show)
-
-        if (prop.show) {
-            init()
-        }
-    }, [prop.show])
-    useEffect(() => {
-        prop.showChange(isModalOpen)
-    }, [isModalOpen])
 
 
     // 弹框
@@ -67,9 +69,9 @@ export default (prop: Props) => {
             setConfirmLoading(true)
 
             if (prop.model == 'add')
-                var res = await api.MajorsCategory.apiMajorsCategoryPost(values)
+                await api.MajorsCategory.apiMajorsCategoryPost(values)
             else if (prop.model == 'put')
-                var res = await api.MajorsCategory.apiMajorsCategoryPut(prop.putId, values)
+                await api.MajorsCategory.apiMajorsCategoryPut(prop.putId, values)
             prop.onFinish()
             setIsModalOpen(false)
         } catch (error) {
@@ -79,7 +81,7 @@ export default (prop: Props) => {
     }
     return (
         <Modal
-            title="新增大专业"
+            title={title}
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
@@ -100,3 +102,5 @@ export default (prop: Props) => {
         </Modal>
     )
 }
+
+export default MajorsCategoryAdd

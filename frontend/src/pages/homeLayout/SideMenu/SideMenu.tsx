@@ -1,6 +1,6 @@
-﻿import { Button, Menu, MenuProps } from 'antd'
+﻿import { Menu, MenuProps } from 'antd'
 import { SelectInfo } from 'rc-menu/lib/interface'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuth } from '../../../Contexts/auth'
 import { useLocation } from 'react-router'
@@ -8,7 +8,7 @@ import { MenuItemGroupType } from 'antd/es/menu/interface'
 import { UserRole } from '../../../services/api'
 
 
-export default () => {
+const SideMenu = () => {
     const navigate = useNavigate()
     const auth = useAuth()
     const routeLocation = useLocation()
@@ -102,3 +102,5 @@ export default () => {
         </div>
     )
 }
+
+export default SideMenu

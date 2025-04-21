@@ -1,17 +1,11 @@
 import { Button, Form, Input } from "antd"
-import { ChangePasswordReqDto, ChangePasswordSelfReqDto } from "../../services/api"
+import { ChangePasswordSelfReqDto } from "../../services/api"
 import * as api from '../../services/http/httpInstance'
-import { useAuth } from "../../Contexts/auth"
 
-export default () => {
-    const auth = useAuth()
-
+const ModifyPw = () => {
     const [form] = Form.useForm<ChangePasswordSelfReqDto>();
     const onFinish = async (values: ChangePasswordSelfReqDto) => {
-        try {
-            await api.Account.apiAccountChangePasswordSelfPut(values)
-        } catch {
-        }
+        await api.Account.apiAccountChangePasswordSelfPut(values)
     }
     return (<>
 
@@ -46,3 +40,5 @@ export default () => {
         </Form>
     </>)
 }
+
+export default ModifyPw
