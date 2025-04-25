@@ -77,21 +77,6 @@ namespace CourseAttendance.Services
 					CreateAdminExt = new CreateUserAdminReqDto { },
 				});
 			}
-			//var dto = new CreateUserAdminReqDto
-			//{
-			//	Name = "admin",
-			//	UserName = "admin",
-			//	PassWord = "Admin123456!"
-			//};
-			//var userModel = await AccountController.CreateUser(dto, _userRepository);
-			//if (userModel != null)
-			//{
-			//	var resRole = await _userRepository._userManager.AddToRoleAsync(userModel, "Admin");
-
-			//	var adminModel = dto.ToModel();
-			//	adminModel.UserId = userModel.Id;
-			//	var result = await _adminRepository.AddAdminAsync(adminModel);
-			//}
 		}
 	}
 }

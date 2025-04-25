@@ -12,6 +12,15 @@ using CourseAttendance.DtoModel.ReqDtos;
 using CourseAttendance.mapper.CreateUserReqDtoExts;
 using Microsoft.AspNetCore.Http.Features;
 using Newtonsoft.Json.Converters;
+using CommandLine;
+using CourseAttendance;
+
+
+await Parser.Default.ParseArguments<Options>(args)
+	.WithNotParsedAsync(async errs =>
+	{
+		Environment.Exit(0);
+	});
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -131,6 +140,26 @@ builder.Services.Configure<FormOptions>(options =>
 
 var app = builder.Build();
 
+await Parser.Default.ParseArguments<Options>(args)
+	  .WithParsedAsync<Options>(async o =>
+	  {
+		  if (o.AppMigration)
+		  {
+			  Console.WriteLine($"数据库结构更新 开始");
+
+			  using var scope = app.Services.CreateScope();
+			  var services = scope.ServiceProvider;
+			  var context = services.GetRequiredService<AppDBContext>();
+
+			  // 执行迁移
+			  await context.Database.MigrateAsync();
+
+			  Console.WriteLine($"数据库结构更新 完成");
+			  Environment.Exit(0);
+		  }
+	  });
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -166,3 +195,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+// 命令行参数设置
+public class Options
+{
+	[Option('a', "App-Migration", Required = false, HelpText = "数据库结构更新")]
+	public bool AppMigration { get; set; }
+}
