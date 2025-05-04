@@ -46,7 +46,7 @@ const Login = () => {
 
     const onTest = async (_: React.MouseEvent<HTMLElement, MouseEvent>) => {
         console.log(auth.token + "qwe")
-        //var res = await api.Account.apiAccountTestGet();
+        await api.Account.apiAccountTestGet();
     }
 
     return (

@@ -71,7 +71,7 @@ const UserAdd = (prop: Props) => {
 
         // 标题
         if (prop.model == 'put')
-            setTitle('修改班级')
+            setTitle('修改用户')
         else if (prop.model == 'get')
             setTitle('用户详情')
         else if (prop.model == 'add')

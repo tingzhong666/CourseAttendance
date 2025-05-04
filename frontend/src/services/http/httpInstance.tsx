@@ -3,7 +3,7 @@ import axios from "axios";
 
 let baseURL = ''
 if (import.meta.env.MODE === 'development') {
-     baseURL = 'https://localhost:7019'
+     baseURL = 'http://localhost:5000'
 } else if (import.meta.env.MODE === 'production') {
      baseURL = ''
 }

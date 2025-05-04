@@ -20,6 +20,7 @@ namespace CourseAttendance.Repositories
 		{
 			return await _context.Attendances
 				.Include(a => a.AttendanceBatch)
+				.ThenInclude(a => a.Course)
 				.Include(a => a.Student)
 				.FirstOrDefaultAsync(a => a.Id == id);
 		}
