@@ -9,9 +9,11 @@ namespace CourseAttendance.Model
 		public int Id { get; set; }
 
 		[Required]
+		[MaxLength(10)]
 		public string Name { get; set; }
 
 		[Required]
+		[Column(TypeName = "datetime")]
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 
 		/// <summary>

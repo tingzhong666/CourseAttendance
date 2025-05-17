@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CourseAttendance.Model
 {
@@ -13,6 +14,7 @@ namespace CourseAttendance.Model
 		/// 描述名称
 		/// </summary>
 		[Required]
+		[MaxLength(10)]
 		public string Name { get; set; }
 		[Required]
 		public TimeSpan Start { get; set; }
@@ -21,6 +23,7 @@ namespace CourseAttendance.Model
 
 
 		[Required]
+		[Column(TypeName = "datetime")]
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 
 		public virtual List<CourseTime> CourseTimes { get; set; }

@@ -9,8 +9,10 @@ namespace CourseAttendance.Model
 	{
 		[Key]
 		[Required]
+		[MaxLength(30)]
 		public string Key { get; set; }
 
+		[MaxLength(100)]
 		public string Value { get; set; } = "";
 	}
 }

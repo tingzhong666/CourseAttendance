@@ -17,6 +17,7 @@ namespace CourseAttendance.Model.Users
 		/// 姓名
 		/// </summary>
 		[Required]
+		[MaxLength(30)]
 		public required string Name { get; set; }
 
 		//[Required]
@@ -32,6 +33,7 @@ namespace CourseAttendance.Model.Users
 
 
 		[Required]
+		[Column(TypeName = "datetime")]
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
 	}
 }

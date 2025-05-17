@@ -9,6 +9,7 @@ namespace CourseAttendance.Model
 		[Key]
 		public int Id { get; set; }
 
+		[MaxLength(10)]
 		public string? Name { get; set; }
 		/// <summary>
 		/// 专业
@@ -27,7 +28,9 @@ namespace CourseAttendance.Model
 		[Required]
 		public int Year { get; set; }
 
+		[Column(TypeName = "datetime")]
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
+		[Column(TypeName = "datetime")]
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
 		//[ForeignKey("Counselor")]

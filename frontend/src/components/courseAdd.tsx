@@ -4,7 +4,7 @@ import * as api from '../services/http/httpInstance'
 import { CourseRequestDto, CourseTimeReqDto, UserRole } from '../services/api'
 import dayjs from 'dayjs'
 import TimeQuantumForm, { TimeQuantum } from './TimeQuantumForm'
-import { groupBy, map } from 'lodash'
+import { groupBy, map, last } from 'lodash'
 import { CreateUUID, WeekdayToString } from '../Utils/Utils'
 import { useMajor } from '../Contexts/major'
 
@@ -84,7 +84,7 @@ const CourseAdd = (prop: Props) => {
                     day: WeekdayToString(dayjs(x[0].dateDay || '').day()),
                     timeTable: x[0].section,
                     start: dayjs(x2[0].dateDay || ''),
-                    end: dayjs(x2[0].dateDay || ''),
+                    end: dayjs(last(x2)?.dateDay || ''),
                     id: CreateUUID(),
                 } as TimeQuantum
             })

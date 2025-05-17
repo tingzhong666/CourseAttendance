@@ -9,11 +9,15 @@ namespace CourseAttendance.Model
 	{
         [Key]
 		public int Id { get; set; }
+		[MaxLength(10)]
 		public string Name { get; set; }
+		[MaxLength(10)]
 		public string Location { get; set; }
 
 
+		[Column(TypeName = "datetime")]
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
+		[Column(TypeName = "datetime")]
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
 		[ForeignKey(nameof(Teacher))]

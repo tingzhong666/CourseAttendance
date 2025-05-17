@@ -25,6 +25,7 @@ namespace CourseAttendance.Model
 		/// <summary>
 		/// 日期 哪一天
 		/// </summary>
+		[Column(TypeName = "datetime")]
 		public DateTime DateDay { get; set; }
 
 		public virtual Course Course { get; set; }

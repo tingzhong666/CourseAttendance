@@ -8,7 +8,9 @@ namespace CourseAttendance.Model
     public class Attendance
 	{
 
+		[Column(TypeName = "datetime")]
 		public DateTime CreatedAt { get; set; } = DateTime.Now;
+		[Column(TypeName = "datetime")]
 		public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
 		[Key]
@@ -37,6 +39,7 @@ namespace CourseAttendance.Model
 		/// <summary>
 		/// 备注
 		/// </summary>
+		[MaxLength(200)]
 		public string Remark { get; set; } = "";
 		///// <summary>
 		///// 密码 密码打卡用 这里只是用作打卡的数字验证 不用加密

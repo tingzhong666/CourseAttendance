@@ -133,7 +133,13 @@ namespace CourseAttendance.AppDataContext
 
 			// 用户的工号唯一
 			modelBuilder.Entity<User>().HasIndex(x => x.UserName).IsUnique();
+			// 用户属性设置
+			modelBuilder.Entity<User>()
+				.Property(u => u.UserName)
+				.HasMaxLength(30);
+			modelBuilder.Entity<User>()
+				.Property(u => u.PhoneNumber)
+				.HasMaxLength(11);
 		}
-
 	}
 }

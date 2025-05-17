@@ -1,5 +1,5 @@
 import { v4 } from "uuid"
-import { WeekDay } from "../models/WeekDay"
+import { WeekDay } from "../Models/WeekDay"
 import jsQR from "jsqr"
 
 export const WeekdayToString = (weekday: WeekDay): WeekDay => {

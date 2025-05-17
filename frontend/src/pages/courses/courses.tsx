@@ -7,7 +7,7 @@ import Search, { SearchProps } from 'antd/es/input/Search';
 import { useAuth } from '../../Contexts/auth';
 import { CreateUUID, WeekdayToString, } from '../../Utils/Utils';
 import CourseAdd, { CourseAddProps } from '../../components/courseAdd';
-import { WeekDay } from '../../models/WeekDay';
+import { WeekDay } from '../../Models/WeekDay';
 import { groupBy, last, map } from 'lodash'
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router';

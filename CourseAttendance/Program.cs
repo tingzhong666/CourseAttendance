@@ -15,12 +15,15 @@ using Newtonsoft.Json.Converters;
 using CommandLine;
 using CourseAttendance;
 
-
-await Parser.Default.ParseArguments<Options>(args)
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+if (environment == "Production")
+{
+	await Parser.Default.ParseArguments<Options>(args)
 	.WithNotParsedAsync(async errs =>
 	{
 		Environment.Exit(0);
 	});
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -140,7 +143,9 @@ builder.Services.Configure<FormOptions>(options =>
 
 var app = builder.Build();
 
-await Parser.Default.ParseArguments<Options>(args)
+if (app.Environment.IsProduction())
+{
+	await Parser.Default.ParseArguments<Options>(args)
 	  .WithParsedAsync<Options>(async o =>
 	  {
 		  if (o.AppMigration)
@@ -158,6 +163,7 @@ await Parser.Default.ParseArguments<Options>(args)
 			  Environment.Exit(0);
 		  }
 	  });
+}
 
 
 // Configure the HTTP request pipeline.
