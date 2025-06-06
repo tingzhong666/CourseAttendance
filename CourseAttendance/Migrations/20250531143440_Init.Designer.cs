@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseAttendance.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250514063725_init")]
-    partial class init
+    [Migration("20250531143440_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -389,7 +389,8 @@ namespace CourseAttendance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");

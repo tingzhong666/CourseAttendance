@@ -98,49 +98,6 @@ namespace CourseAttendance.Controllers
 			}
 		}
 
-		///// <summary>
-		///// 创建考勤信息
-		///// </summary>
-		///// <param name="courseId"></param>
-		///// <param name="checkMethod"></param>
-		///// <returns></returns>
-		//[HttpPost]
-		//[Authorize(Roles = "Admin,Academic,Teacher")]
-		//public async Task<ActionResult<ApiResponse<AttendanceResponseDto>>> CreateAttendance([FromBody] AttendanceCreateRequestDto dto)
-		//{
-		//	var transaction =  _context.Database.BeginTransaction();
-		//	try
-		//	{
-		//		var courseModel = await _courseRepository.GetByIdAsync(dto.CourseId);
-		//		if (courseModel == null)
-		//			throw new Exception("操作失败，未找到此课程信息");
-
-		//		var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		//		if (userId == null)
-		//			throw new Exception("操作失败，Token为携带ID信息");
-		//		// 如果是老师，则验证当前课程是否有权限
-		//		if (User.IsInRole("Teacher") && courseModel.TeacherUserId != userId)
-		//			throw new Exception("操作失败，当前用户无权限发布此课程考勤");
-
-
-		//		var models = courseModel.CourseStudents.Select(x => dto.ToModel(x.StudentId)).ToList();
-		//		foreach (var item in models)
-		//		{
-		//			var res = await _attendanceRepository.AddAsync(item);
-		//			if (res == 0)
-		//				throw new Exception("操作失败，某个考勤创建失败");
-		//		}
-
-		//		await transaction.CommitAsync();
-		//		return Ok(new ApiResponse<List<AttendanceResponseDto>> { Code = 1, Msg = "", Data = null });
-		//	}
-		//	catch (Exception err)
-		//	{
-		//		await transaction.RollbackAsync();
-		//		return Ok(new ApiResponse<AttendanceResponseDto> { Code = 2, Msg = err.Message, Data = null });
-		//	}
-		//}
-
 		/// <summary>
 		/// 修改
 		/// </summary>
@@ -222,8 +179,6 @@ namespace CourseAttendance.Controllers
 				return Ok(new ApiResponse<object> { Code = 2, Msg = err.Message, Data = null });
 			}
 		}
-
-
 
 		// 普通考勤
 		[HttpPost("/checking-in")]

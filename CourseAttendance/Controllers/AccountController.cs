@@ -78,7 +78,6 @@ namespace CourseAttendance.Controllers
 			}
 			var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
-			//var result = await _userManager.CheckPasswordAsync(user, model.Password);
 			if (!result.Succeeded)
 			{
 				return Ok(new ApiResponse<object> { Code = 3, Msg = "无效的工号或密码", Data = null });

@@ -84,8 +84,8 @@ const AttendanceSimulation= (props: Props) => {
         setQRCode(res)
         if (!res)
             notification.info({ message: '无效二维码' })
-        else
-            notification.info({ message: '解码数据 ' + res })
+        // else
+        //     notification.info({ message: '解码数据 ' + res })
     }
 
     return (

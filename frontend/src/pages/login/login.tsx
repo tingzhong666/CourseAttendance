@@ -1,11 +1,10 @@
-﻿import React from 'react'
-import "./login.css"
+﻿import "./login.css"
 import { Button, Card, Form, Input, Image, Row, Col, notification } from "antd"
 import loginPng from "../../assets/login.png"
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import * as api from "../../services/http/httpInstance"
 import { LoginModel } from '../../services/api'
-import { useAuth } from "../../Contexts/auth"
+// import { useAuth } from "../../Contexts/auth"
 import { useNavigate } from 'react-router'
 
 
@@ -15,7 +14,7 @@ interface formType {
 }
 
 const Login = () => {
-    const auth = useAuth();
+    // const auth = useAuth();
     const navigate = useNavigate();
 
     const [form] = Form.useForm();
@@ -44,10 +43,10 @@ const Login = () => {
 
 
 
-    const onTest = async (_: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        console.log(auth.token + "qwe")
-        await api.Account.apiAccountTestGet();
-    }
+    // const onTest = async (_: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    //     console.log(auth.token + "qwe")
+    //     await api.Account.apiAccountTestGet();
+    // }
 
     return (
         <div className="login">
@@ -86,7 +85,7 @@ const Login = () => {
                                 </Form.Item>
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit">登录</Button>
-                                    <Button type="primary" onClick={e => onTest(e)}>测试</Button>
+                                    {/* <Button type="primary" onClick={e => onTest(e)}>测试</Button> */}
                                 </Form.Item>
                             </Form>
                         </Card>
